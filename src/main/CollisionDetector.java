@@ -2,6 +2,7 @@ package main;
 
 import entity.Entity;
 import enums.Direction;
+import object.GameObject;
 
 public class CollisionDetector {
     private final GamePanel gamePanel;
@@ -44,8 +45,41 @@ public class CollisionDetector {
                 tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[entityRightColumn][entityBottomRow];
             }
         }
+        // if entity hits solid tile then collision detected
         if(this.gamePanel.tileManager.tile[tileNumber1].isSolid || this.gamePanel.tileManager.tile[tileNumber2].isSolid) {
             entity.collisionDetected = true;
         }
+    }
+
+    public int detectEntityCollisionWithObject(Entity entity, boolean player) {
+        int objectIndex = Integer.MAX_VALUE;
+        for(int idx = 0 ; idx < this.gamePanel.objects.size() ; idx++) {
+            GameObject object = this.gamePanel.objects.get(idx);
+            if(object != null) {
+                // entity solid area coors
+                entity.solidArea.x = entity.worldX + entity.solidArea.x;
+                entity.solidArea.y = entity.worldY + entity.solidArea.y;
+                // object solid area coors
+                object.solidArea.x = object.worldX + object.solidArea.x;
+                object.solidArea.y = object.worldY + object.solidArea.y;
+                switch (entity.direction) {
+                    case Direction.UP -> { entity.solidArea.y -= entity.velocity; }
+                    case Direction.DOWN -> { entity.solidArea.y += entity.velocity; }
+                    case Direction.LEFT -> { entity.solidArea.x -= entity.velocity; }
+                    case Direction.RIGHT -> { entity.solidArea.x += entity.velocity; }
+                }
+                // check if entity area intersects with object area
+                if(entity.solidArea.intersects(object.solidArea)) {
+                    if(object.isSolid) { entity.collisionDetected = true; }
+                    if(player) { objectIndex = idx; }
+                }
+                // reset areas
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                object.solidArea.x = object.solidAreaDefaultX;
+                object.solidArea.y = object.solidAreaDefaultY;
+            }
+        }
+        return objectIndex;
     }
 }

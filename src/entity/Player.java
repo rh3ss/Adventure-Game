@@ -6,15 +6,18 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import enums.ObjectTyp;
 import main.GamePanel;
 import main.Keyboard;
 
 public class Player extends Entity {
     private final GamePanel gamePanel;
     private final Keyboard keyboard;
-    private final int playerVelocity = 3;
+    private final int playerVelocity = 4;
     private final int playerCollisionOffset = 8;
 
+    private int countPickedUpKeys;
     public final int screenX;
     public final int screenY;  
 
@@ -24,13 +27,14 @@ public class Player extends Entity {
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
 
-
         this.solidArea = new Rectangle(
             this.playerCollisionOffset, 
             this.playerCollisionOffset * 2, 
-            this.gamePanel.tileSize - this.playerCollisionOffset * 2, 
-            this.gamePanel.tileSize - this.playerCollisionOffset * 2
+            this.gamePanel.tileSize - (this.playerCollisionOffset * 2),
+            this.gamePanel.tileSize - (this.playerCollisionOffset * 2)
         );
+        this.solidAreaDefaultX = this.playerCollisionOffset;
+        this.solidAreaDefaultY = this.playerCollisionOffset * 2;
 
         this.setDefaultValues();
         this.getPlayerImage();
@@ -43,6 +47,8 @@ public class Player extends Entity {
         this.velocity = this.playerVelocity;
         // default player looks down
         this.direction = Direction.DOWN;
+        // attributes
+        this.countPickedUpKeys = 0;
     }
 
     private void getPlayerImage() {
@@ -66,9 +72,14 @@ public class Player extends Entity {
             else if(this.keyboard.isLeftPressed) { this.direction = Direction.LEFT; }
             else if(this.keyboard.isRightPressed) { this.direction = Direction.RIGHT; }
 
+            // check tile collision
             this.collisionDetected = false;
             this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
-            // if player hit non solid tile, then he can move
+            // check object collision
+            int objectIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, true);
+            this.interactWithCollidedObject(objectIndex);
+
+            // if player hit non-solid tile, then he can move
             if(!this.collisionDetected) {
                 switch (this.direction) {
                     case Direction.UP -> { this.worldY -= this.velocity; }
@@ -83,6 +94,24 @@ public class Player extends Entity {
             if(this.animationCounter > (this.gamePanel.FPS / 4)) {
                 this.animationFrame = (this.animationFrame == 1) ? 2 : 1;
                 this.animationCounter = 0;
+            }
+        }
+    }
+
+    public void interactWithCollidedObject(int objectIndex) {
+        if(objectIndex != Integer.MAX_VALUE) {
+            ObjectTyp objectTyp = this.gamePanel.objects.get(objectIndex).typ;
+            switch (objectTyp) {
+                case ObjectTyp.Key -> {
+                    this.countPickedUpKeys++;
+                    this.gamePanel.objects.set(objectIndex, null);
+                }
+                case ObjectTyp.Door -> {
+                    if(countPickedUpKeys > 0) {
+                        this.gamePanel.objects.set(objectIndex, null);
+                        this.countPickedUpKeys--;
+                    }
+                }
             }
         }
     }

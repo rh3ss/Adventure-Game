@@ -60,11 +60,11 @@ public class TileManager {
                 int screenY = worldY - this.gamePanel.player.worldY + this.gamePanel.player.screenY;
 
                 // draw only tiles in players field of view
-                if( worldX - this.gamePanel.tileSize < this.gamePanel.player.worldX + this.gamePanel.player.screenX &&
-                    worldX + this.gamePanel.tileSize > this.gamePanel.player.worldX - this.gamePanel.player.screenX &&
-                    worldY - this.gamePanel.tileSize < this.gamePanel.player.worldY + this.gamePanel.player.screenY &&
-                    worldY + this.gamePanel.tileSize > this.gamePanel.player.worldY - this.gamePanel.player.screenY
-                ) {
+                if( worldX + this.gamePanel.tileSize > this.gamePanel.player.worldX - this.gamePanel.player.screenX &&
+                        worldX - this.gamePanel.tileSize < this.gamePanel.player.worldX + this.gamePanel.player.screenX &&
+                        worldY + this.gamePanel.tileSize > this.gamePanel.player.worldY - this.gamePanel.player.screenY &&
+                        worldY - this.gamePanel.tileSize < this.gamePanel.player.worldY + this.gamePanel.player.screenY
+                )  {
                     g2.drawImage(this.tile[tileNumber].image, screenX, screenY, this.gamePanel.tileSize, this.gamePanel.tileSize, null);
                 }
             }

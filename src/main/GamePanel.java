@@ -6,7 +6,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import javax.swing.JPanel;
+
+import object.GameObject;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -27,11 +30,13 @@ public class GamePanel extends JPanel implements Runnable{
     public final int worldHeight = this.tileSize * this.maxWorldRows;
 
     public final int FPS = 60;
-    
-    public TileManager tileManager = new TileManager(this);
+
     public Keyboard keyboard = new Keyboard();
+    public TileManager tileManager = new TileManager(this);
     public CollisionDetector collisionDetector = new CollisionDetector(this);
+    public AssetSetter assetSetter = new AssetSetter(this);
     public Player player = new Player(this, this.keyboard);
+    public ArrayList<GameObject> objects = new ArrayList<>();
 
     public Thread gameThread;
 
@@ -41,6 +46,10 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(this.keyboard);
         this.setFocusable(true);
+    }
+
+    public void setupGame() {
+        this.assetSetter.setObjects();
     }
 
     public void startGame() {
@@ -77,8 +86,18 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        this.tileManager.draw(g2);
-        this.player.draw(g2);
+        this.drawGame(g2);
         g2.dispose();
+    }
+
+    private void drawGame(Graphics2D g2) {
+        // draw map layer
+        this.tileManager.draw(g2);
+        // draw object layer
+        for (GameObject object : objects) {
+            if (object != null) { object.draw(g2, this); }
+        }
+        // last draw player
+        this.player.draw(g2);
     }
 }
