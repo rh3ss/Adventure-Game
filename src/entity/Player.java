@@ -61,25 +61,22 @@ public class Player extends Entity {
 
     public void update() {
         if(this.keyboard.isUpPressed || this.keyboard.isDownPressed || this.keyboard.isLeftPressed || this.keyboard.isRightPressed) {
-            if(this.keyboard.isUpPressed) {
-                this.direction = Direction.UP;
-                this.worldY -= this.velocity;
-            }
-            else if(this.keyboard.isDownPressed) {
-                this.direction = Direction.DOWN;
-                this.worldY += this.velocity;
-            }
-            else if(this.keyboard.isLeftPressed) {
-                this.direction = Direction.LEFT;
-                this.worldX -= this.velocity;
-            }
-            else if(this.keyboard.isRightPressed) {
-                this.direction = Direction.RIGHT;
-                this.worldX += this.velocity;
-            }
+            if(this.keyboard.isUpPressed) { this.direction = Direction.UP; }
+            else if(this.keyboard.isDownPressed) { this.direction = Direction.DOWN; }
+            else if(this.keyboard.isLeftPressed) { this.direction = Direction.LEFT; }
+            else if(this.keyboard.isRightPressed) { this.direction = Direction.RIGHT; }
 
-            this.collisionOn = false;
-            this.gamePanel.collisionDetector.checkTile(this);
+            this.collisionDetected = false;
+            this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
+            // if player hit non solid tile, then he can move
+            if(!this.collisionDetected) {
+                switch (this.direction) {
+                    case Direction.UP -> { this.worldY -= this.velocity; }
+                    case Direction.DOWN -> { this.worldY += this.velocity; }
+                    case Direction.LEFT -> { this.worldX -= this.velocity; }
+                    case Direction.RIGHT -> { this.worldX += this.velocity; }
+                }
+            }
 
             this.animationCounter++;
             // player image should change ever FPS / 4  = 15 frames 

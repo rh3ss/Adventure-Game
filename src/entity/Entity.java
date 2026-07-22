@@ -15,5 +15,5 @@ public class Entity {
     public int animationFrame = 1;
 
     public Rectangle solidArea;
-    public boolean collisionOn = false;
+    public boolean collisionDetected = false;
 }

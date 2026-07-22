@@ -4,10 +4,10 @@ import java.awt.image.BufferedImage;
 
 public class Tile {
     public BufferedImage image;
-    public boolean collision = false;
+    public boolean isSolid = false;
 
-    public Tile(BufferedImage img, boolean collision) {
+    public Tile(BufferedImage img, boolean solid) {
         this.image = img;
-        this.collision = collision;
+        this.isSolid = solid;
     }
 }
