@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable{
     public AssetSetter assetSetter = new AssetSetter(this);
     public Player player = new Player(this, this.keyboard);
     public ArrayList<GameObject> objects = new ArrayList<>();
+    public GUI gui = new GUI(this);
 
     public Thread gameThread;
 
@@ -99,5 +100,7 @@ public class GamePanel extends JPanel implements Runnable{
         }
         // last draw player
         this.player.draw(g2);
+        // GUI
+        this.gui.draw(g2);
     }
 }

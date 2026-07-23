@@ -2,11 +2,13 @@ package object;
 
 import enums.ObjectTyp;
 import main.GamePanel;
+import main.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class GameObject {
+    public UtilityTool utilityTool = new UtilityTool();
     public BufferedImage image;
     public String name;
     public ObjectTyp typ;

@@ -1,36 +1,46 @@
 package tile;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import javax.imageio.ImageIO;
 import main.GamePanel;
+import main.UtilityTool;
 
 public class TileManager {
     private final GamePanel gamePanel;
-    public final Tile[] tile;
+    public final HashMap<Integer, Tile> tiles;
     public final int[][] mapTileNumbers;
 
     public TileManager(GamePanel p) {
         this.gamePanel = p;
-        this.tile = new Tile[10];
+        this.tiles = new HashMap<>();
         this.mapTileNumbers = new int[this.gamePanel.maxWorldColumns][this.gamePanel.maxWorldRows];
 
-        this.getTileImage();
+        this.getTileImages();
         this.loadMap("/res/maps/world01.txt");
     }
 
-    private void getTileImage() {
+    private void getTileImages() {
+        setupTiles(0, "grass", false);
+        setupTiles(1, "wall", true);
+        setupTiles(2, "water", true);
+        setupTiles(3, "earth", false);
+        setupTiles(4, "tree", true);
+        setupTiles(5, "sand", false);
+    }
+
+    private void setupTiles(int keyIndex, String imagePath, boolean collision) {
+        UtilityTool utilityTool = new UtilityTool();
         try {
-            this.tile[0] = new Tile(ImageIO.read(getClass().getResourceAsStream("/res/tiles/grass.png")), false);
-            this.tile[1] = new Tile(ImageIO.read(getClass().getResourceAsStream("/res/tiles/wall.png")), true);
-            this.tile[2] = new Tile(ImageIO.read(getClass().getResourceAsStream("/res/tiles/water.png")), true);
-            this.tile[3] = new Tile(ImageIO.read(getClass().getResourceAsStream("/res/tiles/earth.png")), false);
-            this.tile[4] = new Tile(ImageIO.read(getClass().getResourceAsStream("/res/tiles/tree.png")), true);
-            this.tile[5] = new Tile(ImageIO.read(getClass().getResourceAsStream("/res/tiles/sand.png")), false);
-        } 
+            BufferedImage originalImage = ImageIO.read(getClass().getResourceAsStream("/res/tiles/" + imagePath + ".png"));
+            BufferedImage scaledImage = utilityTool.scaleImage(originalImage, this.gamePanel.tileSize, this.gamePanel.tileSize);
+            this.tiles.put(keyIndex, new Tile(scaledImage, collision));
+        }
         catch (IOException e) {}
     }
 
@@ -65,7 +75,7 @@ public class TileManager {
                         worldY + this.gamePanel.tileSize > this.gamePanel.player.worldY - this.gamePanel.player.screenY &&
                         worldY - this.gamePanel.tileSize < this.gamePanel.player.worldY + this.gamePanel.player.screenY
                 )  {
-                    g2.drawImage(this.tile[tileNumber].image, screenX, screenY, this.gamePanel.tileSize, this.gamePanel.tileSize, null);
+                    g2.drawImage(this.tiles.get(tileNumber).image, screenX, screenY, this.gamePanel.tileSize, this.gamePanel.tileSize, null);
                 }
             }
         }

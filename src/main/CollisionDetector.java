@@ -46,7 +46,7 @@ public class CollisionDetector {
             }
         }
         // if entity hits solid tile then collision detected
-        if(this.gamePanel.tileManager.tile[tileNumber1].isSolid || this.gamePanel.tileManager.tile[tileNumber2].isSolid) {
+        if(this.gamePanel.tileManager.tiles.get(tileNumber1).isSolid || this.gamePanel.tileManager.tiles.get(tileNumber2).isSolid) {
             entity.collisionDetected = true;
         }
     }

@@ -12,15 +12,15 @@ public class AssetSetter {
     }
 
     public void setObjects() {
-        ObjectKey key = new ObjectKey();
+        ObjectKey key = new ObjectKey(this.gamePanel);
         key.worldX = 23 * this.gamePanel.tileSize;
         key.worldY = 10 * this.gamePanel.tileSize;
 
-        ObjectChest chest = new ObjectChest();
+        ObjectChest chest = new ObjectChest(this.gamePanel);
         chest.worldX = 10 * this.gamePanel.tileSize;
         chest.worldY = 11 * this.gamePanel.tileSize;
 
-        ObjectDoor door = new ObjectDoor();
+        ObjectDoor door = new ObjectDoor(this.gamePanel);
         door.worldX = 10 * this.gamePanel.tileSize;
         door.worldY = 14 * this.gamePanel.tileSize;
 
