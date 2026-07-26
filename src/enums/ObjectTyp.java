@@ -1,8 +1,8 @@
 package enums;
 
 public enum ObjectTyp {
-    Key,
-    Door,
-    Chest,
-    Boots
+    KEY,
+    DOOR,
+    CHEST,
+    BOOTS
 }

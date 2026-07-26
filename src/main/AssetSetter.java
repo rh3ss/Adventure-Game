@@ -1,5 +1,7 @@
 package main;
 
+import entity.NPCOldMan;
+import object.ObjectBoots;
 import object.ObjectChest;
 import object.ObjectDoor;
 import object.ObjectKey;
@@ -12,21 +14,19 @@ public class AssetSetter {
     }
 
     public void setObjects() {
-        ObjectKey key = new ObjectKey(this.gamePanel);
-        key.worldX = 23 * this.gamePanel.tileSize;
-        key.worldY = 10 * this.gamePanel.tileSize;
-
-        ObjectChest chest = new ObjectChest(this.gamePanel);
-        chest.worldX = 10 * this.gamePanel.tileSize;
-        chest.worldY = 11 * this.gamePanel.tileSize;
-
-        ObjectDoor door = new ObjectDoor(this.gamePanel);
-        door.worldX = 10 * this.gamePanel.tileSize;
-        door.worldY = 14 * this.gamePanel.tileSize;
-
+        ObjectKey key = new ObjectKey(this.gamePanel, 23, 7);
+        ObjectChest chest = new ObjectChest(this.gamePanel, 10, 9);
+        ObjectDoor door = new ObjectDoor(this.gamePanel, 10, 12);
+        ObjectBoots boots = new ObjectBoots(this.gamePanel, 21, 23);
 
         this.gamePanel.objects.add(key);
         this.gamePanel.objects.add(chest);
         this.gamePanel.objects.add(door);
+        this.gamePanel.objects.add(boots);
+    }
+
+    public void setNPCs() {
+        NPCOldMan oldMan = new NPCOldMan(this.gamePanel, 21, 21);
+        this.gamePanel.npcs.add(oldMan);
     }
 }

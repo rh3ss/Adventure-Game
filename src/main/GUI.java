@@ -1,28 +1,24 @@
 package main;
 
-import object.ObjectKey;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Font;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 
 public class GUI {
     private final GamePanel gamePanel;
+    private Graphics2D graphics2D;
     private final Font font;
-    private final BufferedImage keyImage;
     private int countShownMessageFrames = 0;
     public boolean messageOn = false;
     public String message = "";
     public boolean gameFinished = false;
 
-    private double playedTime = 0;
-    private final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-
     public GUI(GamePanel p) {
         this.gamePanel = p;
         this.font = new Font("Arial", Font.PLAIN, 40);
-        ObjectKey key = new ObjectKey(this.gamePanel);
-        this.keyImage = key.image;
     }
 
     public void showMessage(String text) {
@@ -31,33 +27,36 @@ public class GUI {
     }
 
     public void draw(Graphics2D g2) {
-        g2.setFont(this.font);
-        g2.setColor(Color.WHITE);
-        if(this.gameFinished) {
-            String finishText = "You found the End!";
-            int finishTextLength = (int) g2.getFontMetrics().getStringBounds(finishText, g2).getWidth();
-            int x = (this.gamePanel.screenWidth / 2) - finishTextLength / 2;
-            int y = this.gamePanel.screenHeight / 2;
-            g2.drawString(finishText, x, y);
-            this.gamePanel.gameThread = null;
-            return;
-        }
+        this.graphics2D = g2;
 
-        g2.drawImage(this.keyImage, this.gamePanel.tileSize / 2, this.gamePanel.tileSize / 2, this.gamePanel.tileSize, this.gamePanel.tileSize, null);
-        g2.drawString("x " + this.gamePanel.player.countPickedUpKeys, 74, 65);
+        switch (this.gamePanel.gameState) {
+            case PLAYING -> {
 
-        this.playedTime += (double) 1/60;
-        g2.drawString("Time: " + this.decimalFormat.format(this.playedTime), this.gamePanel.tileSize*11, 65);
-
-        if(this.messageOn) {
-            g2.setFont(g2.getFont().deriveFont(25F));
-            g2.drawString(this.message, this.gamePanel.tileSize / 2, this.gamePanel.screenHeight / 2);
-
-            this.countShownMessageFrames++;
-            if(this.countShownMessageFrames > 120) {
-                this.countShownMessageFrames = 0;
-                this.messageOn = false;
+            }
+            case PAUSED -> {
+                this.drawPausedGameScreen();
             }
         }
+    }
+
+    private void drawPausedGameScreen() {
+        this.graphics2D.setFont(font);
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 80F));
+
+        String pausedText = "PAUSED";
+        int xPos = this.calcXPositionForCenteredText(pausedText);
+        int yPos = this.calcYPositionForCenteredText(pausedText);
+        this.graphics2D.drawString(pausedText, xPos, yPos);
+    }
+
+    private int calcXPositionForCenteredText(String text) {
+        int textLength = (int) this.graphics2D.getFontMetrics().getStringBounds(text, this.graphics2D).getWidth();
+        return (this.gamePanel.screenWidth / 2) - (textLength / 2);
+    }
+
+    private int calcYPositionForCenteredText(String text) {
+        int textHeight = (int) this.graphics2D.getFontMetrics().getStringBounds(text, this.graphics2D).getHeight();
+        return (this.gamePanel.screenHeight / 2) - (textHeight / 2);
     }
 }

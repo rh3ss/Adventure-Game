@@ -1,6 +1,7 @@
 package main;
 
 
+import entity.Entity;
 import entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +10,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
+import enums.GameState;
 import object.GameObject;
 import tile.TileManager;
 
@@ -31,14 +33,16 @@ public class GamePanel extends JPanel implements Runnable{
 
     public final int FPS = 60;
 
-    public Keyboard keyboard = new Keyboard();
+    public Keyboard keyboard = new Keyboard(this);
     public TileManager tileManager = new TileManager(this);
     public CollisionDetector collisionDetector = new CollisionDetector(this);
     public AssetSetter assetSetter = new AssetSetter(this);
+    public GUI gui = new GUI(this);
     public Player player = new Player(this, this.keyboard);
     public ArrayList<GameObject> objects = new ArrayList<>();
-    public GUI gui = new GUI(this);
+    public ArrayList<Entity> npcs = new ArrayList<>();
 
+    public GameState gameState;
     public Thread gameThread;
 
     public GamePanel() {
@@ -47,10 +51,13 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(this.keyboard);
         this.setFocusable(true);
+        this.gameState = GameState.PREPARING;
     }
 
     public void setupGame() {
         this.assetSetter.setObjects();
+        this.assetSetter.setNPCs();
+        this.gameState = GameState.PLAYING;
     }
 
     public void startGame() {
@@ -66,7 +73,7 @@ public class GamePanel extends JPanel implements Runnable{
         long currentTime;
 
         // GAME LOOP
-        while(this.gameThread != null) {
+        while(this.gameState != GameState.GAMEOVER) {
             currentTime = System.nanoTime();
             deltaTime += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
@@ -77,10 +84,16 @@ public class GamePanel extends JPanel implements Runnable{
                 deltaTime--;
             }
         }
+        this.gameThread = null;
     }
 
     public void update() {
-        this.player.update();
+        if (this.gameState == GameState.PLAYING) {
+            this.player.update();
+            for (Entity entity : npcs) {
+                if (entity != null) { entity.update(); }
+            }
+        }
     }
 
     @Override
@@ -97,6 +110,10 @@ public class GamePanel extends JPanel implements Runnable{
         // draw object layer
         for (GameObject object : objects) {
             if (object != null) { object.draw(g2, this); }
+        }
+        // draw NPC layer
+        for (Entity entity : npcs) {
+            if (entity != null) { entity.draw(g2); }
         }
         // last draw player
         this.player.draw(g2);
