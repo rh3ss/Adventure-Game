@@ -4,5 +4,6 @@ public enum ObjectTyp {
     KEY,
     DOOR,
     CHEST,
-    BOOTS
+    BOOTS,
+    HEART
 }

@@ -1,23 +1,19 @@
 package object;
 
+import entity.Entity;
+import enums.EntityTyp;
 import enums.ObjectTyp;
 import main.GamePanel;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
-
-public class ObjectKey extends GameObject {
+public class ObjectKey extends Entity {
 
     public ObjectKey(GamePanel gamePanel, int worldColumn, int worldRow) {
-        this.name = "DoorKey";
-        this.typ = ObjectTyp.KEY;
+        super(gamePanel);
+
+        this.entityTyp = EntityTyp.OBJECT;
+        this.objectTyp = ObjectTyp.KEY;
+        this.down1 = this.setupEntityImage("/res/objects/key.png");
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
-        try {
-            this.image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/objects/key.png")));
-            this.utilityTool.scaleImage(this.image, gamePanel.tileSize, gamePanel.tileSize);
-        }
-        catch (IOException _) {}
     }
 }

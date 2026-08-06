@@ -8,10 +8,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JPanel;
 
 import enums.GameState;
-import object.GameObject;
+import enums.Menu;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -38,9 +40,9 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionDetector collisionDetector = new CollisionDetector(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public GUI gui = new GUI(this);
+    public EventHandler eventHandler = new EventHandler(this);
     public Player player = new Player(this, this.keyboard);
-    public ArrayList<GameObject> objects = new ArrayList<>();
-    public ArrayList<Entity> npcs = new ArrayList<>();
+    public ArrayList<Entity> entities = new ArrayList<>();
 
     public GameState gameState;
     public Thread gameThread;
@@ -56,8 +58,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setupGame() {
         this.assetSetter.setObjects();
+        this.assetSetter.setPlayer();
         this.assetSetter.setNPCs();
-        this.gameState = GameState.PLAYING;
+        this.gameState = GameState.TITLE;
+        this.gui.menuSelection = Menu.NEW_GAME;
     }
 
     public void startGame() {
@@ -89,8 +93,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void update() {
         if (this.gameState == GameState.PLAYING) {
-            this.player.update();
-            for (Entity entity : npcs) {
+            for (Entity entity : this.entities) {
                 if (entity != null) { entity.update(); }
             }
         }
@@ -100,23 +103,35 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        this.drawGame(g2);
+        if (this.gameState == GameState.TITLE) {
+            this.drawTitleScreen(g2);
+        }
+        else {
+            this.drawGame(g2);
+        }
         g2.dispose();
+    }
+
+    private void drawTitleScreen(Graphics2D g2) {
+        // GUI
+        this.gui.draw(g2);
     }
 
     private void drawGame(Graphics2D g2) {
         // draw map layer
         this.tileManager.draw(g2);
-        // draw object layer
-        for (GameObject object : objects) {
-            if (object != null) { object.draw(g2, this); }
-        }
-        // draw NPC layer
-        for (Entity entity : npcs) {
+
+        Collections.sort(entities, new Comparator<Entity>() {
+            @Override
+            public int compare(Entity entity1, Entity entity2) {
+                return Integer.compare(entity1.worldY, entity2.worldY);
+            }
+        });
+
+        // draw entities
+        for (Entity entity : entities) {
             if (entity != null) { entity.draw(g2); }
         }
-        // last draw player
-        this.player.draw(g2);
         // GUI
         this.gui.draw(g2);
     }

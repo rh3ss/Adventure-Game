@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import enums.Direction;
+import enums.GameState;
 import main.GamePanel;
 import main.Keyboard;
 
@@ -17,7 +18,7 @@ public class Player extends Entity {
         this.keyboard = k;
 
         this.setDefaultValues();
-        this.getPlayerImages();
+        this.getImages();
     }
 
     private void setDefaultValues() {
@@ -25,12 +26,15 @@ public class Player extends Entity {
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
         // set player into center
-        this.worldX = (this.gamePanel.worldWidth / 2) - (2 * this.gamePanel.tileSize);
-        this.worldY = (this.gamePanel.worldHeight / 2) - (4 * this.gamePanel.tileSize);
+        this.worldX = (this.gamePanel.worldWidth / 2);
+        this.worldY = (this.gamePanel.worldHeight / 2);
         this.velocity = 4;
+        // heart status
+        this.maxHearts = 5;
+        this.currentHearts = this.maxHearts;
     }
 
-    private void getPlayerImages() {
+    private void getImages() {
         this.up1 = this.setupEntityImage("/res/player/boy_up_1.png");
         this.up2 = this.setupEntityImage("/res/player/boy_up_2.png");
         this.down1 = this.setupEntityImage("/res/player/boy_down_1.png");
@@ -53,17 +57,17 @@ public class Player extends Entity {
             this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
 
             // check object collision
-            int objectIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, true);
-            if (objectIndex != Integer.MAX_VALUE) {
-                this.interactWithCollidedObject(objectIndex);
-            }
+//            int objectIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, true);
+//            this.interactWithCollidedObject(objectIndex);
 
             // check entity collision
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
-            if (entityIndex != Integer.MAX_VALUE) {
-                this.interactWithCollidedEntity(entityIndex);
-            }
+            this.interactWithCollidedEntity(entityIndex);
 
+            // check event handling
+            this.gamePanel.eventHandler.checkEvent();
+
+            this.gamePanel.keyboard.isEnterPressed = false;
             if (!this.collisionDetected) {
                 switch (this.direction) {
                     case Direction.UP -> { this.worldY -= this.velocity; }
@@ -83,11 +87,18 @@ public class Player extends Entity {
     }
 
     private void interactWithCollidedObject(int objectIndex) {
+        if (objectIndex != Integer.MAX_VALUE) {
 
+        }
     }
 
     private void interactWithCollidedEntity(int entityIndex) {
-
+        if (entityIndex != Integer.MAX_VALUE) {
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.gamePanel.gameState = GameState.DIALOGUE;
+                this.gamePanel.entities.get(entityIndex).speak();
+            }
+        }
     }
 
     public void draw(Graphics2D g2) {

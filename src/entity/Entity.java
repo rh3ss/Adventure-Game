@@ -1,6 +1,8 @@
 package entity;
 
 import enums.Direction;
+import enums.EntityTyp;
+import enums.ObjectTyp;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -8,28 +10,32 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
 
 public class Entity {
     public GamePanel gamePanel;
-
     public int worldX, worldY;
     public int velocity;
-
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, image1, image2;
     public Direction direction;
-
     public int animationCounter = 0;
     public int animationFrame = 1;
     public int actionCounterFrames = 0;
-
+    public boolean isSolid = false;
     public Rectangle solidArea;
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionDetected = false;
+    public ArrayList<String> dialogues;
+    public int dialogueIndex;
+    public EntityTyp entityTyp;
+    public ObjectTyp objectTyp;
+    public int maxHearts, currentHearts;
 
     public Entity(GamePanel p) {
         this.gamePanel = p;
+        this.dialogues = new ArrayList<>();
+        this.dialogueIndex = 0;
 
         // entity solid area
         int entityCollisionOffset = 8;
@@ -47,13 +53,28 @@ public class Entity {
 
     public void setAction() {}
 
+    public void speak() {
+        this.gamePanel.gui.currentDialogueMessage = this.dialogues.get(this.dialogueIndex);
+        this.dialogueIndex++;
+        if (this.dialogueIndex > this.dialogues.size() - 1) {
+            this.dialogueIndex = 0;
+        }
+        // entity should look in players direction while dialogue
+        switch (this.gamePanel.player.direction) {
+            case Direction.UP -> { this.direction = Direction.DOWN; }
+            case Direction.DOWN -> { this.direction = Direction.UP; }
+            case Direction.LEFT -> { this.direction = Direction.RIGHT; }
+            case Direction.RIGHT -> { this.direction = Direction.LEFT; }
+        }
+    }
+
     public void update() {
         this.setAction();
 
         // check collision
         this.collisionDetected = false;
         this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
-        this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, false);
+//        this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, false);
         this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
 
         if (!this.collisionDetected) {
@@ -83,12 +104,18 @@ public class Entity {
                 this.worldY - this.gamePanel.tileSize < this.gamePanel.player.worldY + this.gamePanel.player.screenY
         ) {
             BufferedImage image = null;
-            switch (this.direction) {
-                case Direction.UP -> { image = (this.animationFrame == 1) ? this.up1 : this.up2; }
-                case Direction.DOWN -> { image = (this.animationFrame == 1) ? this.down1 : this.down2; }
-                case Direction.LEFT -> { image = (this.animationFrame == 1) ? this.left1 : this.left2; }
-                case Direction.RIGHT -> { image = (this.animationFrame == 1) ? this.right1 : this.right2; }
+            if (this.entityTyp != EntityTyp.OBJECT) {
+                switch (this.direction) {
+                    case Direction.UP -> { image = (this.animationFrame == 1) ? this.up1 : this.up2; }
+                    case Direction.DOWN -> { image = (this.animationFrame == 1) ? this.down1 : this.down2; }
+                    case Direction.LEFT -> { image = (this.animationFrame == 1) ? this.left1 : this.left2; }
+                    case Direction.RIGHT -> { image = (this.animationFrame == 1) ? this.right1 : this.right2; }
+                }
             }
+            else {
+                image = this.down1;
+            }
+
             g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
         }
     }
