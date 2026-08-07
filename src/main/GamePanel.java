@@ -1,12 +1,19 @@
 package main;
 
 
+import entity.Entity;
 import entity.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JPanel;
+
+import enums.GameState;
+import enums.Menu;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -27,12 +34,17 @@ public class GamePanel extends JPanel implements Runnable{
     public final int worldHeight = this.tileSize * this.maxWorldRows;
 
     public final int FPS = 60;
-    
-    public TileManager tileManager = new TileManager(this);
-    public Keyboard keyboard = new Keyboard();
-    public CollisionDetector collisionDetector = new CollisionDetector(this);
-    public Player player = new Player(this, this.keyboard);
 
+    public Keyboard keyboard = new Keyboard(this);
+    public TileManager tileManager = new TileManager(this);
+    public CollisionDetector collisionDetector = new CollisionDetector(this);
+    public AssetSetter assetSetter = new AssetSetter(this);
+    public GUI gui = new GUI(this);
+    public EventHandler eventHandler = new EventHandler(this);
+    public Player player = new Player(this, this.keyboard);
+    public ArrayList<Entity> entities = new ArrayList<>();
+
+    public GameState gameState;
     public Thread gameThread;
 
     public GamePanel() {
@@ -41,6 +53,15 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(this.keyboard);
         this.setFocusable(true);
+        this.gameState = GameState.PREPARING;
+    }
+
+    public void setupGame() {
+        this.assetSetter.setObjects();
+        this.assetSetter.setPlayer();
+        this.assetSetter.setNPCs();
+        this.gameState = GameState.TITLE;
+        this.gui.menuSelection = Menu.NEW_GAME;
     }
 
     public void startGame() {
@@ -56,7 +77,7 @@ public class GamePanel extends JPanel implements Runnable{
         long currentTime;
 
         // GAME LOOP
-        while(this.gameThread != null) {
+        while(this.gameState != GameState.GAMEOVER) {
             currentTime = System.nanoTime();
             deltaTime += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
@@ -67,18 +88,51 @@ public class GamePanel extends JPanel implements Runnable{
                 deltaTime--;
             }
         }
+        this.gameThread = null;
     }
 
     public void update() {
-        this.player.update();
+        if (this.gameState == GameState.PLAYING) {
+            for (Entity entity : this.entities) {
+                if (entity != null) { entity.update(); }
+            }
+        }
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        this.tileManager.draw(g2);
-        this.player.draw(g2);
+        if (this.gameState == GameState.TITLE) {
+            this.drawTitleScreen(g2);
+        }
+        else {
+            this.drawGame(g2);
+        }
         g2.dispose();
+    }
+
+    private void drawTitleScreen(Graphics2D g2) {
+        // GUI
+        this.gui.draw(g2);
+    }
+
+    private void drawGame(Graphics2D g2) {
+        // draw map layer
+        this.tileManager.draw(g2);
+
+        Collections.sort(entities, new Comparator<Entity>() {
+            @Override
+            public int compare(Entity entity1, Entity entity2) {
+                return Integer.compare(entity1.worldY, entity2.worldY);
+            }
+        });
+
+        // draw entities
+        for (Entity entity : entities) {
+            if (entity != null) { entity.draw(g2); }
+        }
+        // GUI
+        this.gui.draw(g2);
     }
 }

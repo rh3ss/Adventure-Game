@@ -15,7 +15,8 @@ class Main{
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-        
+
+        panel.setupGame();
         panel.startGame();
     }
 }
