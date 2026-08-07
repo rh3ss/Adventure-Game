@@ -59,6 +59,7 @@ public class Player extends Entity {
             // check object collision
 //            int objectIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, true);
 //            this.interactWithCollidedObject(objectIndex);
+            
 
             // check entity collision
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
