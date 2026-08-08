@@ -49,10 +49,10 @@ public class Keyboard implements KeyListener{
                 }
             }
             case GameState.PLAYING -> {
-                if (keyboardCode == KeyEvent.VK_UP) { this.isUpPressed = true; }
-                if (keyboardCode == KeyEvent.VK_DOWN) { this.isDownPressed = true; }
-                if (keyboardCode == KeyEvent.VK_LEFT) { this.isLeftPressed = true; }
-                if (keyboardCode == KeyEvent.VK_RIGHT) { this.isRightPressed = true; }
+                if (keyboardCode == KeyEvent.VK_W) { this.isUpPressed = true; }
+                if (keyboardCode == KeyEvent.VK_S) { this.isDownPressed = true; }
+                if (keyboardCode == KeyEvent.VK_A) { this.isLeftPressed = true; }
+                if (keyboardCode == KeyEvent.VK_D) { this.isRightPressed = true; }
                 if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
                 if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
             }
@@ -69,10 +69,10 @@ public class Keyboard implements KeyListener{
     public void keyReleased(KeyEvent e) {
         int keyboardCode = e.getKeyCode();
 
-        if(keyboardCode == KeyEvent.VK_UP) { this.isUpPressed = false; }
-        if(keyboardCode == KeyEvent.VK_DOWN) { this.isDownPressed = false; }
-        if(keyboardCode == KeyEvent.VK_LEFT) { this.isLeftPressed = false; }
-        if(keyboardCode == KeyEvent.VK_RIGHT) { this.isRightPressed = false; }
+        if(keyboardCode == KeyEvent.VK_W) { this.isUpPressed = false; }
+        if(keyboardCode == KeyEvent.VK_S) { this.isDownPressed = false; }
+        if(keyboardCode == KeyEvent.VK_A) { this.isLeftPressed = false; }
+        if(keyboardCode == KeyEvent.VK_D) { this.isRightPressed = false; }
     }
     
 }

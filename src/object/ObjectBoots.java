@@ -1,8 +1,8 @@
 package object;
 
 import entity.Entity;
-import enums.EntityTyp;
-import enums.ObjectTyp;
+import enums.EntityType;
+import enums.ObjectType;
 import main.GamePanel;
 
 public class ObjectBoots extends Entity {
@@ -10,9 +10,9 @@ public class ObjectBoots extends Entity {
     public ObjectBoots(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel);
 
-        this.entityTyp = EntityTyp.OBJECT;
-        this.objectTyp = ObjectTyp.BOOTS;
-        this.down1 = this.setupEntityImage("/res/objects/boots.png");
+        this.entityType = EntityType.OBJECT;
+        this.objectType = ObjectType.BOOTS;
+        this.down1 = this.setupEntityImage("/res/objects/boots.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
     }

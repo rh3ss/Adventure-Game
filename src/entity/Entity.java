@@ -1,8 +1,9 @@
 package entity;
 
 import enums.Direction;
-import enums.EntityTyp;
-import enums.ObjectTyp;
+import enums.EntityType;
+import enums.MonsterType;
+import enums.ObjectType;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -15,22 +16,38 @@ import java.util.Objects;
 
 public class Entity {
     public GamePanel gamePanel;
-    public int worldX, worldY;
-    public int velocity;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, image1, image2;
-    public Direction direction;
-    public int animationCounter = 0;
-    public int animationFrame = 1;
-    public int actionCounterFrames = 0;
-    public boolean isSolid = false;
+
+    // IMAGES
+    public BufferedImage image1, image2;
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+
+    // INTERACTION
     public Rectangle solidArea;
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collisionDetected = false;
+    public Rectangle attackArea;
     public ArrayList<String> dialogues;
     public int dialogueIndex;
-    public EntityTyp entityTyp;
-    public ObjectTyp objectTyp;
-    public int maxHearts, currentHearts;
+
+    // STATE
+    public int worldX, worldY;
+    public Direction direction;
+    public int animationFrame = 1;
+    public boolean isInvincible = false;
+    public boolean isAttacking = false;
+    public boolean collisionDetected = false;
+
+    // COUNTER
+    public int animationCounterFrames = 0;
+    public int actionCounterFrames = 0;
+    public int invincibleCounterFrames = 0;
+
+    // ATTRIBUTES
+    public EntityType entityType;
+    public ObjectType objectType;
+    public MonsterType monsterType;
+    public boolean isSolid = false;
+    public int velocity, maxHearts, currentHearts, attackDamage;
 
     public Entity(GamePanel p) {
         this.gamePanel = p;
@@ -74,8 +91,15 @@ public class Entity {
         // check collision
         this.collisionDetected = false;
         this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
-//        this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, false);
-        this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
+        this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
+        boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
+
+        if (this.entityType == EntityType.MONSTER && entityCollidedWithPlayer) {
+            if (!this.gamePanel.player.isInvincible && this.gamePanel.player.currentHearts > 0) {
+                this.gamePanel.player.currentHearts--;
+                this.gamePanel.player.isInvincible = true;
+            }
+        }
 
         if (!this.collisionDetected) {
             switch (this.direction) {
@@ -86,11 +110,19 @@ public class Entity {
             }
         }
 
-        this.animationCounter++;
+        this.animationCounterFrames++;
         // entity image should change ever FPS / 4 = 15 frames
-        if (this.animationCounter > (this.gamePanel.FPS / 4)) {
+        if (this.animationCounterFrames > (this.gamePanel.FPS / 4)) {
             this.animationFrame = (this.animationFrame == 1) ? 2 : 1;
-            this.animationCounter = 0;
+            this.animationCounterFrames = 0;
+        }
+
+        if (isInvincible) {
+            this.invincibleCounterFrames++;
+            if (this.invincibleCounterFrames > (this.gamePanel.FPS - 20)) {
+                this.isInvincible = false;
+                this.invincibleCounterFrames = 0;
+            }
         }
     }
 
@@ -104,7 +136,7 @@ public class Entity {
                 this.worldY - this.gamePanel.tileSize < this.gamePanel.player.worldY + this.gamePanel.player.screenY
         ) {
             BufferedImage image = null;
-            if (this.entityTyp != EntityTyp.OBJECT) {
+            if (this.entityType != EntityType.OBJECT) {
                 switch (this.direction) {
                     case Direction.UP -> { image = (this.animationFrame == 1) ? this.up1 : this.up2; }
                     case Direction.DOWN -> { image = (this.animationFrame == 1) ? this.down1 : this.down2; }
@@ -115,17 +147,20 @@ public class Entity {
             else {
                 image = this.down1;
             }
-
+            if (this.isInvincible) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+            }
             g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }
 
-    public BufferedImage setupEntityImage(String filePath) {
+    public BufferedImage setupEntityImage(String filePath, int width, int height) {
         UtilityTool utilityTool = new UtilityTool();
         BufferedImage entityImage = null;
         try {
             entityImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(filePath)));
-            entityImage = utilityTool.scaleImage(entityImage, this.gamePanel.tileSize, this.gamePanel.tileSize);
+            entityImage = utilityTool.scaleImage(entityImage, width, height);
         }
         catch (IOException _) {}
         return entityImage;

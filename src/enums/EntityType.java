@@ -1,7 +1,8 @@
 package enums;
 
-public enum EntityTyp {
+public enum EntityType {
     PLAYER,
     NPC,
+    MONSTER,
     OBJECT
 }

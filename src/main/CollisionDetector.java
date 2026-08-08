@@ -96,7 +96,7 @@ public class CollisionDetector {
                     case Direction.RIGHT -> { entity.solidArea.x += entity.velocity; }
                 }
                 // check if entity area intersects with idxEntity area
-                if (entity.solidArea.intersects(idxEntity.solidArea)) {
+                if (entity.solidArea.intersects(idxEntity.solidArea) && idxEntity.isSolid) {
                     entity.collisionDetected = true;
                     entityIndex = idx;
                 }
@@ -110,7 +110,9 @@ public class CollisionDetector {
         return entityIndex;
     }
 
-    public void detectEntityCollisionWithPlayer(Entity entity) {
+    public boolean detectEntityCollisionWithPlayer(Entity entity) {
+        boolean entityCollidedWithPlayer = false;
+
         entity.solidArea.x = entity.worldX + entity.solidArea.x;
         entity.solidArea.y = entity.worldY + entity.solidArea.y;
         this.gamePanel.player.solidArea.x = this.gamePanel.player.worldX + this.gamePanel.player.solidArea.x;
@@ -124,11 +126,14 @@ public class CollisionDetector {
         // check if entity area intersects with player area
         if (entity.solidArea.intersects(this.gamePanel.player.solidArea)) {
             entity.collisionDetected = true;
+            entityCollidedWithPlayer = true;
         }
         // reset areas
         entity.solidArea.x = entity.solidAreaDefaultX;
         entity.solidArea.y = entity.solidAreaDefaultY;
         this.gamePanel.player.solidArea.x = this.gamePanel.player.solidAreaDefaultX;
         this.gamePanel.player.solidArea.y = this.gamePanel.player.solidAreaDefaultY;
+
+        return entityCollidedWithPlayer;
     }
 }

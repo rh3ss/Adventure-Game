@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 import javax.swing.JPanel;
 
 import enums.GameState;
@@ -57,9 +58,10 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setupGame() {
-        this.assetSetter.setObjects();
         this.assetSetter.setPlayer();
+        this.assetSetter.setObjects();
         this.assetSetter.setNPCs();
+        this.assetSetter.setMonster();
         this.gameState = GameState.TITLE;
         this.gui.menuSelection = Menu.NEW_GAME;
     }
@@ -121,12 +123,9 @@ public class GamePanel extends JPanel implements Runnable{
         // draw map layer
         this.tileManager.draw(g2);
 
-        Collections.sort(entities, new Comparator<Entity>() {
-            @Override
-            public int compare(Entity entity1, Entity entity2) {
-                return Integer.compare(entity1.worldY, entity2.worldY);
-            }
-        });
+        // sorting entities by worldY pos
+        entities.removeIf(Objects::isNull);
+        entities.sort(Comparator.comparingInt(entity -> entity.worldY));
 
         // draw entities
         for (Entity entity : entities) {
