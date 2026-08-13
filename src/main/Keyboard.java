@@ -55,12 +55,16 @@ public class Keyboard implements KeyListener{
                 if (keyboardCode == KeyEvent.VK_D) { this.isRightPressed = true; }
                 if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
                 if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
+                if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.CHARACTER; }
             }
             case GameState.PAUSED -> {
                 if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PLAYING; }
             }
             case GameState.DIALOGUE -> {
                 if (keyboardCode == KeyEvent.VK_ENTER) { this.gamePanel.gameState = GameState.PLAYING; }
+            }
+            case GameState.CHARACTER -> {
+                if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.PLAYING; }
             }
         }
     }

@@ -2,6 +2,7 @@ package main;
 
 
 import entity.Entity;
+import enums.GameState;
 import enums.Menu;
 import object.ObjectHeart;
 
@@ -24,6 +25,8 @@ public class GUI {
     public boolean gameFinished;
     public String message;
     public String currentDialogueMessage;
+    public BufferedImage healthBarHeart;
+
 
     public GUI(GamePanel p) {
         this.gamePanel = p;
@@ -40,6 +43,7 @@ public class GUI {
         Entity heart = new ObjectHeart(this.gamePanel, 10, 10);
         this.heart_full = heart.image1;
         this.heart_blank = heart.image2;
+        this.healthBarHeart = heart.setupEntityImage("/res/objects/health_bar_heart.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
 
     public void showMessage(String text) {
@@ -53,10 +57,11 @@ public class GUI {
         this.graphics2D.setColor(Color.WHITE);
 
         switch (this.gamePanel.gameState) {
-            case TITLE -> { this.drawTitleScreen(); }
-            case PLAYING -> { this.drawPlayerHearts(); }
-            case PAUSED -> { this.drawPausedScreen(); }
-            case DIALOGUE -> { this.drawDialogueScreen(); }
+            case GameState.TITLE -> { this.drawTitleScreen(); }
+            case GameState.PLAYING -> { this.drawPlayerHearts(); }
+            case GameState.PAUSED -> { this.drawPausedScreen(); }
+            case GameState.DIALOGUE -> { this.drawDialogueScreen(); }
+            case GameState.CHARACTER -> { this.drawCharacterScreen(); }
         }
     }
 
@@ -114,12 +119,6 @@ public class GUI {
             this.graphics2D.drawImage(this.heart_blank, xPos, yPos, null);
             xPos += this.gamePanel.tileSize;
         }
-
-        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 32F));
-        int wCol = this.gamePanel.player.worldX / this.gamePanel.tileSize;
-        int wRow = this.gamePanel.player.worldY / this.gamePanel.tileSize;
-        this.graphics2D.drawString("Col:" + wCol, xPos + 100, yPos + 48);
-        this.graphics2D.drawString("Row:" + wRow, xPos + 200, yPos + 48);
     }
 
     private void drawPausedScreen() {
@@ -148,6 +147,90 @@ public class GUI {
         }
     }
 
+    private void drawCharacterScreen() {
+        // create a frame
+        int frameX = this.gamePanel.tileSize;
+        int frameY = this.gamePanel.tileSize;
+        int frameWidth = this.gamePanel.tileSize * 5;
+        int frameHeight = this.gamePanel.tileSize * 10;
+        this.drawSubWindowScreen(frameX, frameY, frameWidth, frameHeight);
+
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+
+        int textX = frameX + 20;
+        int textY = frameY + this.gamePanel.tileSize;
+        int lineSpacing = 35;
+
+        // attribute text
+        this.graphics2D.drawString("Level", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Life", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Strength", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Dexterity", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Attack", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Defense", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Experience", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Next Level", textX, textY);
+        textY += lineSpacing;
+        this.graphics2D.drawString("Coin", textX, textY);
+        textY += lineSpacing + 20;
+        this.graphics2D.drawString("Weapon", textX, textY);
+        textY += lineSpacing + 20;
+        this.graphics2D.drawString("Shield", textX, textY);
+
+        // attribuet values
+        int rightX = (frameX + frameWidth) - 30;
+        textY = frameY + this.gamePanel.tileSize;
+
+        String textValue = String.valueOf(this.gamePanel.player.currentLevel);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.currentHearts + "/" + this.gamePanel.player.maxHearts);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.strength);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.dexterity);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.attackDamage);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.defenseArmor);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.currentExperience);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.nextLevelExperience);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.coins);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+
+        this.graphics2D.drawImage(this.gamePanel.player.currentWeapon.down1, rightX - this.gamePanel.tileSize, textY - 14, null);
+        textY += this.gamePanel.tileSize;
+        this.graphics2D.drawImage(this.gamePanel.player.currentShield.down1, rightX - this.gamePanel.tileSize, textY - 14, null);
+    }
+
     private void drawSubWindowScreen(int x, int y, int width, int height) {
         int arcSize = 35;
 
@@ -167,5 +250,10 @@ public class GUI {
     private int calcYPositionForCenteredText(String text) {
         int textHeight = (int) this.graphics2D.getFontMetrics().getStringBounds(text, this.graphics2D).getHeight();
         return (this.gamePanel.screenHeight / 2) - (textHeight / 2);
+    }
+
+    private int calcXPositionForAlignToRightText(String text, int rightX) {
+        int textLength = (int) this.graphics2D.getFontMetrics().getStringBounds(text, this.graphics2D).getWidth();
+        return rightX - textLength;
     }
 }

@@ -35,19 +35,31 @@ public class Entity {
     public int animationFrame = 1;
     public boolean isInvincible = false;
     public boolean isAttacking = false;
+    public boolean isAlive = true;
+    public boolean isDying = false;
+    public boolean showHealthBar = false;
     public boolean collisionDetected = false;
 
     // COUNTER
     public int animationCounterFrames = 0;
     public int actionCounterFrames = 0;
     public int invincibleCounterFrames = 0;
+    public int dyingCounterFrames = 0;
+    public int healthBarCounterFrames = 0;
 
     // ATTRIBUTES
     public EntityType entityType;
     public ObjectType objectType;
     public MonsterType monsterType;
     public boolean isSolid = false;
-    public int velocity, maxHearts, currentHearts, attackDamage;
+    public int velocity, strength, dexterity, coins;
+    public int maxHearts, currentHearts;
+    public int attackDamage, defenseArmor;
+    public int currentLevel, currentExperience, nextLevelExperience;
+    public Entity currentWeapon, currentShield;
+
+    // OBJECT ATTRIBUTES
+    public int objectAttackValue, objectDefenseValue;
 
     public Entity(GamePanel p) {
         this.gamePanel = p;
@@ -69,6 +81,8 @@ public class Entity {
     }
 
     public void setAction() {}
+
+    public void damageReaction() {}
 
     public void speak() {
         this.gamePanel.gui.currentDialogueMessage = this.dialogues.get(this.dialogueIndex);
@@ -147,12 +161,57 @@ public class Entity {
             else {
                 image = this.down1;
             }
+            // draw current entity state
+            if (this.entityType == EntityType.MONSTER && this.showHealthBar) {
+                this.drawHealthBar(g2, screenX, screenY);
+            }
             if (this.isInvincible) {
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                this.showHealthBar = true;
+                this.healthBarCounterFrames = 0;
+                this.changeAlphaCompositeValue(g2, 0.5f);
+            }
+            if (this.isDying) {
+                this.drawDyingAnimation(g2);
             }
             g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            this.changeAlphaCompositeValue(g2, 1f);
         }
+    }
+
+    private void drawHealthBar(Graphics2D g2, int screenX, int screenY) {
+        double healthBarScale = (double) this.gamePanel.tileSize / this.maxHearts;
+        double healthBarValue = healthBarScale * this.currentHearts;
+        int healthBarWidth = this.gamePanel.tileSize;
+        int healthBarHeight = 9;
+        int healthBarYPositionAboveEntity = 5;
+
+        g2.setColor(new Color(207, 181, 59));
+        g2.fillRect(screenX - 2, screenY - healthBarYPositionAboveEntity - 1, healthBarWidth + 2, healthBarHeight + 2);
+        g2.setColor(new Color(30, 30, 30));
+        g2.fillRect(screenX, screenY - healthBarYPositionAboveEntity, healthBarWidth - 1, healthBarHeight);
+        g2.setColor(new Color(139, 0, 0));
+        g2.fillRect(screenX, screenY - healthBarYPositionAboveEntity, (int) healthBarValue, healthBarHeight);
+        g2.drawImage(this.gamePanel.gui.healthBarHeart, screenX - 10, screenY - healthBarYPositionAboveEntity - 4, healthBarHeight + 7, healthBarHeight + 7, null);
+
+        this.healthBarCounterFrames++;
+        if (this.healthBarCounterFrames > (this.gamePanel.FPS * 10)) {
+            this.showHealthBar = false;
+            this.healthBarCounterFrames = 0;
+        }
+    }
+
+    private void drawDyingAnimation(Graphics2D g2) {
+        this.dyingCounterFrames++;
+        // blink animation for dying entity every 5 Frames change
+        if (dyingCounterFrames % 5 == 0) { changeAlphaCompositeValue(g2, 0f); }
+        else { changeAlphaCompositeValue(g2, 1f); }
+        if (this.dyingCounterFrames > (this.gamePanel.FPS)) {
+            this.isDying = this.isAlive = false;
+        }
+    }
+
+    private void changeAlphaCompositeValue(Graphics2D g2, float alpha) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
 
     public BufferedImage setupEntityImage(String filePath, int width, int height) {

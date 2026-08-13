@@ -19,7 +19,7 @@ public class GreenSlime extends Entity {
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
         this.velocity = 1;
-        this.maxHearts = 3;
+        this.maxHearts = 4;
         this.currentHearts = this.maxHearts;
         this.attackDamage = 1;
 
@@ -32,14 +32,14 @@ public class GreenSlime extends Entity {
     }
 
     private void getImages() {
-        this.up1 = this.setupEntityImage("/res/monster/greenslime_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.up2 = this.setupEntityImage("/res/monster/greenslime_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.down1 = this.setupEntityImage("/res/monster/greenslime_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.down2 = this.setupEntityImage("/res/monster/greenslime_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.left1 = this.setupEntityImage("/res/monster/greenslime_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.left2 = this.setupEntityImage("/res/monster/greenslime_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.right1 = this.setupEntityImage("/res/monster/greenslime_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.right2 = this.setupEntityImage("/res/monster/greenslime_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.up1 = this.setupEntityImage("/res/monster/ball_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.up2 = this.setupEntityImage("/res/monster/ball_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/monster/ball_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down2 = this.setupEntityImage("/res/monster/ball_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.left1 = this.setupEntityImage("/res/monster/ball_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.left2 = this.setupEntityImage("/res/monster/ball_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.right1 = this.setupEntityImage("/res/monster/ball_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.right2 = this.setupEntityImage("/res/monster/ball_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
 
     public void setAction() {
@@ -54,5 +54,10 @@ public class GreenSlime extends Entity {
             else { this.direction = Direction.RIGHT; }
             this.actionCounterFrames = 0;
         }
+    }
+
+    public void damageReaction() {
+        this.actionCounterFrames = 0;
+        this.direction = this.gamePanel.player.direction;
     }
 }

@@ -8,6 +8,8 @@ import enums.EntityType;
 import enums.GameState;
 import main.GamePanel;
 import main.Keyboard;
+import object.ObjectShield;
+import object.ObjectSword;
 
 public class Player extends Entity {
     private final Keyboard keyboard;
@@ -24,20 +26,31 @@ public class Player extends Entity {
 
     private void setDefaultValues() {
         this.entityType = EntityType.PLAYER;
-        // centering player on screen
+        // centering player
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
-        // set player into center
         this.worldX = (this.gamePanel.worldWidth / 2);
         this.worldY = (this.gamePanel.worldHeight / 2);
+        // player status
         this.velocity = 4;
-        // heart status
+        this.strength = 1;
+        this.dexterity = 1;
+        this.coins = 0;
         this.maxHearts = 5;
         this.currentHearts = this.maxHearts;
-        // attacking
-        this.attackDamage = 1;
         this.attackArea = new Rectangle(0, 0, 36, 36);
+        this.currentLevel = 1;
+        this.currentExperience = 0;
+        this.nextLevelExperience = 5;
+        this.currentWeapon = new ObjectSword(this.gamePanel, -1, -1);
+        this.currentShield = new ObjectShield(this.gamePanel, -1, -1);
+        this.attackDamage = this.getAttackDamage();
+        this.defenseArmor = this.getDefenseArmor();
     }
+
+    private int getAttackDamage() { return this.strength * this.currentWeapon.objectAttackValue; }
+
+    private int getDefenseArmor() { return this.dexterity * this.currentShield.objectDefenseValue; }
 
     private void getImages() {
         // MOVEMENT
@@ -183,8 +196,9 @@ public class Player extends Entity {
             if (monster.entityType == EntityType.MONSTER && !monster.isInvincible) {
                 monster.currentHearts -= this.attackDamage;
                 monster.isInvincible = true;
+                monster.damageReaction();
                 if (monster.currentHearts < 1) {
-                    this.gamePanel.entities.set(entityIndex, null);
+                    this.gamePanel.entities.get(entityIndex).isDying = true;
                 }
             }
         }

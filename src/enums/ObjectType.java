@@ -5,5 +5,7 @@ public enum ObjectType {
     DOOR,
     CHEST,
     BOOTS,
-    HEART
+    HEART,
+    SWORD,
+    SHIELD
 }

@@ -6,5 +6,6 @@ public enum GameState {
     PLAYING,
     PAUSED,
     DIALOGUE,
+    CHARACTER,
     GAMEOVER
 }
