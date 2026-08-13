@@ -1,9 +1,11 @@
 package enums;
 
-public enum ObjectTyp {
+public enum ObjectType {
     KEY,
     DOOR,
     CHEST,
     BOOTS,
-    HEART
+    HEART,
+    SWORD,
+    SHIELD
 }

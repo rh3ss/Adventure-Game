@@ -1,8 +1,9 @@
 package entity;
 
 import enums.Direction;
-import enums.EntityTyp;
-import enums.ObjectTyp;
+import enums.EntityType;
+import enums.MonsterType;
+import enums.ObjectType;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -15,22 +16,50 @@ import java.util.Objects;
 
 public class Entity {
     public GamePanel gamePanel;
-    public int worldX, worldY;
-    public int velocity;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, image1, image2;
-    public Direction direction;
-    public int animationCounter = 0;
-    public int animationFrame = 1;
-    public int actionCounterFrames = 0;
-    public boolean isSolid = false;
+
+    // IMAGES
+    public BufferedImage image1, image2;
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+
+    // INTERACTION
     public Rectangle solidArea;
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collisionDetected = false;
+    public Rectangle attackArea;
     public ArrayList<String> dialogues;
     public int dialogueIndex;
-    public EntityTyp entityTyp;
-    public ObjectTyp objectTyp;
+
+    // STATE
+    public int worldX, worldY;
+    public Direction direction;
+    public int animationFrame = 1;
+    public boolean isInvincible = false;
+    public boolean isAttacking = false;
+    public boolean isAlive = true;
+    public boolean isDying = false;
+    public boolean showHealthBar = false;
+    public boolean collisionDetected = false;
+
+    // COUNTER
+    public int animationCounterFrames = 0;
+    public int actionCounterFrames = 0;
+    public int invincibleCounterFrames = 0;
+    public int dyingCounterFrames = 0;
+    public int healthBarCounterFrames = 0;
+
+    // ATTRIBUTES
+    public EntityType entityType;
+    public ObjectType objectType;
+    public MonsterType monsterType;
+    public boolean isSolid = false;
+    public int velocity, strength, dexterity, coins;
     public int maxHearts, currentHearts;
+    public int attackDamage, defenseArmor;
+    public int currentLevel, currentExperience, nextLevelExperience;
+    public Entity currentWeapon, currentShield;
+
+    // OBJECT ATTRIBUTES
+    public int objectAttackValue, objectDefenseValue;
 
     public Entity(GamePanel p) {
         this.gamePanel = p;
@@ -53,6 +82,8 @@ public class Entity {
 
     public void setAction() {}
 
+    public void damageReaction() {}
+
     public void speak() {
         this.gamePanel.gui.currentDialogueMessage = this.dialogues.get(this.dialogueIndex);
         this.dialogueIndex++;
@@ -74,8 +105,15 @@ public class Entity {
         // check collision
         this.collisionDetected = false;
         this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
-//        this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, false);
-        this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
+        this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
+        boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
+
+        if (this.entityType == EntityType.MONSTER && entityCollidedWithPlayer) {
+            if (!this.gamePanel.player.isInvincible && this.gamePanel.player.currentHearts > 0) {
+                this.gamePanel.player.currentHearts--;
+                this.gamePanel.player.isInvincible = true;
+            }
+        }
 
         if (!this.collisionDetected) {
             switch (this.direction) {
@@ -86,11 +124,19 @@ public class Entity {
             }
         }
 
-        this.animationCounter++;
+        this.animationCounterFrames++;
         // entity image should change ever FPS / 4 = 15 frames
-        if (this.animationCounter > (this.gamePanel.FPS / 4)) {
+        if (this.animationCounterFrames > (this.gamePanel.FPS / 4)) {
             this.animationFrame = (this.animationFrame == 1) ? 2 : 1;
-            this.animationCounter = 0;
+            this.animationCounterFrames = 0;
+        }
+
+        if (isInvincible) {
+            this.invincibleCounterFrames++;
+            if (this.invincibleCounterFrames > (this.gamePanel.FPS - 20)) {
+                this.isInvincible = false;
+                this.invincibleCounterFrames = 0;
+            }
         }
     }
 
@@ -104,7 +150,7 @@ public class Entity {
                 this.worldY - this.gamePanel.tileSize < this.gamePanel.player.worldY + this.gamePanel.player.screenY
         ) {
             BufferedImage image = null;
-            if (this.entityTyp != EntityTyp.OBJECT) {
+            if (this.entityType != EntityType.OBJECT) {
                 switch (this.direction) {
                     case Direction.UP -> { image = (this.animationFrame == 1) ? this.up1 : this.up2; }
                     case Direction.DOWN -> { image = (this.animationFrame == 1) ? this.down1 : this.down2; }
@@ -115,17 +161,65 @@ public class Entity {
             else {
                 image = this.down1;
             }
-
+            // draw current entity state
+            if (this.entityType == EntityType.MONSTER && this.showHealthBar) {
+                this.drawHealthBar(g2, screenX, screenY);
+            }
+            if (this.isInvincible) {
+                this.showHealthBar = true;
+                this.healthBarCounterFrames = 0;
+                this.changeAlphaCompositeValue(g2, 0.5f);
+            }
+            if (this.isDying) {
+                this.drawDyingAnimation(g2);
+            }
             g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+            this.changeAlphaCompositeValue(g2, 1f);
         }
     }
 
-    public BufferedImage setupEntityImage(String filePath) {
+    private void drawHealthBar(Graphics2D g2, int screenX, int screenY) {
+        double healthBarScale = (double) this.gamePanel.tileSize / this.maxHearts;
+        double healthBarValue = healthBarScale * this.currentHearts;
+        int healthBarWidth = this.gamePanel.tileSize;
+        int healthBarHeight = 9;
+        int healthBarYPositionAboveEntity = 5;
+
+        g2.setColor(new Color(207, 181, 59));
+        g2.fillRect(screenX - 2, screenY - healthBarYPositionAboveEntity - 1, healthBarWidth + 2, healthBarHeight + 2);
+        g2.setColor(new Color(30, 30, 30));
+        g2.fillRect(screenX, screenY - healthBarYPositionAboveEntity, healthBarWidth - 1, healthBarHeight);
+        g2.setColor(new Color(139, 0, 0));
+        g2.fillRect(screenX, screenY - healthBarYPositionAboveEntity, (int) healthBarValue, healthBarHeight);
+        g2.drawImage(this.gamePanel.gui.healthBarHeart, screenX - 10, screenY - healthBarYPositionAboveEntity - 4, healthBarHeight + 7, healthBarHeight + 7, null);
+
+        this.healthBarCounterFrames++;
+        if (this.healthBarCounterFrames > (this.gamePanel.FPS * 10)) {
+            this.showHealthBar = false;
+            this.healthBarCounterFrames = 0;
+        }
+    }
+
+    private void drawDyingAnimation(Graphics2D g2) {
+        this.dyingCounterFrames++;
+        // blink animation for dying entity every 5 Frames change
+        if (dyingCounterFrames % 5 == 0) { changeAlphaCompositeValue(g2, 0f); }
+        else { changeAlphaCompositeValue(g2, 1f); }
+        if (this.dyingCounterFrames > (this.gamePanel.FPS)) {
+            this.isDying = this.isAlive = false;
+        }
+    }
+
+    private void changeAlphaCompositeValue(Graphics2D g2, float alpha) {
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+    }
+
+    public BufferedImage setupEntityImage(String filePath, int width, int height) {
         UtilityTool utilityTool = new UtilityTool();
         BufferedImage entityImage = null;
         try {
             entityImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(filePath)));
-            entityImage = utilityTool.scaleImage(entityImage, this.gamePanel.tileSize, this.gamePanel.tileSize);
+            entityImage = utilityTool.scaleImage(entityImage, width, height);
         }
         catch (IOException _) {}
         return entityImage;

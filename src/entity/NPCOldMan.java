@@ -2,6 +2,7 @@ package entity;
 
 
 import enums.Direction;
+import enums.EntityType;
 import main.GamePanel;
 
 import java.util.Random;
@@ -10,23 +11,26 @@ public class NPCOldMan extends Entity {
 
     public NPCOldMan(GamePanel p, int worldColumn, int worldRow) {
         super(p);
+
+        this.entityType = EntityType.NPC;
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
         this.velocity = 1;
+        this.isSolid = true;
 
         this.getImages();
         this.setDialogues();
     }
 
     private void getImages() {
-        this.up1 = this.setupEntityImage("/res/npc/oldman_up_1.png");
-        this.up2 = this.setupEntityImage("/res/npc/oldman_up_2.png");
-        this.down1 = this.setupEntityImage("/res/npc/oldman_down_1.png");
-        this.down2 = this.setupEntityImage("/res/npc/oldman_down_2.png");
-        this.left1 = this.setupEntityImage("/res/npc/oldman_left_1.png");
-        this.left2 = this.setupEntityImage("/res/npc/oldman_left_2.png");
-        this.right1 = this.setupEntityImage("/res/npc/oldman_right_1.png");
-        this.right2 = this.setupEntityImage("/res/npc/oldman_right_2.png");
+        this.up1 = this.setupEntityImage("/res/npc/oldman_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.up2 = this.setupEntityImage("/res/npc/oldman_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/npc/oldman_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down2 = this.setupEntityImage("/res/npc/oldman_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.left1 = this.setupEntityImage("/res/npc/oldman_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.left2 = this.setupEntityImage("/res/npc/oldman_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.right1 = this.setupEntityImage("/res/npc/oldman_right_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.right2 = this.setupEntityImage("/res/npc/oldman_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
 
     private void setDialogues() {
