@@ -60,7 +60,7 @@ public class Entity {
 
     // OBJECT ATTRIBUTES
     public int objectAttackValue, objectDefenseValue;
-    public String objectDescription;
+    public String objectDescription = "";
 
     public Entity(GamePanel p) {
         this.gamePanel = p;
@@ -106,6 +106,7 @@ public class Entity {
         // check collision
         this.collisionDetected = false;
         this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
+        this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, false);
         this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
         boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
 

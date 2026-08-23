@@ -19,15 +19,15 @@ public class AssetSetter {
     }
 
     public void setObjects() {
-        ObjectKey key = new ObjectKey(this.gamePanel, 22, 15);
-//        ObjectChest chest = new ObjectChest(this.gamePanel, 19, 12);
-//        ObjectDoor door = new ObjectDoor(this.gamePanel, 23, 23);
-//        ObjectBoots boots = new ObjectBoots(this.gamePanel, 22, 27);
+        ObjectKey key1 = new ObjectKey(this.gamePanel, 22, 22);
+        ObjectKey key2 = new ObjectKey(this.gamePanel, 20, 25);
+        ObjectKey key3 = new ObjectKey(this.gamePanel, 24, 25);
+        ObjectDoor door1 = new ObjectDoor(this.gamePanel, 22, 42);
 
-        this.gamePanel.entities.add(key);
-//        this.gamePanel.entities.add(chest);
-//        this.gamePanel.entities.add(door);
-//        this.gamePanel.entities.add(boots);
+        this.gamePanel.entities.add(key1);
+        this.gamePanel.entities.add(key2);
+        this.gamePanel.entities.add(key3);
+        this.gamePanel.entities.add(door1);
     }
 
     public void setNPCs() {

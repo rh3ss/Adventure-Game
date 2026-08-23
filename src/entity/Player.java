@@ -88,7 +88,6 @@ public class Player extends Entity {
 
         this.inventory.add(this.currentWeapon);
         this.inventory.add(this.currentShield);
-        this.inventory.add(new ObjectKey(this.gamePanel, -1, -1));
     }
 
     public void update() {
@@ -151,10 +150,11 @@ public class Player extends Entity {
         else if (this.keyboard.isLeftPressed) { this.direction = Direction.LEFT; }
         else if (this.keyboard.isRightPressed) { this.direction = Direction.RIGHT; }
 
-        // check tile collision
+        // check collisions
         this.collisionDetected = false;
         this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
-        // check entity collision
+        int objectIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, true);
+        this.interactWithCollidedEntity(objectIndex);
         int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
         this.interactWithCollidedEntity(entityIndex);
         // check event handling
@@ -182,9 +182,9 @@ public class Player extends Entity {
         if (entityIndex != Integer.MAX_VALUE) {
             Entity entity = this.gamePanel.entities.get(entityIndex);
             switch (entity.entityType) {
-                case EntityType.NPC -> { playerCollisionWithNPC(entity); }
-                case EntityType.MONSTER -> { playerCollisionWithMonster(entity); }
-                case EntityType.OBJECT -> { }
+                case EntityType.NPC -> { this.playerCollisionWithNPC(entity); }
+                case EntityType.MONSTER -> { this.playerCollisionWithMonster(entity); }
+                case EntityType.OBJECT -> { this.playerCollisionWithObject(entity); }
             }
         }
         else {
@@ -194,20 +194,33 @@ public class Player extends Entity {
         }
     }
 
-    private void playerCollisionWithNPC(Entity entity) {
+    private void playerCollisionWithNPC(Entity npc) {
         if (this.gamePanel.keyboard.isEnterPressed) {
             this.gamePanel.gameState = GameState.DIALOGUE;
-            entity.speak();
+            npc.speak();
         }
     }
 
-    private void playerCollisionWithMonster(Entity entity) {
+    private void playerCollisionWithMonster(Entity monster) {
         if (!this.isInvincible && this.currentHearts > 0) {
-            int damage = entity.attackDamage - this.defenseArmor;
+            int damage = monster.attackDamage - this.defenseArmor;
             if (damage < 0) { damage = 0; }
             this.currentHearts -= damage;
             this.isInvincible = true;
         }
+    }
+
+    private void playerCollisionWithObject(Entity object) {
+        String collisionMessage;
+        if (this.inventory.size() < this.maxInventorySize) {
+            collisionMessage = "You found a " + object.objectType.toString();
+            this.inventory.add(object);
+            this.gamePanel.entities.remove(object);
+        }
+        else {
+            collisionMessage = "Inventory full!";
+        }
+        this.gamePanel.gui.addMessage(collisionMessage);
     }
 
     private void playerAttacksMonster(int entityIndex) {

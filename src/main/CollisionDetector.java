@@ -2,6 +2,7 @@ package main;
 
 import entity.Entity;
 import enums.Direction;
+import enums.EntityType;
 
 public class CollisionDetector {
     private final GamePanel gamePanel;
@@ -50,41 +51,45 @@ public class CollisionDetector {
         }
     }
 
-//    public int detectEntityCollisionWithObject(Entity entity, boolean player) {
-//        int objectIndex = Integer.MAX_VALUE;
-//        for (int idx = 0; idx < this.gamePanel.objects.size(); idx++) {
-//            GameObject object = this.gamePanel.objects.get(idx);
-//            if (object != null) {
-//                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-//                entity.solidArea.y = entity.worldY + entity.solidArea.y;
-//                object.solidArea.x = object.worldX + object.solidArea.x;
-//                object.solidArea.y = object.worldY + object.solidArea.y;
-//                switch (entity.direction) {
-//                    case Direction.UP -> { entity.solidArea.y -= entity.velocity; }
-//                    case Direction.DOWN -> { entity.solidArea.y += entity.velocity; }
-//                    case Direction.LEFT -> { entity.solidArea.x -= entity.velocity; }
-//                    case Direction.RIGHT -> { entity.solidArea.x += entity.velocity; }
-//                }
-//                // check if entity area intersects with object area
-//                if (entity.solidArea.intersects(object.solidArea)) {
-//                    if (object.isSolid) { entity.collisionDetected = true; }
-//                    if (player) { objectIndex = idx; }
-//                }
-//                // reset areas
-//                entity.solidArea.x = entity.solidAreaDefaultX;
-//                entity.solidArea.y = entity.solidAreaDefaultY;
-//                object.solidArea.x = object.solidAreaDefaultX;
-//                object.solidArea.y = object.solidAreaDefaultY;
-//            }
-//        }
-//        return objectIndex;
-//    }
+    public int detectEntityCollisionWithObject(Entity entity, boolean player) {
+        int objectIndex = Integer.MAX_VALUE;
+        for (int idx = 0; idx < this.gamePanel.entities.size(); idx++) {
+            Entity object = this.gamePanel.entities.get(idx);
+            if (object != null && object != entity && object.entityType == EntityType.OBJECT) {
+                entity.solidArea.x = entity.worldX + entity.solidArea.x;
+                entity.solidArea.y = entity.worldY + entity.solidArea.y;
+                object.solidArea.x = object.worldX + object.solidArea.x;
+                object.solidArea.y = object.worldY + object.solidArea.y;
+                switch (entity.direction) {
+                    case Direction.UP -> { entity.solidArea.y -= entity.velocity; }
+                    case Direction.DOWN -> { entity.solidArea.y += entity.velocity; }
+                    case Direction.LEFT -> { entity.solidArea.x -= entity.velocity; }
+                    case Direction.RIGHT -> { entity.solidArea.x += entity.velocity; }
+                }
+                // check if entity area intersects with object area
+                if (entity.solidArea.intersects(object.solidArea)) {
+                    if (object.isSolid) {
+                        entity.collisionDetected = true;
+                    }
+                    if (!object.isSolid && player) {
+                        objectIndex = idx;
+                    }
+                }
+                // reset areas
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                object.solidArea.x = object.solidAreaDefaultX;
+                object.solidArea.y = object.solidAreaDefaultY;
+            }
+        }
+        return objectIndex;
+    }
 
     public int detectEntityCollisionWithEntities(Entity entity) {
         int entityIndex = Integer.MAX_VALUE;
         for (int idx = 0; idx < this.gamePanel.entities.size(); idx++) {
             Entity idxEntity = this.gamePanel.entities.get(idx);
-            if (idxEntity != null && entity != idxEntity) {
+            if (idxEntity != null && entity != idxEntity && entity.entityType != EntityType.OBJECT) {
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
                 idxEntity.solidArea.x = idxEntity.worldX + idxEntity.solidArea.x;
