@@ -2,12 +2,14 @@ package entity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import enums.Direction;
 import enums.EntityType;
 import enums.GameState;
 import main.GamePanel;
 import main.Keyboard;
+import object.ObjectKey;
 import object.ObjectShield;
 import object.ObjectSword;
 
@@ -15,6 +17,9 @@ public class Player extends Entity {
     private final Keyboard keyboard;
     public int screenX;
     public int screenY;
+    public ArrayList<Entity> inventory;
+    public int inventoryColumnSize, inventoryRowSize;
+    public int maxInventorySize;
 
     public Player(GamePanel p, Keyboard k) {
         super(p);
@@ -22,6 +27,7 @@ public class Player extends Entity {
 
         this.setDefaultValues();
         this.getImages();
+        this.setInventory();
     }
 
     private void setDefaultValues() {
@@ -71,6 +77,18 @@ public class Player extends Entity {
         this.attackLeft2 = this.setupEntityImage("/res/player/boy_attack_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
         this.attackRight1 = this.setupEntityImage("/res/player/boy_attack_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
         this.attackRight2 = this.setupEntityImage("/res/player/boy_attack_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+    }
+
+    private void setInventory() {
+        // inventory
+        this.inventory = new ArrayList<>();
+        this.inventoryColumnSize = 5;
+        this.inventoryRowSize = 4;
+        this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
+
+        this.inventory.add(this.currentWeapon);
+        this.inventory.add(this.currentShield);
+        this.inventory.add(new ObjectKey(this.gamePanel, -1, -1));
     }
 
     public void update() {
@@ -185,7 +203,9 @@ public class Player extends Entity {
 
     private void playerCollisionWithMonster(Entity entity) {
         if (!this.isInvincible && this.currentHearts > 0) {
-            this.currentHearts -= entity.attackDamage;
+            int damage = entity.attackDamage - this.defenseArmor;
+            if (damage < 0) { damage = 0; }
+            this.currentHearts -= damage;
             this.isInvincible = true;
         }
     }
@@ -194,13 +214,36 @@ public class Player extends Entity {
         if (entityIndex != Integer.MAX_VALUE) {
             Entity monster = this.gamePanel.entities.get(entityIndex);
             if (monster.entityType == EntityType.MONSTER && !monster.isInvincible) {
-                monster.currentHearts -= this.attackDamage;
+                int damage = this.attackDamage - monster.defenseArmor;
+                if (damage < 0) { damage = 0; }
+
+                this.gamePanel.gui.addMessage(damage + " damage!");
+                monster.currentHearts -= damage;
                 monster.isInvincible = true;
                 monster.damageReaction();
                 if (monster.currentHearts < 1) {
                     this.gamePanel.entities.get(entityIndex).isDying = true;
+                    this.gamePanel.gui.addMessage("killed the " + monster.monsterType.toString() + "!");
+                    this.currentExperience += monster.currentExperience;
+                    this.gamePanel.gui.addMessage("Experience +" + monster.currentExperience);
+                    this.checkPlayerLevelUp();
                 }
             }
+        }
+    }
+
+    private void checkPlayerLevelUp() {
+        if (this.currentExperience >= this.nextLevelExperience) {
+            this.currentLevel++;
+            this.maxHearts++;
+            this.strength++;
+            this.dexterity++;
+            this.nextLevelExperience *= 2;
+            this.attackDamage = this.getAttackDamage();
+            this.defenseArmor = this.getDefenseArmor();
+
+            this.gamePanel.gameState = GameState.DIALOGUE;
+            this.gamePanel.gui.currentDialogueMessage = "You are level " + this.currentLevel + "now!";
         }
     }
 

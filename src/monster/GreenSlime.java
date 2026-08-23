@@ -21,7 +21,9 @@ public class GreenSlime extends Entity {
         this.velocity = 1;
         this.maxHearts = 4;
         this.currentHearts = this.maxHearts;
-        this.attackDamage = 1;
+        this.currentExperience = 3;
+        this.attackDamage = 3;
+        this.defenseArmor = 0;
 
         this.isSolid = true;
         this.solidArea = new Rectangle(3, 18, 42, 30);

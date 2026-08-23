@@ -38,7 +38,11 @@ public class AssetSetter {
     public void setMonster() {
         GreenSlime slime = new GreenSlime(this.gamePanel, 23, 38);
         this.gamePanel.entities.add(slime);
-        GreenSlime slime1 = new GreenSlime(this.gamePanel, 25, 38);
+        GreenSlime slime1 = new GreenSlime(this.gamePanel, 23, 40);
         this.gamePanel.entities.add(slime1);
+        GreenSlime slime2 = new GreenSlime(this.gamePanel, 23, 43);
+        this.gamePanel.entities.add(slime2);
+        GreenSlime slime3 = new GreenSlime(this.gamePanel, 23, 42);
+        this.gamePanel.entities.add(slime3);
     }
 }

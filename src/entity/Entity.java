@@ -60,6 +60,7 @@ public class Entity {
 
     // OBJECT ATTRIBUTES
     public int objectAttackValue, objectDefenseValue;
+    public String objectDescription;
 
     public Entity(GamePanel p) {
         this.gamePanel = p;
@@ -110,7 +111,9 @@ public class Entity {
 
         if (this.entityType == EntityType.MONSTER && entityCollidedWithPlayer) {
             if (!this.gamePanel.player.isInvincible && this.gamePanel.player.currentHearts > 0) {
-                this.gamePanel.player.currentHearts--;
+                int damage = this.attackDamage - this.gamePanel.player.defenseArmor;
+                if (damage < 0) { damage = 0; }
+                this.gamePanel.player.currentHearts -= damage;
                 this.gamePanel.player.isInvincible = true;
             }
         }

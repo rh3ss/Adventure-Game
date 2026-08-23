@@ -16,5 +16,6 @@ public class ObjectShield extends Entity {
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
         this.objectDefenseValue = 1;
+        this.objectDescription = "[" + this.objectType.toString() + "]\nAn old wooden shield.";
     }
 }

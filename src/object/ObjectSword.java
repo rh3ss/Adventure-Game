@@ -16,5 +16,6 @@ public class ObjectSword extends Entity {
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
         this.objectAttackValue = 1;
+        this.objectDescription = "[" + this.objectType.toString() + "]\nAn old wooden sword.";
     }
 }

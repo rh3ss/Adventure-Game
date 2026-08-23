@@ -65,6 +65,30 @@ public class Keyboard implements KeyListener{
             }
             case GameState.CHARACTER -> {
                 if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.PLAYING; }
+                if (keyboardCode == KeyEvent.VK_W) {
+                    this.gamePanel.gui.inventorySlotRowSelected--;
+                    if (this.gamePanel.gui.inventorySlotRowSelected < 0) {
+                        this.gamePanel.gui.inventorySlotRowSelected = this.gamePanel.player.inventoryRowSize - 1;
+                    }
+                }
+                if (keyboardCode == KeyEvent.VK_S) {
+                    this.gamePanel.gui.inventorySlotRowSelected++;
+                    if (this.gamePanel.gui.inventorySlotRowSelected > this.gamePanel.player.inventoryRowSize - 1) {
+                        this.gamePanel.gui.inventorySlotRowSelected = 0;
+                    }
+                }
+                if (keyboardCode == KeyEvent.VK_A) {
+                    this.gamePanel.gui.inventorySlotColumnSelected--;
+                    if (this.gamePanel.gui.inventorySlotColumnSelected < 0) {
+                        this.gamePanel.gui.inventorySlotColumnSelected = this.gamePanel.player.inventoryColumnSize - 1;
+                    }
+                }
+                if (keyboardCode == KeyEvent.VK_D) {
+                    this.gamePanel.gui.inventorySlotColumnSelected++;
+                    if (this.gamePanel.gui.inventorySlotColumnSelected > this.gamePanel.player.inventoryColumnSize - 1) {
+                        this.gamePanel.gui.inventorySlotColumnSelected = 0;
+                    }
+                }
             }
         }
     }

@@ -14,6 +14,7 @@ import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class GUI {
     private final GamePanel gamePanel;
@@ -21,12 +22,13 @@ public class GUI {
     private final BufferedImage heart_full, heart_blank;
     private Graphics2D graphics2D;
     public Menu menuSelection;
+    public ArrayList<String> messages;
+    public ArrayList<Integer> messagesCounter;
     public boolean messageOn;
     public boolean gameFinished;
-    public String message;
     public String currentDialogueMessage;
     public BufferedImage healthBarHeart;
-
+    public int inventorySlotColumnSelected, inventorySlotRowSelected;
 
     public GUI(GamePanel p) {
         this.gamePanel = p;
@@ -37,18 +39,21 @@ public class GUI {
         }
         catch (FontFormatException | IOException e) { throw new RuntimeException(e);}
 
+        this.messages = new ArrayList<>();
+        this.messagesCounter = new ArrayList<>();
         this.messageOn = this.gameFinished = false;
-        this.message = this.currentDialogueMessage = "";
 
         Entity heart = new ObjectHeart(this.gamePanel, 10, 10);
         this.heart_full = heart.image1;
         this.heart_blank = heart.image2;
         this.healthBarHeart = heart.setupEntityImage("/res/objects/health_bar_heart.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+
+        this.inventorySlotColumnSelected = this.inventorySlotRowSelected = 0;
     }
 
-    public void showMessage(String text) {
-        this.message = text;
-        this.messageOn = true;
+    public void addMessage(String message) {
+        this.messages.add(message);
+        this.messagesCounter.add(0);
     }
 
     public void draw(Graphics2D g2) {
@@ -58,10 +63,16 @@ public class GUI {
 
         switch (this.gamePanel.gameState) {
             case GameState.TITLE -> { this.drawTitleScreen(); }
-            case GameState.PLAYING -> { this.drawPlayerHearts(); }
+            case GameState.PLAYING -> {
+                this.drawPlayerHearts();
+                this.drawMessages();
+            }
             case GameState.PAUSED -> { this.drawPausedScreen(); }
             case GameState.DIALOGUE -> { this.drawDialogueScreen(); }
-            case GameState.CHARACTER -> { this.drawCharacterScreen(); }
+            case GameState.CHARACTER -> {
+                this.drawPlayerAttributes();
+                this.drawPlayerInventory();
+            }
         }
     }
 
@@ -121,6 +132,30 @@ public class GUI {
         }
     }
 
+    private void drawMessages() {
+        int messageX = this.gamePanel.tileSize;
+        int messageY = this.gamePanel.tileSize * 4;
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 26F));
+
+        for (int idx = 0; idx < this.messages.size(); idx++) {
+            String idxMessage = this.messages.get(idx);
+            if (idxMessage != null) {
+                this.graphics2D.setColor(Color.BLACK);
+                this.graphics2D.drawString(idxMessage, messageX + 2, messageY + 2);
+                this.graphics2D.setColor(Color.WHITE);
+                this.graphics2D.drawString(idxMessage, messageX, messageY);
+                int counter =  this.messagesCounter.get(idx) + 1;
+                this.messagesCounter.set(idx, counter);
+                messageY += 30;
+
+                if (this.messagesCounter.get(idx) > (this.gamePanel.FPS * 3)) {
+                    this.messages.remove(idx);
+                    this.messagesCounter.remove(idx);
+                }
+            }
+        }
+    }
+
     private void drawPausedScreen() {
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 80F));
 
@@ -147,7 +182,7 @@ public class GUI {
         }
     }
 
-    private void drawCharacterScreen() {
+    private void drawPlayerAttributes() {
         // create a frame
         int frameX = this.gamePanel.tileSize;
         int frameY = this.gamePanel.tileSize;
@@ -165,7 +200,7 @@ public class GUI {
         // attribute text
         this.graphics2D.drawString("Level", textX, textY);
         textY += lineSpacing;
-        this.graphics2D.drawString("Life", textX, textY);
+        this.graphics2D.drawString("Hearts", textX, textY);
         textY += lineSpacing;
         this.graphics2D.drawString("Strength", textX, textY);
         textY += lineSpacing;
@@ -229,6 +264,58 @@ public class GUI {
         this.graphics2D.drawImage(this.gamePanel.player.currentWeapon.down1, rightX - this.gamePanel.tileSize, textY - 14, null);
         textY += this.gamePanel.tileSize;
         this.graphics2D.drawImage(this.gamePanel.player.currentShield.down1, rightX - this.gamePanel.tileSize, textY - 14, null);
+    }
+
+    private void drawPlayerInventory() {
+        // inventory window frame
+        int inventoryWindowFrameX = this.gamePanel.tileSize * 9;
+        int inventoryWindowFrameY = this.gamePanel.tileSize;
+        int inventoryWindowFrameWidth = this.gamePanel.tileSize * (this.gamePanel.player.inventoryColumnSize + 1);
+        int inventoryWindowFrameHeight = this.gamePanel.tileSize * (this.gamePanel.player.inventoryRowSize + 1);
+        this.drawSubWindowScreen(inventoryWindowFrameX, inventoryWindowFrameY, inventoryWindowFrameWidth, inventoryWindowFrameHeight);
+        // players inventory items
+        int inventorySlotStartX = inventoryWindowFrameX + 20;
+        int inventorySlotStartY = inventoryWindowFrameY + 20;
+        int inventorySlotX = inventorySlotStartX;
+        int inventorySlotY = inventorySlotStartY;
+        for (int idx = 1; idx < this.gamePanel.player.inventory.size() + 1; idx++) {
+            Entity item = this.gamePanel.player.inventory.get(idx - 1);
+            this.graphics2D.drawImage(item.down1, inventorySlotX, inventorySlotY, null);
+            inventorySlotX += this.gamePanel.tileSize;
+            if (idx % this.gamePanel.player.inventoryColumnSize == 0) {
+                inventorySlotX = inventorySlotStartX;
+                inventorySlotY += this.gamePanel.tileSize;
+            }
+        }
+        // inventory selected cursor
+        int inventoryCursorX = inventorySlotStartX + (this.gamePanel.tileSize * this.inventorySlotColumnSelected);
+        int inventoryCursorY = inventorySlotStartY + (this.gamePanel.tileSize * this.inventorySlotRowSelected);
+        int inventoryCursorWidth = this.gamePanel.tileSize;
+        int inventoryCursorHeight = this.gamePanel.tileSize;
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.setStroke(new BasicStroke(3));
+        this.graphics2D.drawRoundRect(inventoryCursorX, inventoryCursorY, inventoryCursorWidth, inventoryCursorHeight, 10, 10);
+        // inventory selected item description
+        int descriptionFrameX = inventoryWindowFrameX;
+        int descriptionFrameY = inventoryWindowFrameY + inventoryWindowFrameHeight;
+        int descriptionFrameWidth = inventoryWindowFrameWidth;
+        int descriptionFrameHeight = this.gamePanel.tileSize * 3;
+        this.drawSubWindowScreen(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight);
+        int descriptionTextX = descriptionFrameX + 20;
+        int descriptionTextY = descriptionFrameY + this.gamePanel.tileSize;
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(28F));
+        int itemIndex = this.getInventoryItemIndexOnSlot();
+        if (itemIndex < this.gamePanel.player.inventory.size()) {
+            String itemDescription = this.gamePanel.player.inventory.get(itemIndex).objectDescription;
+            for (String line : itemDescription.split("\n")) {
+                this.graphics2D.drawString(line, descriptionTextX, descriptionTextY);
+                descriptionTextY += 32;
+            }
+        }
+    }
+
+    private int getInventoryItemIndexOnSlot() {
+        return this.inventorySlotColumnSelected + (this.inventorySlotRowSelected * 5);
     }
 
     private void drawSubWindowScreen(int x, int y, int width, int height) {

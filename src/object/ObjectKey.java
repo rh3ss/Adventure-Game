@@ -15,5 +15,6 @@ public class ObjectKey extends Entity {
         this.down1 = this.setupEntityImage("/res/objects/key.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
+        this.objectDescription = "[" + this.objectType.toString() + "]\nA golden key.";
     }
 }
