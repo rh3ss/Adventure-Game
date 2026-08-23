@@ -300,12 +300,12 @@ public class GUI {
         int descriptionFrameY = inventoryWindowFrameY + inventoryWindowFrameHeight;
         int descriptionFrameWidth = inventoryWindowFrameWidth;
         int descriptionFrameHeight = this.gamePanel.tileSize * 3;
-        this.drawSubWindowScreen(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight);
         int descriptionTextX = descriptionFrameX + 20;
         int descriptionTextY = descriptionFrameY + this.gamePanel.tileSize;
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(28F));
         int itemIndex = this.getInventoryItemIndexOnSlot();
         if (itemIndex < this.gamePanel.player.inventory.size()) {
+            this.drawSubWindowScreen(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight);
             String itemDescription = this.gamePanel.player.inventory.get(itemIndex).objectDescription;
             for (String line : itemDescription.split("\n")) {
                 this.graphics2D.drawString(line, descriptionTextX, descriptionTextY);
