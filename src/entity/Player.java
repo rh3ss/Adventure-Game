@@ -4,12 +4,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import enums.Direction;
-import enums.EntityType;
-import enums.GameState;
+import enums.*;
 import main.GamePanel;
 import main.Keyboard;
-import object.ObjectKey;
 import object.ObjectShield;
 import object.ObjectSword;
 
@@ -26,7 +23,8 @@ public class Player extends Entity {
         this.keyboard = k;
 
         this.setDefaultValues();
-        this.getImages();
+        this.getMovingImages();
+        this.getAttackImages();
         this.setInventory();
     }
 
@@ -44,7 +42,6 @@ public class Player extends Entity {
         this.coins = 0;
         this.maxHearts = 5;
         this.currentHearts = this.maxHearts;
-        this.attackArea = new Rectangle(0, 0, 36, 36);
         this.currentLevel = 1;
         this.currentExperience = 0;
         this.nextLevelExperience = 5;
@@ -54,11 +51,14 @@ public class Player extends Entity {
         this.defenseArmor = this.getDefenseArmor();
     }
 
-    private int getAttackDamage() { return this.strength * this.currentWeapon.objectAttackValue; }
+    private int getAttackDamage() {
+        this.attackArea = this.currentWeapon.attackArea;
+        return this.strength * this.currentWeapon.objectAttackValue;
+    }
 
     private int getDefenseArmor() { return this.dexterity * this.currentShield.objectDefenseValue; }
 
-    private void getImages() {
+    private void getMovingImages() {
         // MOVEMENT
         this.up1 = this.setupEntityImage("/res/player/boy_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.up2 = this.setupEntityImage("/res/player/boy_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
@@ -68,15 +68,31 @@ public class Player extends Entity {
         this.left2 = this.setupEntityImage("/res/player/boy_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.right1 = this.setupEntityImage("/res/player/boy_right_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.right2 = this.setupEntityImage("/res/player/boy_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        // ATTACK
-        this.attackUp1 = this.setupEntityImage("/res/player/boy_attack_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-        this.attackUp2 = this.setupEntityImage("/res/player/boy_attack_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-        this.attackDown1 = this.setupEntityImage("/res/player/boy_attack_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-        this.attackDown2 = this.setupEntityImage("/res/player/boy_attack_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-        this.attackLeft1 = this.setupEntityImage("/res/player/boy_attack_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-        this.attackLeft2 = this.setupEntityImage("/res/player/boy_attack_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-        this.attackRight1 = this.setupEntityImage("/res/player/boy_attack_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-        this.attackRight2 = this.setupEntityImage("/res/player/boy_attack_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+    }
+
+    private void getAttackImages() {
+        if (this.currentWeapon.objectType == ObjectType.SWORD) {
+            // SWORD
+            this.attackUp1 = this.setupEntityImage("/res/player/boy_attack_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackUp2 = this.setupEntityImage("/res/player/boy_attack_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown1 = this.setupEntityImage("/res/player/boy_attack_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown2 = this.setupEntityImage("/res/player/boy_attack_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackLeft1 = this.setupEntityImage("/res/player/boy_attack_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackLeft2 = this.setupEntityImage("/res/player/boy_attack_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight1 = this.setupEntityImage("/res/player/boy_attack_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight2 = this.setupEntityImage("/res/player/boy_attack_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+        }
+        else if (this.currentWeapon.objectType == ObjectType.AXE) {
+            // AXE
+            this.attackUp1 = this.setupEntityImage("/res/player/boy_axe_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackUp2 = this.setupEntityImage("/res/player/boy_axe_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown1 = this.setupEntityImage("/res/player/boy_axe_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown2 = this.setupEntityImage("/res/player/boy_axe_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackLeft1 = this.setupEntityImage("/res/player/boy_axe_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackLeft2 = this.setupEntityImage("/res/player/boy_axe_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight1 = this.setupEntityImage("/res/player/boy_axe_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight2 = this.setupEntityImage("/res/player/boy_axe_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+        }
     }
 
     private void setInventory() {
@@ -126,8 +142,8 @@ public class Player extends Entity {
                 case Direction.LEFT -> { this.worldX -= this.attackArea.width; }
                 case Direction.RIGHT -> { this.worldX += this.attackArea.width; }
             }
-            this.solidArea.width = attackArea.width;
-            this.solidArea.height = attackArea.height;
+            this.solidArea.width = this.attackArea.width;
+            this.solidArea.height = this.attackArea.height;
             
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
             this.playerAttacksMonster(entityIndex);
@@ -205,7 +221,12 @@ public class Player extends Entity {
         if (!this.isInvincible && this.currentHearts > 0) {
             int damage = monster.attackDamage - this.defenseArmor;
             if (damage < 0) { damage = 0; }
-            this.currentHearts -= damage;
+            if (this.currentHearts - damage < 0) {
+                this.currentHearts = 0;
+            }
+            else {
+                this.currentHearts -= damage;
+            }
             this.isInvincible = true;
         }
     }
@@ -257,6 +278,30 @@ public class Player extends Entity {
 
             this.gamePanel.gameState = GameState.DIALOGUE;
             this.gamePanel.gui.currentDialogueMessage = "You are level " + this.currentLevel + "now!";
+        }
+    }
+
+    public void equipCurrentSelectedInventoryItem() {
+        int itemIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot();
+        if (itemIndex < this.inventory.size()) {
+            Entity selectedItem = this.inventory.get(itemIndex);
+            if (selectedItem.entityType == EntityType.OBJECT) {
+                switch (selectedItem.objectCategory) {
+                    case ObjectCategory.WEAPON:
+                        this.currentWeapon = selectedItem;
+                        this.attackDamage = this.getAttackDamage();
+                        this.getAttackImages();
+                        break;
+                    case ObjectCategory.SHIELD:
+                        this.currentShield = selectedItem;
+                        this.defenseArmor = this.getDefenseArmor();
+                        break;
+                    case ObjectCategory.CONSUMABLE:
+                        selectedItem.use(this);
+                        this.inventory.remove(itemIndex);
+                        break;
+                }
+            }
         }
     }
 

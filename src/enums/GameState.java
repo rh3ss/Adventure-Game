@@ -7,5 +7,5 @@ public enum GameState {
     PAUSED,
     DIALOGUE,
     CHARACTER,
-    GAMEOVER
+    GAME_OVER
 }

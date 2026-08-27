@@ -280,6 +280,11 @@ public class GUI {
         int inventorySlotY = inventorySlotStartY;
         for (int idx = 1; idx < this.gamePanel.player.inventory.size() + 1; idx++) {
             Entity item = this.gamePanel.player.inventory.get(idx - 1);
+            // highlight players equipped items
+            if (item == this.gamePanel.player.currentWeapon || item == this.gamePanel.player.currentShield) {
+                this.graphics2D.setColor(new Color(240, 190, 90));
+                this.graphics2D.fillRoundRect(inventorySlotX, inventorySlotY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
+            }
             this.graphics2D.drawImage(item.down1, inventorySlotX, inventorySlotY, null);
             inventorySlotX += this.gamePanel.tileSize;
             if (idx % this.gamePanel.player.inventoryColumnSize == 0) {
@@ -303,7 +308,7 @@ public class GUI {
         int descriptionTextX = descriptionFrameX + 20;
         int descriptionTextY = descriptionFrameY + this.gamePanel.tileSize;
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(28F));
-        int itemIndex = this.getInventoryItemIndexOnSlot();
+        int itemIndex = this.getSelectedInventoryItemIndexOnSlot();
         if (itemIndex < this.gamePanel.player.inventory.size()) {
             this.drawSubWindowScreen(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight);
             String itemDescription = this.gamePanel.player.inventory.get(itemIndex).objectDescription;
@@ -314,7 +319,7 @@ public class GUI {
         }
     }
 
-    private int getInventoryItemIndexOnSlot() {
+    public int getSelectedInventoryItemIndexOnSlot() {
         return this.inventorySlotColumnSelected + (this.inventorySlotRowSelected * 5);
     }
 

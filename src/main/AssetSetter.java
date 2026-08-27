@@ -2,10 +2,7 @@ package main;
 
 import entity.NPCOldMan;
 import monster.GreenSlime;
-import object.ObjectBoots;
-import object.ObjectChest;
-import object.ObjectDoor;
-import object.ObjectKey;
+import object.*;
 
 public class AssetSetter {
     private final GamePanel gamePanel;
@@ -23,11 +20,17 @@ public class AssetSetter {
         ObjectKey key2 = new ObjectKey(this.gamePanel, 20, 25);
         ObjectKey key3 = new ObjectKey(this.gamePanel, 24, 25);
         ObjectDoor door1 = new ObjectDoor(this.gamePanel, 22, 42);
+        ObjectAxe axe1 = new ObjectAxe(this.gamePanel, 28, 24);
+        ObjectShieldBlue shieldBlue1 = new ObjectShieldBlue(this.gamePanel, 16, 24);
+        ObjectPotion potion1 = new ObjectPotion(this.gamePanel, 22, 28);
 
         this.gamePanel.entities.add(key1);
         this.gamePanel.entities.add(key2);
         this.gamePanel.entities.add(key3);
         this.gamePanel.entities.add(door1);
+        this.gamePanel.entities.add(axe1);
+        this.gamePanel.entities.add(shieldBlue1);
+        this.gamePanel.entities.add(potion1);
     }
 
     public void setNPCs() {

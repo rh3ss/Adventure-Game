@@ -24,38 +24,10 @@ public class Keyboard implements KeyListener{
 
         switch (this.gamePanel.gameState) {
             case GameState.TITLE -> {
-                if (keyboardCode == KeyEvent.VK_UP) {
-                    switch (this.gamePanel.gui.menuSelection) {
-                        case Menu.NEW_GAME -> { this.gamePanel.gui.menuSelection = Menu.QUIT; }
-                        case Menu.LOAD_GAME -> { this.gamePanel.gui.menuSelection = Menu.NEW_GAME; }
-                        case Menu.QUIT -> { this.gamePanel.gui.menuSelection = Menu.LOAD_GAME; }
-                    }
-                }
-                if (keyboardCode == KeyEvent.VK_DOWN) {
-                    switch (this.gamePanel.gui.menuSelection) {
-                        case Menu.NEW_GAME -> { this.gamePanel.gui.menuSelection = Menu.LOAD_GAME; }
-                        case Menu.LOAD_GAME -> { this.gamePanel.gui.menuSelection = Menu.QUIT; }
-                        case Menu.QUIT -> { this.gamePanel.gui.menuSelection = Menu.NEW_GAME; }
-                    }
-                }
-                if (keyboardCode == KeyEvent.VK_ENTER) {
-                    switch (this.gamePanel.gui.menuSelection) {
-                        case Menu.NEW_GAME -> { this.gamePanel.gameState = GameState.PLAYING; }
-                        case Menu.LOAD_GAME -> {
-                            // later
-                        }
-                        case Menu.QUIT -> { System.exit(0); }
-                    }
-                }
+                this.titleKeyEvent(keyboardCode);
             }
             case GameState.PLAYING -> {
-                if (keyboardCode == KeyEvent.VK_W) { this.isUpPressed = true; }
-                if (keyboardCode == KeyEvent.VK_S) { this.isDownPressed = true; }
-                if (keyboardCode == KeyEvent.VK_A) { this.isLeftPressed = true; }
-                if (keyboardCode == KeyEvent.VK_D) { this.isRightPressed = true; }
-                if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
-                if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
-                if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.CHARACTER; }
+                this.playingKeyEvent(keyboardCode);
             }
             case GameState.PAUSED -> {
                 if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PLAYING; }
@@ -64,32 +36,75 @@ public class Keyboard implements KeyListener{
                 if (keyboardCode == KeyEvent.VK_ENTER) { this.gamePanel.gameState = GameState.PLAYING; }
             }
             case GameState.CHARACTER -> {
-                if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.PLAYING; }
-                if (keyboardCode == KeyEvent.VK_W) {
-                    this.gamePanel.gui.inventorySlotRowSelected--;
-                    if (this.gamePanel.gui.inventorySlotRowSelected < 0) {
-                        this.gamePanel.gui.inventorySlotRowSelected = this.gamePanel.player.inventoryRowSize - 1;
-                    }
-                }
-                if (keyboardCode == KeyEvent.VK_S) {
-                    this.gamePanel.gui.inventorySlotRowSelected++;
-                    if (this.gamePanel.gui.inventorySlotRowSelected > this.gamePanel.player.inventoryRowSize - 1) {
-                        this.gamePanel.gui.inventorySlotRowSelected = 0;
-                    }
-                }
-                if (keyboardCode == KeyEvent.VK_A) {
-                    this.gamePanel.gui.inventorySlotColumnSelected--;
-                    if (this.gamePanel.gui.inventorySlotColumnSelected < 0) {
-                        this.gamePanel.gui.inventorySlotColumnSelected = this.gamePanel.player.inventoryColumnSize - 1;
-                    }
-                }
-                if (keyboardCode == KeyEvent.VK_D) {
-                    this.gamePanel.gui.inventorySlotColumnSelected++;
-                    if (this.gamePanel.gui.inventorySlotColumnSelected > this.gamePanel.player.inventoryColumnSize - 1) {
-                        this.gamePanel.gui.inventorySlotColumnSelected = 0;
-                    }
-                }
+                this.characterKeyEvent(keyboardCode);
             }
+        }
+    }
+
+    private void titleKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_UP) {
+            switch (this.gamePanel.gui.menuSelection) {
+                case Menu.NEW_GAME -> { this.gamePanel.gui.menuSelection = Menu.QUIT; }
+                case Menu.LOAD_GAME -> { this.gamePanel.gui.menuSelection = Menu.NEW_GAME; }
+                case Menu.QUIT -> { this.gamePanel.gui.menuSelection = Menu.LOAD_GAME; }
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_DOWN) {
+            switch (this.gamePanel.gui.menuSelection) {
+                case Menu.NEW_GAME -> { this.gamePanel.gui.menuSelection = Menu.LOAD_GAME; }
+                case Menu.LOAD_GAME -> { this.gamePanel.gui.menuSelection = Menu.QUIT; }
+                case Menu.QUIT -> { this.gamePanel.gui.menuSelection = Menu.NEW_GAME; }
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_ENTER) {
+            switch (this.gamePanel.gui.menuSelection) {
+                case Menu.NEW_GAME -> { this.gamePanel.gameState = GameState.PLAYING; }
+                case Menu.LOAD_GAME -> {
+                    // later
+                }
+                case Menu.QUIT -> { System.exit(0); }
+            }
+        }
+    }
+
+    private void playingKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_W) { this.isUpPressed = true; }
+        if (keyboardCode == KeyEvent.VK_S) { this.isDownPressed = true; }
+        if (keyboardCode == KeyEvent.VK_A) { this.isLeftPressed = true; }
+        if (keyboardCode == KeyEvent.VK_D) { this.isRightPressed = true; }
+        if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
+        if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
+        if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.CHARACTER; }
+    }
+
+    private void characterKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.PLAYING; }
+        if (keyboardCode == KeyEvent.VK_W) {
+            this.gamePanel.gui.inventorySlotRowSelected--;
+            if (this.gamePanel.gui.inventorySlotRowSelected < 0) {
+                this.gamePanel.gui.inventorySlotRowSelected = this.gamePanel.player.inventoryRowSize - 1;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_S) {
+            this.gamePanel.gui.inventorySlotRowSelected++;
+            if (this.gamePanel.gui.inventorySlotRowSelected > this.gamePanel.player.inventoryRowSize - 1) {
+                this.gamePanel.gui.inventorySlotRowSelected = 0;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_A) {
+            this.gamePanel.gui.inventorySlotColumnSelected--;
+            if (this.gamePanel.gui.inventorySlotColumnSelected < 0) {
+                this.gamePanel.gui.inventorySlotColumnSelected = this.gamePanel.player.inventoryColumnSize - 1;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_D) {
+            this.gamePanel.gui.inventorySlotColumnSelected++;
+            if (this.gamePanel.gui.inventorySlotColumnSelected > this.gamePanel.player.inventoryColumnSize - 1) {
+                this.gamePanel.gui.inventorySlotColumnSelected = 0;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_ENTER) {
+            this.gamePanel.player.equipCurrentSelectedInventoryItem();
         }
     }
 

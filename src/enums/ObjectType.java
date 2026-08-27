@@ -1,11 +1,16 @@
 package enums;
 
 public enum ObjectType {
-    KEY,
+    SWORD,
+    AXE,
+    SHIELD_WOOD,
+    SHIELD_BLUE,
+
     DOOR,
     CHEST,
-    BOOTS,
+
     HEART,
-    SWORD,
-    SHIELD
+    KEY,
+    BOOTS,
+    POTION
 }

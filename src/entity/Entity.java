@@ -1,9 +1,6 @@
 package entity;
 
-import enums.Direction;
-import enums.EntityType;
-import enums.MonsterType;
-import enums.ObjectType;
+import enums.*;
 import main.GamePanel;
 import main.UtilityTool;
 
@@ -47,10 +44,13 @@ public class Entity {
     public int dyingCounterFrames = 0;
     public int healthBarCounterFrames = 0;
 
-    // ATTRIBUTES
+    // TYPES
     public EntityType entityType;
+    public ObjectCategory objectCategory;
     public ObjectType objectType;
     public MonsterType monsterType;
+
+    // ATTRIBUTES
     public boolean isSolid = false;
     public int velocity, strength, dexterity, coins;
     public int maxHearts, currentHearts;
@@ -99,6 +99,8 @@ public class Entity {
             case Direction.RIGHT -> { this.direction = Direction.LEFT; }
         }
     }
+
+    public void use(Entity entity) { }
 
     public void update() {
         this.setAction();

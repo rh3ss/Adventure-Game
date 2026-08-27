@@ -2,6 +2,7 @@ package object;
 
 import entity.Entity;
 import enums.EntityType;
+import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
@@ -11,7 +12,8 @@ public class ObjectShield extends Entity {
         super(gamePanel);
 
         this.entityType = EntityType.OBJECT;
-        this.objectType = ObjectType.SHIELD;
+        this.objectCategory = ObjectCategory.SHIELD;
+        this.objectType = ObjectType.SHIELD_WOOD;
         this.down1 = this.setupEntityImage("/res/objects/shield_wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
