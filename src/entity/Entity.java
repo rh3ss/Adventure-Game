@@ -43,6 +43,7 @@ public class Entity {
     public int invincibleCounterFrames = 0;
     public int dyingCounterFrames = 0;
     public int healthBarCounterFrames = 0;
+    public int shootingAvailableCounter = 0;
 
     // TYPES
     public EntityType entityType;
@@ -54,12 +55,14 @@ public class Entity {
     public boolean isSolid = false;
     public int velocity, strength, dexterity, coins;
     public int maxHearts, currentHearts;
+    public int maxManaDamage, currentManaDamage;
     public int attackDamage, defenseArmor;
     public int currentLevel, currentExperience, nextLevelExperience;
     public Entity currentWeapon, currentShield;
+    public Projectile currentProjectile;
 
     // OBJECT ATTRIBUTES
-    public int objectAttackValue, objectDefenseValue;
+    public int objectAttackValue, objectDefenseValue, objectUsageCostValue;
     public String objectDescription = "";
 
     public Entity(GamePanel p) {
@@ -212,7 +215,7 @@ public class Entity {
         if (dyingCounterFrames % 5 == 0) { changeAlphaCompositeValue(g2, 0f); }
         else { changeAlphaCompositeValue(g2, 1f); }
         if (this.dyingCounterFrames > (this.gamePanel.FPS)) {
-            this.isDying = this.isAlive = false;
+            this.isAlive = false;
         }
     }
 

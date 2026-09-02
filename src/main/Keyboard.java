@@ -9,7 +9,7 @@ import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener{
     private final GamePanel gamePanel;
-    public boolean isUpPressed, isDownPressed, isLeftPressed, isRightPressed, isEnterPressed;
+    public boolean isUpPressed, isDownPressed, isLeftPressed, isRightPressed, isEnterPressed, isShootingPressed;
 
     public Keyboard(GamePanel p) {
         this.gamePanel = p;
@@ -73,6 +73,7 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_A) { this.isLeftPressed = true; }
         if (keyboardCode == KeyEvent.VK_D) { this.isRightPressed = true; }
         if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
+        if (keyboardCode == KeyEvent.VK_F) { this.isShootingPressed = true; }
         if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
         if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.CHARACTER; }
     }
@@ -116,6 +117,7 @@ public class Keyboard implements KeyListener{
         if(keyboardCode == KeyEvent.VK_S) { this.isDownPressed = false; }
         if(keyboardCode == KeyEvent.VK_A) { this.isLeftPressed = false; }
         if(keyboardCode == KeyEvent.VK_D) { this.isRightPressed = false; }
+        if(keyboardCode == KeyEvent.VK_F) { this.isShootingPressed = false; }
     }
     
 }

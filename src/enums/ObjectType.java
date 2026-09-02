@@ -12,5 +12,7 @@ public enum ObjectType {
     HEART,
     KEY,
     BOOTS,
-    POTION
+    POTION,
+
+    FIREBALL
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import enums.*;
 import main.GamePanel;
 import main.Keyboard;
+import object.ObjectFireBall;
 import object.ObjectShield;
 import object.ObjectSword;
 
@@ -47,6 +48,7 @@ public class Player extends Entity {
         this.nextLevelExperience = 5;
         this.currentWeapon = new ObjectSword(this.gamePanel, -1, -1);
         this.currentShield = new ObjectShield(this.gamePanel, -1, -1);
+        this.currentProjectile = new ObjectFireBall(this.gamePanel);
         this.attackDamage = this.getAttackDamage();
         this.defenseArmor = this.getDefenseArmor();
     }
@@ -109,18 +111,26 @@ public class Player extends Entity {
     public void update() {
         // ATTACKING
         if (this.isAttacking) {
-            playerIsAttacking();
+            this.playerIsAttacking();
         }
         // MOVEMENT
         else if (this.keyboard.isUpPressed || this.keyboard.isDownPressed || this.keyboard.isLeftPressed || this.keyboard.isRightPressed || this.keyboard.isEnterPressed) {
-            playerIsMoving();
+            this.playerIsMoving();
         }
+        // SHOOTING PROJECTILES
+        else if (this.keyboard.isShootingPressed && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
+            this.playerIsShooting();
+        }
+
         if (isInvincible) {
             this.invincibleCounterFrames++;
             if (this.invincibleCounterFrames > this.gamePanel.FPS) {
                 this.isInvincible = false;
                 this.invincibleCounterFrames = 0;
             }
+        }
+        if (this.shootingAvailableCounter < (this.gamePanel.FPS / 2)) {
+            this.shootingAvailableCounter++;
         }
     }
 
@@ -146,7 +156,7 @@ public class Player extends Entity {
             this.solidArea.height = this.attackArea.height;
             
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
-            this.playerAttacksMonster(entityIndex);
+            this.playerAttacksMonster(entityIndex, this.attackDamage);
 
             this.worldX = currentWorldX;
             this.worldY = currentWorldY;
@@ -194,6 +204,12 @@ public class Player extends Entity {
         }
     }
 
+    private void playerIsShooting() {
+        this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
+        this.gamePanel.entities.add(this.currentProjectile);
+        this.shootingAvailableCounter = 0;
+    }
+
     private void interactWithCollidedEntity(int entityIndex) {
         if (entityIndex != Integer.MAX_VALUE) {
             Entity entity = this.gamePanel.entities.get(entityIndex);
@@ -218,7 +234,7 @@ public class Player extends Entity {
     }
 
     private void playerCollisionWithMonster(Entity monster) {
-        if (!this.isInvincible && this.currentHearts > 0) {
+        if (!this.isInvincible && this.currentHearts > 0 && !monster.isDying) {
             int damage = monster.attackDamage - this.defenseArmor;
             if (damage < 0) { damage = 0; }
             if (this.currentHearts - damage < 0) {
@@ -244,11 +260,11 @@ public class Player extends Entity {
         this.gamePanel.gui.addMessage(collisionMessage);
     }
 
-    private void playerAttacksMonster(int entityIndex) {
+    public void playerAttacksMonster(int entityIndex, int attackDamage) {
         if (entityIndex != Integer.MAX_VALUE) {
             Entity monster = this.gamePanel.entities.get(entityIndex);
             if (monster.entityType == EntityType.MONSTER && !monster.isInvincible) {
-                int damage = this.attackDamage - monster.defenseArmor;
+                int damage = attackDamage - monster.defenseArmor;
                 if (damage < 0) { damage = 0; }
 
                 this.gamePanel.gui.addMessage(damage + " damage!");

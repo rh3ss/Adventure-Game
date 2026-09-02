@@ -4,5 +4,6 @@ public enum EntityType {
     PLAYER,
     NPC,
     MONSTER,
-    OBJECT
+    OBJECT,
+    PROJECTILE
 }

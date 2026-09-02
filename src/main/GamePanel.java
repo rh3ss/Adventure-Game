@@ -95,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void update() {
         if (this.gameState == GameState.PLAYING) {
+            // draw all entities (npc, monster, projectiles)
             for (int idx = 0; idx < this.entities.size(); idx++) {
                 Entity entity = this.entities.get(idx);
                 if (entity != null) {
