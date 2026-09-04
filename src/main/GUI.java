@@ -5,6 +5,7 @@ import entity.Entity;
 import enums.GameState;
 import enums.Menu;
 import object.ObjectHeart;
+import object.ObjectManaCrystal;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 public class GUI {
     private final GamePanel gamePanel;
     private final Font maruMonica;
-    private final BufferedImage heart_full, heart_blank;
+    private final BufferedImage heartFull, heartBlank, manaCrystalFull, manaCrystalBlank;
     private Graphics2D graphics2D;
     public Menu menuSelection;
     public ArrayList<String> messages;
@@ -43,10 +44,13 @@ public class GUI {
         this.messagesCounter = new ArrayList<>();
         this.messageOn = this.gameFinished = false;
 
-        Entity heart = new ObjectHeart(this.gamePanel, 10, 10);
-        this.heart_full = heart.image1;
-        this.heart_blank = heart.image2;
+        Entity heart = new ObjectHeart(this.gamePanel, -1, -1);
+        this.heartFull = heart.image1;
+        this.heartBlank = heart.image2;
         this.healthBarHeart = heart.setupEntityImage("/res/objects/health_bar_heart.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        Entity manaCrystal = new ObjectManaCrystal(this.gamePanel, -1, -1);
+        this.manaCrystalFull = manaCrystal.image1;
+        this.manaCrystalBlank = manaCrystal.image2;
 
         this.inventorySlotColumnSelected = this.inventorySlotRowSelected = 0;
     }
@@ -65,6 +69,7 @@ public class GUI {
             case GameState.TITLE -> { this.drawTitleScreen(); }
             case GameState.PLAYING -> {
                 this.drawPlayerHearts();
+                this.drawPlayerMana();
                 this.drawMessages();
             }
             case GameState.PAUSED -> { this.drawPausedScreen(); }
@@ -122,12 +127,27 @@ public class GUI {
         int yPos = this.gamePanel.tileSize / 2;
         // current hearts
         for (int i = 0; i < this.gamePanel.player.currentHearts; i++) {
-            this.graphics2D.drawImage(this.heart_full, xPos, yPos, null);
+            this.graphics2D.drawImage(this.heartFull, xPos, yPos, null);
             xPos += this.gamePanel.tileSize;
         }
         // remaining hearts
         for (int i = 0; i < this.gamePanel.player.maxHearts - this.gamePanel.player.currentHearts; i++) {
-            this.graphics2D.drawImage(this.heart_blank, xPos, yPos, null);
+            this.graphics2D.drawImage(this.heartBlank, xPos, yPos, null);
+            xPos += this.gamePanel.tileSize;
+        }
+    }
+
+    private void drawPlayerMana() {
+        int xPos = (this.gamePanel.tileSize / 2) + 1;
+        int yPos = (int) (this.gamePanel.tileSize * 1.5);
+        // current mana
+        for (int i = 0; i < this.gamePanel.player.currentMana; i++) {
+            this.graphics2D.drawImage(this.manaCrystalFull, xPos, yPos, null);
+            xPos += this.gamePanel.tileSize;
+        }
+        // remaining mana
+        for (int i = 0; i < this.gamePanel.player.maxMana - this.gamePanel.player.currentMana; i++) {
+            this.graphics2D.drawImage(this.manaCrystalBlank, xPos, yPos, null);
             xPos += this.gamePanel.tileSize;
         }
     }
@@ -202,6 +222,8 @@ public class GUI {
         textY += lineSpacing;
         this.graphics2D.drawString("Hearts", textX, textY);
         textY += lineSpacing;
+        this.graphics2D.drawString("Mana", textX, textY);
+        textY += lineSpacing;
         this.graphics2D.drawString("Strength", textX, textY);
         textY += lineSpacing;
         this.graphics2D.drawString("Dexterity", textX, textY);
@@ -212,12 +234,12 @@ public class GUI {
         textY += lineSpacing;
         this.graphics2D.drawString("Experience", textX, textY);
         textY += lineSpacing;
-        this.graphics2D.drawString("Next Level", textX, textY);
+        this.graphics2D.drawString("Next Level Exp.", textX, textY);
         textY += lineSpacing;
         this.graphics2D.drawString("Coin", textX, textY);
-        textY += lineSpacing + 20;
+        textY += lineSpacing + 10;
         this.graphics2D.drawString("Weapon", textX, textY);
-        textY += lineSpacing + 20;
+        textY += lineSpacing + 15;
         this.graphics2D.drawString("Shield", textX, textY);
 
         // attribuet values
@@ -229,6 +251,10 @@ public class GUI {
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
         textValue = String.valueOf(this.gamePanel.player.currentHearts + "/" + this.gamePanel.player.maxHearts);
+        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
+        this.graphics2D.drawString(textValue, textX, textY);
+        textY += lineSpacing;
+        textValue = String.valueOf(this.gamePanel.player.currentMana + "/" + this.gamePanel.player.maxMana);
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
@@ -261,9 +287,9 @@ public class GUI {
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
 
-        this.graphics2D.drawImage(this.gamePanel.player.currentWeapon.down1, rightX - this.gamePanel.tileSize, textY - 14, null);
+        this.graphics2D.drawImage(this.gamePanel.player.currentWeapon.down1, rightX - this.gamePanel.tileSize, textY - 24, null);
         textY += this.gamePanel.tileSize;
-        this.graphics2D.drawImage(this.gamePanel.player.currentShield.down1, rightX - this.gamePanel.tileSize, textY - 14, null);
+        this.graphics2D.drawImage(this.gamePanel.player.currentShield.down1, rightX - this.gamePanel.tileSize, textY - 24, null);
     }
 
     private void drawPlayerInventory() {

@@ -12,11 +12,19 @@ public class ObjectHeart extends Entity {
         super(gamePanel);
 
         this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.INTERACTABLE;
+        this.objectCategory = ObjectCategory.PICKUP;
         this.objectType = ObjectType.HEART;
+        this.down1 = this.setupEntityImage("/res/objects/heart_full.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.image1 = this.setupEntityImage("/res/objects/heart_full.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.image2 = this.setupEntityImage("/res/objects/heart_blank.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
+
+        this.objectBenefitValue = 1;
+    }
+
+    public void use(Entity entity) {
+        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue);
+        entity.currentHearts += this.objectBenefitValue;
     }
 }

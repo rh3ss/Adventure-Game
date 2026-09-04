@@ -19,6 +19,10 @@ public class AssetSetter {
         ObjectKey key1 = new ObjectKey(this.gamePanel, 22, 22);
         ObjectKey key2 = new ObjectKey(this.gamePanel, 20, 25);
         ObjectKey key3 = new ObjectKey(this.gamePanel, 24, 25);
+        ObjectCoin coin1 = new ObjectCoin(this.gamePanel, 20, 24);
+        ObjectCoin coin2 = new ObjectCoin(this.gamePanel, 24, 24);
+        ObjectHeart heart1 = new ObjectHeart(this.gamePanel, 22, 24);
+        ObjectManaCrystal mana1 = new ObjectManaCrystal(this.gamePanel, 22, 26);
         ObjectDoor door1 = new ObjectDoor(this.gamePanel, 22, 42);
         ObjectAxe axe1 = new ObjectAxe(this.gamePanel, 28, 24);
         ObjectShieldBlue shieldBlue1 = new ObjectShieldBlue(this.gamePanel, 16, 24);
@@ -27,6 +31,10 @@ public class AssetSetter {
         this.gamePanel.entities.add(key1);
         this.gamePanel.entities.add(key2);
         this.gamePanel.entities.add(key3);
+        this.gamePanel.entities.add(coin1);
+        this.gamePanel.entities.add(coin2);
+        this.gamePanel.entities.add(heart1);
+        this.gamePanel.entities.add(mana1);
         this.gamePanel.entities.add(door1);
         this.gamePanel.entities.add(axe1);
         this.gamePanel.entities.add(shieldBlue1);

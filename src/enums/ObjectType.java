@@ -13,6 +13,9 @@ public enum ObjectType {
     KEY,
     BOOTS,
     POTION,
+    MANA_CRYSTAL,
+    COIN,
 
-    FIREBALL
+    FIREBALL,
+    BULLET
 }

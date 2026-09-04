@@ -37,15 +37,10 @@ public class Player extends Entity {
         this.worldX = (this.gamePanel.worldWidth / 2);
         this.worldY = (this.gamePanel.worldHeight / 2);
         // player status
-        this.velocity = 4;
-        this.strength = 1;
-        this.dexterity = 1;
-        this.coins = 0;
-        this.maxHearts = 5;
-        this.currentHearts = this.maxHearts;
-        this.currentLevel = 1;
-        this.currentExperience = 0;
-        this.nextLevelExperience = 5;
+        this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 0;
+        this.maxHearts = 5; this.currentHearts = this.maxHearts;
+        this.maxMana = 3; this.currentMana = this.maxMana;
+        this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 5;
         this.currentWeapon = new ObjectSword(this.gamePanel, -1, -1);
         this.currentShield = new ObjectShield(this.gamePanel, -1, -1);
         this.currentProjectile = new ObjectFireBall(this.gamePanel);
@@ -118,7 +113,10 @@ public class Player extends Entity {
             this.playerIsMoving();
         }
         // SHOOTING PROJECTILES
-        else if (this.keyboard.isShootingPressed && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
+        else if (this.keyboard.isShootingPressed
+                && !this.currentProjectile.isAlive
+                && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)
+                && this.currentProjectile.userCanUseManaByUsageCost(this)) {
             this.playerIsShooting();
         }
 
@@ -131,6 +129,13 @@ public class Player extends Entity {
         }
         if (this.shootingAvailableCounter < (this.gamePanel.FPS / 2)) {
             this.shootingAvailableCounter++;
+        }
+        // SET MAX HEARTS
+        if (this.currentHearts > this.maxHearts) {
+            this.currentHearts = this.maxHearts;
+        }
+        if (this.currentMana > this.maxMana) {
+            this.currentMana = this.maxMana;
         }
     }
 
@@ -206,6 +211,7 @@ public class Player extends Entity {
 
     private void playerIsShooting() {
         this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
+        this.currentProjectile.subtractManaByUsageCost(this);
         this.gamePanel.entities.add(this.currentProjectile);
         this.shootingAvailableCounter = 0;
     }
@@ -248,16 +254,23 @@ public class Player extends Entity {
     }
 
     private void playerCollisionWithObject(Entity object) {
-        String collisionMessage;
-        if (this.inventory.size() < this.maxInventorySize) {
-            collisionMessage = "You found a " + object.objectType.toString();
-            this.inventory.add(object);
+        // PICKUP ITEMS
+        if (object.objectCategory == ObjectCategory.PICKUP) {
+            object.use(this);
             this.gamePanel.entities.remove(object);
         }
+        // INVENTORY
         else {
-            collisionMessage = "Inventory full!";
+            String collisionMessage;
+            if (this.inventory.size() < this.maxInventorySize) {
+                collisionMessage = "You found a " + object.objectType.toString();
+                this.inventory.add(object);
+                this.gamePanel.entities.remove(object);
+            } else {
+                collisionMessage = "Inventory full!";
+            }
+            this.gamePanel.gui.addMessage(collisionMessage);
         }
-        this.gamePanel.gui.addMessage(collisionMessage);
     }
 
     public void playerAttacksMonster(int entityIndex, int attackDamage) {

@@ -82,8 +82,9 @@ public class EventHandler {
     private void eventHealingPool(int eventColumn, int eventRow, GameState gameState) {
         if (this.gamePanel.keyboard.isEnterPressed) {
             this.gamePanel.gameState = gameState;
-            this.gamePanel.gui.currentDialogueMessage = "You drink the water!";
+            this.gamePanel.gui.currentDialogueMessage = "You drink the water and mana!";
             this.gamePanel.player.currentHearts = this.gamePanel.player.maxHearts;
+            this.gamePanel.player.currentMana = this.gamePanel.player.maxMana;
             this.eventRectangle[eventRow][eventColumn].eventDone = true;
         }
     }

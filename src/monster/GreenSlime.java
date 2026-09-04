@@ -5,8 +5,9 @@ import enums.Direction;
 import enums.EntityType;
 import enums.MonsterType;
 import main.GamePanel;
+import object.ObjectBullet;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.Random;
 
 public class GreenSlime extends Entity {
@@ -21,15 +22,14 @@ public class GreenSlime extends Entity {
         this.velocity = 1;
         this.maxHearts = 4;
         this.currentHearts = this.maxHearts;
-        this.currentExperience = 3;
-        this.attackDamage = 3;
-        this.defenseArmor = 0;
+        this.attackDamage = 1;
 
         this.isSolid = true;
         this.solidArea = new Rectangle(3, 18, 42, 30);
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
 
+        this.currentProjectile = new ObjectBullet(p);
         this.getImages();
     }
 
@@ -55,6 +55,13 @@ public class GreenSlime extends Entity {
             else if (number <= 0.75) { this.direction = Direction.LEFT; }
             else { this.direction = Direction.RIGHT; }
             this.actionCounterFrames = 0;
+        }
+
+        int randomNumber = new Random().nextInt(101);
+        if (randomNumber > 99 && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
+            this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
+            this.gamePanel.entities.add(this.currentProjectile);
+            this.shootingAvailableCounter = 0;
         }
     }
 

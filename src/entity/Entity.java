@@ -55,14 +55,15 @@ public class Entity {
     public boolean isSolid = false;
     public int velocity, strength, dexterity, coins;
     public int maxHearts, currentHearts;
-    public int maxManaDamage, currentManaDamage;
+    public int maxMana, currentMana;
     public int attackDamage, defenseArmor;
     public int currentLevel, currentExperience, nextLevelExperience;
+    public int projectileUsageCostValue;
     public Entity currentWeapon, currentShield;
     public Projectile currentProjectile;
 
     // OBJECT ATTRIBUTES
-    public int objectAttackValue, objectDefenseValue, objectUsageCostValue;
+    public int objectBenefitValue, objectAttackValue, objectDefenseValue;
     public String objectDescription = "";
 
     public Entity(GamePanel p) {
@@ -116,12 +117,7 @@ public class Entity {
         boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
 
         if (this.entityType == EntityType.MONSTER && entityCollidedWithPlayer) {
-            if (!this.gamePanel.player.isInvincible && this.gamePanel.player.currentHearts > 0) {
-                int damage = this.attackDamage - this.gamePanel.player.defenseArmor;
-                if (damage < 0) { damage = 0; }
-                this.gamePanel.player.currentHearts -= damage;
-                this.gamePanel.player.isInvincible = true;
-            }
+            this.entityDamagePlayer(this.attackDamage);
         }
 
         if (!this.collisionDetected) {
@@ -146,6 +142,18 @@ public class Entity {
                 this.isInvincible = false;
                 this.invincibleCounterFrames = 0;
             }
+        }
+        if (this.shootingAvailableCounter < (this.gamePanel.FPS / 2)) {
+            this.shootingAvailableCounter++;
+        }
+    }
+
+    public void entityDamagePlayer(int attackDamage) {
+        if (!this.gamePanel.player.isInvincible && this.gamePanel.player.currentHearts > 0) {
+            int damage = attackDamage - this.gamePanel.player.defenseArmor;
+            if (damage < 0) { damage = 0; }
+            this.gamePanel.player.currentHearts -= damage;
+            this.gamePanel.player.isInvincible = true;
         }
     }
 
@@ -182,7 +190,7 @@ public class Entity {
             if (this.isDying) {
                 this.drawDyingAnimation(g2);
             }
-            g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(image, screenX, screenY, null);
             this.changeAlphaCompositeValue(g2, 1f);
         }
     }

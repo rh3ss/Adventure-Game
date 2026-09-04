@@ -29,7 +29,11 @@ public class Projectile extends Entity {
             }
         }
         else {
-
+            boolean collisionWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
+            if (!this.gamePanel.player.isInvincible && collisionWithPlayer) {
+                this.entityDamagePlayer(this.attackDamage);
+                this.isAlive = false;
+            }
         }
 
         switch (this.direction) {
@@ -50,4 +54,10 @@ public class Projectile extends Entity {
             this.animationFrame = (this.animationFrame + 1) % 3;
         }
     }
+
+    public boolean userCanUseManaByUsageCost(Entity user) {
+        return false;
+    }
+
+    public void subtractManaByUsageCost(Entity user) { }
 }
