@@ -17,7 +17,7 @@ public class ObjectShield extends Entity {
         this.down1 = this.setupEntityImage("/res/objects/shield_wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
-        this.objectDefenseValue = 1;
-        this.objectDescription = "[" + this.objectType.toString() + "]\nAn old wooden shield.";
+        this.objectDamageReductionMultiplier = 0.25;
+        this.objectDescription = "[" + this.objectType.toString() + "]\nAn old wooden shield.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Defense reduction.";
     }
 }

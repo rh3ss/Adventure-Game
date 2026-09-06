@@ -20,7 +20,7 @@ public class ObjectSword extends Entity {
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
         this.attackArea = new Rectangle(0, 0, 36, 36);
-        this.objectAttackValue = 1;
-        this.objectDescription = "[" + this.objectType.toString() + "]\nAn old iron sword.";
+        this.objectAttackDamageMultiplier = 0.15;
+        this.objectDescription = "[" + this.objectType.toString() + "]\nAn good robust iron sword.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
     }
 }

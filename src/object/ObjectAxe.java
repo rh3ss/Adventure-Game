@@ -20,7 +20,7 @@ public class ObjectAxe extends Entity {
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
         this.attackArea = new Rectangle(0, 0, 30, 30);
-        this.objectAttackValue = 2;
-        this.objectDescription = "[" + this.objectType.toString() + "]\nAn heavy axe.";
+        this.objectAttackDamageMultiplier = 0.3;
+        this.objectDescription = "[" + this.objectType.toString() + "]\nAn heavy lumberjack axe.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
     }
 }

@@ -4,14 +4,11 @@ package main;
 import entity.Entity;
 import enums.GameState;
 import enums.Menu;
+import object.ObjectCoin;
 import object.ObjectHeart;
 import object.ObjectManaCrystal;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +17,7 @@ import java.util.ArrayList;
 public class GUI {
     private final GamePanel gamePanel;
     private final Font maruMonica;
-    private final BufferedImage heartFull, heartBlank, manaCrystalFull, manaCrystalBlank;
+    private final BufferedImage heartFull, heartBlank, playerCoins, manaCrystalFull, manaCrystalBlank;
     private Graphics2D graphics2D;
     public Menu menuSelection;
     public ArrayList<String> messages;
@@ -48,6 +45,8 @@ public class GUI {
         this.heartFull = heart.image1;
         this.heartBlank = heart.image2;
         this.healthBarHeart = heart.setupEntityImage("/res/objects/health_bar_heart.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        Entity coin = new ObjectCoin(this.gamePanel, -1, -1);
+        this.playerCoins = coin.down1;
         Entity manaCrystal = new ObjectManaCrystal(this.gamePanel, -1, -1);
         this.manaCrystalFull = manaCrystal.image1;
         this.manaCrystalBlank = manaCrystal.image2;
@@ -69,6 +68,7 @@ public class GUI {
             case GameState.TITLE -> { this.drawTitleScreen(); }
             case GameState.PLAYING -> {
                 this.drawPlayerHearts();
+                this.drawPlayerCoins();
                 this.drawPlayerMana();
                 this.drawMessages();
             }
@@ -150,6 +150,24 @@ public class GUI {
             this.graphics2D.drawImage(this.manaCrystalBlank, xPos, yPos, null);
             xPos += this.gamePanel.tileSize;
         }
+    }
+
+    private void drawPlayerCoins() {
+        int xPos = (int) (this.gamePanel.screenWidth - (this.gamePanel.tileSize * 1.25));
+        int yPos = this.gamePanel.tileSize / 2;
+        // current coins value
+        String textValueOfCoins = String.valueOf(this.gamePanel.player.coins);
+        int textX = this.calcXPositionForAlignToRightText(textValueOfCoins, xPos - 20);
+        // draw
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 40F));
+        FontMetrics fontMetrics = this.graphics2D.getFontMetrics();
+        int textY = yPos + (this.playerCoins.getHeight() - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
+        this.graphics2D.setColor(Color.BLACK);
+        this.graphics2D.drawString(textValueOfCoins, textX + 2, textY + 2);
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.drawString(textValueOfCoins, textX, textY);
+        // coin image
+        this.graphics2D.drawImage(this.playerCoins, xPos, yPos, null);
     }
 
     private void drawMessages() {
@@ -235,8 +253,6 @@ public class GUI {
         this.graphics2D.drawString("Experience", textX, textY);
         textY += lineSpacing;
         this.graphics2D.drawString("Next Level Exp.", textX, textY);
-        textY += lineSpacing;
-        this.graphics2D.drawString("Coin", textX, textY);
         textY += lineSpacing + 10;
         this.graphics2D.drawString("Weapon", textX, textY);
         textY += lineSpacing + 15;
@@ -266,11 +282,15 @@ public class GUI {
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
-        textValue = String.valueOf(this.gamePanel.player.attackDamage);
+        textValue = "+";
+        textValue += String.valueOf(Math.round(this.gamePanel.player.attackDamage * 100));
+        textValue += "%";
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
-        textValue = String.valueOf(this.gamePanel.player.defenseArmor);
+        textValue = "+";
+        textValue += String.valueOf(Math.round(this.gamePanel.player.defenseArmor * 100));
+        textValue += "%";
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
@@ -282,11 +302,6 @@ public class GUI {
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
-        textValue = String.valueOf(this.gamePanel.player.coins);
-        textX = this.calcXPositionForAlignToRightText(textValue, rightX);
-        this.graphics2D.drawString(textValue, textX, textY);
-        textY += lineSpacing;
-
         this.graphics2D.drawImage(this.gamePanel.player.currentWeapon.down1, rightX - this.gamePanel.tileSize, textY - 24, null);
         textY += this.gamePanel.tileSize;
         this.graphics2D.drawImage(this.gamePanel.player.currentShield.down1, rightX - this.gamePanel.tileSize, textY - 24, null);

@@ -40,7 +40,7 @@ public class Player extends Entity {
         this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 0;
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
-        this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 5;
+        this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;
         this.currentWeapon = new ObjectSword(this.gamePanel, -1, -1);
         this.currentShield = new ObjectShield(this.gamePanel, -1, -1);
         this.currentProjectile = new ObjectFireBall(this.gamePanel);
@@ -48,12 +48,14 @@ public class Player extends Entity {
         this.defenseArmor = this.getDefenseArmor();
     }
 
-    private int getAttackDamage() {
+    private double getAttackDamage() {
         this.attackArea = this.currentWeapon.attackArea;
-        return this.strength * this.currentWeapon.objectAttackValue;
+        return this.strength + (this.strength * this.currentWeapon.objectAttackDamageMultiplier);
     }
 
-    private int getDefenseArmor() { return this.dexterity * this.currentShield.objectDefenseValue; }
+    private double getDefenseArmor() {
+        return this.dexterity + (this.dexterity * this.currentShield.objectDamageReductionMultiplier);
+    }
 
     private void getMovingImages() {
         // MOVEMENT
@@ -241,13 +243,15 @@ public class Player extends Entity {
 
     private void playerCollisionWithMonster(Entity monster) {
         if (!this.isInvincible && this.currentHearts > 0 && !monster.isDying) {
-            int damage = monster.attackDamage - this.defenseArmor;
-            if (damage < 0) { damage = 0; }
-            if (this.currentHearts - damage < 0) {
+            double monsterDamage = monster.attackDamage - this.defenseArmor;
+            if (monsterDamage < 0) {
+                monsterDamage = 0;
+            }
+            if (this.currentHearts - monsterDamage < 0) {
                 this.currentHearts = 0;
             }
             else {
-                this.currentHearts -= damage;
+                this.currentHearts -= monsterDamage;
             }
             this.isInvincible = true;
         }
@@ -273,22 +277,24 @@ public class Player extends Entity {
         }
     }
 
-    public void playerAttacksMonster(int entityIndex, int attackDamage) {
+    public void playerAttacksMonster(int entityIndex, double attackDamage) {
         if (entityIndex != Integer.MAX_VALUE) {
             Entity monster = this.gamePanel.entities.get(entityIndex);
             if (monster.entityType == EntityType.MONSTER && !monster.isInvincible) {
-                int damage = attackDamage - monster.defenseArmor;
-                if (damage < 0) { damage = 0; }
+                double dealtDamage = attackDamage - monster.defenseArmor;
+                if (dealtDamage < 0) {
+                    dealtDamage = 0;
+                }
 
-                this.gamePanel.gui.addMessage(damage + " damage!");
-                monster.currentHearts -= damage;
+                this.gamePanel.gui.addMessage("Hit " + dealtDamage + "!");
+                monster.currentHearts -= dealtDamage;
                 monster.isInvincible = true;
                 monster.damageReaction();
                 if (monster.currentHearts < 1) {
                     this.gamePanel.entities.get(entityIndex).isDying = true;
-                    this.gamePanel.gui.addMessage("killed the " + monster.monsterType.toString() + "!");
+                    this.gamePanel.gui.addMessage("Kill " + monster.monsterType.toString() + "!");
                     this.currentExperience += monster.currentExperience;
-                    this.gamePanel.gui.addMessage("Experience +" + monster.currentExperience);
+                    this.gamePanel.gui.addMessage("Exp. +" + monster.currentExperience);
                     this.checkPlayerLevelUp();
                 }
             }
@@ -299,14 +305,14 @@ public class Player extends Entity {
         if (this.currentExperience >= this.nextLevelExperience) {
             this.currentLevel++;
             this.maxHearts++;
-            this.strength++;
-            this.dexterity++;
-            this.nextLevelExperience *= 2;
+            this.strength += 0.1;
+            this.dexterity += 0.1;
+            this.nextLevelExperience += 10;
             this.attackDamage = this.getAttackDamage();
             this.defenseArmor = this.getDefenseArmor();
 
             this.gamePanel.gameState = GameState.DIALOGUE;
-            this.gamePanel.gui.currentDialogueMessage = "You are level " + this.currentLevel + "now!";
+            this.gamePanel.gui.currentDialogueMessage = "You are level " + this.currentLevel + " now!";
         }
     }
 

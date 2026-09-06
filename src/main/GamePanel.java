@@ -103,6 +103,7 @@ public class GamePanel extends JPanel implements Runnable{
                         entity.update();
                     }
                     else if (!entity.isAlive){
+                        entity.chooseObjectToDrop();
                         this.entities.set(idx, null);
                     }
                 }

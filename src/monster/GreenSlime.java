@@ -6,21 +6,26 @@ import enums.EntityType;
 import enums.MonsterType;
 import main.GamePanel;
 import object.ObjectBullet;
+import object.ObjectCoin;
+import object.ObjectHeart;
+import object.ObjectManaCrystal;
 
 import java.awt.Rectangle;
 import java.util.Random;
 
 public class GreenSlime extends Entity {
+    private final Random random;
 
     public GreenSlime(GamePanel p, int worldColumn, int worldRow) {
         super(p);
+        this.random = new Random();
 
         this.entityType = EntityType.MONSTER;
         this.monsterType = MonsterType.GREEN_SLIME;
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
         this.velocity = 1;
-        this.maxHearts = 4;
+        this.maxHearts = 6;
         this.currentHearts = this.maxHearts;
         this.currentExperience = 3;
         this.attackDamage = 3;
@@ -49,8 +54,7 @@ public class GreenSlime extends Entity {
     public void setAction() {
         this.actionCounterFrames++;
         if (this.actionCounterFrames > 120) {
-            Random r = new Random();
-            double number  = r.nextDouble();
+            double number = random.nextDouble();
 
             if (number <= 0.25) { this.direction = Direction.UP; }
             else if (number <= 0.50) { this.direction = Direction.DOWN; }
@@ -59,7 +63,7 @@ public class GreenSlime extends Entity {
             this.actionCounterFrames = 0;
         }
 
-        int randomNumber = new Random().nextInt(101);
+        int randomNumber = random.nextInt(101);
         if (randomNumber > 99 && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
             this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
             this.gamePanel.entities.add(this.currentProjectile);
@@ -70,5 +74,20 @@ public class GreenSlime extends Entity {
     public void damageReaction() {
         this.actionCounterFrames = 0;
         this.direction = this.gamePanel.player.direction;
+    }
+
+    public void chooseObjectToDrop() {
+        int number = random.nextInt(101);
+        Entity objectToDrop;
+        if (number < 50) {
+            objectToDrop = new ObjectCoin(this.gamePanel, -1, -1);
+        }
+        else if (number < 75) {
+            objectToDrop = new ObjectHeart(this.gamePanel, -1, -1);
+        }
+        else {
+            objectToDrop = new ObjectManaCrystal(this.gamePanel, -1, -1);
+        }
+        this.dropObject(objectToDrop);
     }
 }

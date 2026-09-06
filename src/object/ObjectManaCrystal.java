@@ -7,7 +7,7 @@ import enums.ObjectType;
 import main.GamePanel;
 
 public class ObjectManaCrystal extends Entity {
-    private GamePanel gamePanel;
+    private final GamePanel gamePanel;
 
     public ObjectManaCrystal(GamePanel p, int worldColumn, int worldRow) {
         super(p);

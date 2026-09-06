@@ -53,17 +53,19 @@ public class Entity {
 
     // ATTRIBUTES
     public boolean isSolid = false;
-    public int velocity, strength, dexterity, coins;
-    public int maxHearts, currentHearts;
-    public int maxMana, currentMana;
-    public int attackDamage, defenseArmor;
-    public int currentLevel, currentExperience, nextLevelExperience;
+    public int velocity, coins;
     public int projectileUsageCostValue;
+    public int maxMana, currentMana;
+    public int currentLevel, currentExperience, nextLevelExperience;
+    public double strength, dexterity;
+    public double maxHearts, currentHearts;
+    public double attackDamage, defenseArmor;
     public Entity currentWeapon, currentShield;
     public Projectile currentProjectile;
 
     // OBJECT ATTRIBUTES
-    public int objectBenefitValue, objectAttackValue, objectDefenseValue;
+    public int objectBenefitValue;
+    public double objectAttackDamageMultiplier, objectDamageReductionMultiplier;
     public String objectDescription = "";
 
     public Entity(GamePanel p) {
@@ -105,6 +107,14 @@ public class Entity {
     }
 
     public void use(Entity entity) { }
+
+    public void chooseObjectToDrop() { }
+
+    public void dropObject(Entity objectToDrop) {
+        objectToDrop.worldX = this.worldX;
+        objectToDrop.worldY = this.worldY;
+        this.gamePanel.entities.add(objectToDrop);
+    }
 
     public void update() {
         this.setAction();
@@ -148,10 +158,12 @@ public class Entity {
         }
     }
 
-    public void entityDamagePlayer(int attackDamage) {
+    public void entityDamagePlayer(double attackDamage) {
         if (!this.gamePanel.player.isInvincible && this.gamePanel.player.currentHearts > 0) {
-            int damage = attackDamage - this.gamePanel.player.defenseArmor;
-            if (damage < 0) { damage = 0; }
+            double damage = attackDamage - this.gamePanel.player.defenseArmor;
+            if (damage < 0) {
+                damage = 0;
+            }
             this.gamePanel.player.currentHearts -= damage;
             this.gamePanel.player.isInvincible = true;
         }
