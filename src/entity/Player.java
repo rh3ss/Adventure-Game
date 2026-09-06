@@ -10,6 +10,8 @@ import main.Keyboard;
 import object.ObjectFireBall;
 import object.ObjectShield;
 import object.ObjectSword;
+import object.ObjectWood;
+import tileInteractive.InteractiveTile;
 
 public class Player extends Entity {
     private final Keyboard keyboard;
@@ -164,6 +166,7 @@ public class Player extends Entity {
             
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
             this.playerAttacksMonster(entityIndex, this.attackDamage);
+            this.playerAttacksInteractiveTile(entityIndex, this.attackDamage);
 
             this.worldX = currentWorldX;
             this.worldY = currentWorldY;
@@ -296,6 +299,26 @@ public class Player extends Entity {
                     this.currentExperience += monster.currentExperience;
                     this.gamePanel.gui.addMessage("Exp. +" + monster.currentExperience);
                     this.checkPlayerLevelUp();
+                }
+            }
+        }
+    }
+
+    private void playerAttacksInteractiveTile(int tileIndex, double attackDamage) {
+        if (tileIndex != Integer.MAX_VALUE) {
+            if (this.gamePanel.entities.get(tileIndex).entityType != EntityType.INTERACTIVE_TILE) {
+                return;
+            }
+            InteractiveTile tile = (InteractiveTile) this.gamePanel.entities.get(tileIndex);
+            if (tile.entityType == EntityType.INTERACTIVE_TILE && !tile.isInvincible && tile.isDestructible && tile.isCorrectObjectEquipped(this)) {
+                tile.maxHearts -= attackDamage;
+                tile.isInvincible = true;
+                if (tile.maxHearts < 0) {
+                    this.gamePanel.entities.set(tileIndex, tile.getFollowingTileAfterDestruction());
+                    if (tile.interactiveTileType == InteractiveTileType.DRY_TREE) {
+                        ObjectWood droppedWood = new ObjectWood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, tile.worldY / this.gamePanel.tileSize);
+                        this.gamePanel.entities.add(droppedWood);
+                    }
                 }
             }
         }

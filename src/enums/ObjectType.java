@@ -15,6 +15,7 @@ public enum ObjectType {
     POTION,
     MANA_CRYSTAL,
     COIN,
+    WOOD,
 
     FIREBALL,
     BULLET

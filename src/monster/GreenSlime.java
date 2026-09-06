@@ -21,7 +21,7 @@ public class GreenSlime extends Entity {
         this.random = new Random();
 
         this.entityType = EntityType.MONSTER;
-        this.monsterType = MonsterType.GREEN_SLIME;
+        this.monsterType = MonsterType.SLIME;
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
         this.velocity = 1;

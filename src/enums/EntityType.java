@@ -5,5 +5,6 @@ public enum EntityType {
     NPC,
     MONSTER,
     OBJECT,
-    PROJECTILE
+    PROJECTILE,
+    INTERACTIVE_TILE
 }

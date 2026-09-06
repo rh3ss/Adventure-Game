@@ -3,6 +3,8 @@ package main;
 import entity.NPCOldMan;
 import monster.GreenSlime;
 import object.*;
+import tileInteractive.InteractiveTile;
+import tileInteractive.InteractiveTileDryTree;
 
 public class AssetSetter {
     private final GamePanel gamePanel;
@@ -16,9 +18,9 @@ public class AssetSetter {
     }
 
     public void setObjects() {
-        ObjectKey key1 = new ObjectKey(this.gamePanel, 22, 22);
-        ObjectKey key2 = new ObjectKey(this.gamePanel, 20, 25);
-        ObjectKey key3 = new ObjectKey(this.gamePanel, 24, 25);
+        ObjectKeySilver key1 = new ObjectKeySilver(this.gamePanel, 22, 22);
+        ObjectKeySilver key2 = new ObjectKeySilver(this.gamePanel, 20, 25);
+        ObjectKeySilver key3 = new ObjectKeySilver(this.gamePanel, 24, 25);
         ObjectCoin coin1 = new ObjectCoin(this.gamePanel, 20, 24);
         ObjectCoin coin2 = new ObjectCoin(this.gamePanel, 24, 24);
         ObjectHeart heart1 = new ObjectHeart(this.gamePanel, 22, 24);
@@ -46,14 +48,39 @@ public class AssetSetter {
         this.gamePanel.entities.add(oldMan);
     }
 
-    public void setMonster() {
+    public void setMonsters() {
         GreenSlime slime = new GreenSlime(this.gamePanel, 23, 38);
-        this.gamePanel.entities.add(slime);
         GreenSlime slime1 = new GreenSlime(this.gamePanel, 23, 40);
-        this.gamePanel.entities.add(slime1);
         GreenSlime slime2 = new GreenSlime(this.gamePanel, 23, 43);
-        this.gamePanel.entities.add(slime2);
         GreenSlime slime3 = new GreenSlime(this.gamePanel, 23, 42);
+
+        this.gamePanel.entities.add(slime);
+        this.gamePanel.entities.add(slime1);
+        this.gamePanel.entities.add(slime2);
         this.gamePanel.entities.add(slime3);
+    }
+
+    public void setInteractiveTiles() {
+        InteractiveTile it1 = new InteractiveTileDryTree(this.gamePanel, 26, 15);
+        InteractiveTile it2 = new InteractiveTileDryTree(this.gamePanel, 27, 15);
+        InteractiveTile it3 = new InteractiveTileDryTree(this.gamePanel, 28, 15);
+        InteractiveTile it4 = new InteractiveTileDryTree(this.gamePanel, 29, 15);
+        InteractiveTile it5 = new InteractiveTileDryTree(this.gamePanel, 30, 15);
+        InteractiveTile it6 = new InteractiveTileDryTree(this.gamePanel, 31, 15);
+        InteractiveTile it7 = new InteractiveTileDryTree(this.gamePanel, 32, 15);
+        InteractiveTile it8 = new InteractiveTileDryTree(this.gamePanel, 19, 23);
+        InteractiveTile it9 = new InteractiveTileDryTree(this.gamePanel, 19, 24);
+        InteractiveTile it10 = new InteractiveTileDryTree(this.gamePanel, 19, 25);
+
+        this.gamePanel.entities.add(it1);
+        this.gamePanel.entities.add(it2);
+        this.gamePanel.entities.add(it3);
+        this.gamePanel.entities.add(it4);
+        this.gamePanel.entities.add(it5);
+        this.gamePanel.entities.add(it6);
+        this.gamePanel.entities.add(it7);
+        this.gamePanel.entities.add(it8);
+        this.gamePanel.entities.add(it9);
+        this.gamePanel.entities.add(it10);
     }
 }

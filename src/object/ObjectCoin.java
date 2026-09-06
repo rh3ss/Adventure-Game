@@ -14,7 +14,7 @@ public class ObjectCoin extends Entity {
         this.entityType = EntityType.OBJECT;
         this.objectCategory = ObjectCategory.PICKUP;
         this.objectType = ObjectType.COIN;
-        this.down1 = this.setupEntityImage("/res/objects/coin_bronze.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/objects/coin.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
 

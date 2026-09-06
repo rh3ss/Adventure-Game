@@ -50,6 +50,7 @@ public class Entity {
     public ObjectCategory objectCategory;
     public ObjectType objectType;
     public MonsterType monsterType;
+    public InteractiveTileType interactiveTileType;
 
     // ATTRIBUTES
     public boolean isSolid = false;
@@ -123,9 +124,12 @@ public class Entity {
         this.collisionDetected = false;
         this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
         this.gamePanel.collisionDetector.detectEntityCollisionWithObject(this, false);
-        this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
-        boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
+        int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
+        if (this.entityType == EntityType.PROJECTILE && entityIndex != Integer.MAX_VALUE) {
+            this.collisionDetected = true;
+        }
 
+        boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
         if (this.entityType == EntityType.MONSTER && entityCollidedWithPlayer) {
             this.entityDamagePlayer(this.attackDamage);
         }

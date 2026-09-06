@@ -8,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 import javax.swing.JPanel;
@@ -61,7 +60,8 @@ public class GamePanel extends JPanel implements Runnable{
         this.assetSetter.setPlayer();
         this.assetSetter.setObjects();
         this.assetSetter.setNPCs();
-        this.assetSetter.setMonster();
+        this.assetSetter.setMonsters();
+        this.assetSetter.setInteractiveTiles();
         this.gameState = GameState.TITLE;
         this.gui.menuSelection = Menu.NEW_GAME;
     }
