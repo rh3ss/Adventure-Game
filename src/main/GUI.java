@@ -21,6 +21,7 @@ public class GUI {
     private Graphics2D graphics2D;
     public Menu menuSelection;
     public ArrayList<String> messages;
+    public ArrayList<Color> messagesColor;
     public ArrayList<Integer> messagesCounter;
     public boolean messageOn;
     public boolean gameFinished;
@@ -38,6 +39,7 @@ public class GUI {
         catch (FontFormatException | IOException e) { throw new RuntimeException(e);}
 
         this.messages = new ArrayList<>();
+        this.messagesColor = new ArrayList<>();
         this.messagesCounter = new ArrayList<>();
         this.messageOn = this.gameFinished = false;
 
@@ -54,8 +56,9 @@ public class GUI {
         this.inventorySlotColumnSelected = this.inventorySlotRowSelected = 0;
     }
 
-    public void addMessage(String message) {
+    public void addMessage(String message, Color color) {
         this.messages.add(message);
+        this.messagesColor.add(color);
         this.messagesCounter.add(0);
     }
 
@@ -180,7 +183,7 @@ public class GUI {
             if (idxMessage != null) {
                 this.graphics2D.setColor(Color.BLACK);
                 this.graphics2D.drawString(idxMessage, messageX + 2, messageY + 2);
-                this.graphics2D.setColor(Color.WHITE);
+                this.graphics2D.setColor(this.messagesColor.get(idx));
                 this.graphics2D.drawString(idxMessage, messageX, messageY);
                 int counter =  this.messagesCounter.get(idx) + 1;
                 this.messagesCounter.set(idx, counter);
@@ -188,6 +191,7 @@ public class GUI {
 
                 if (this.messagesCounter.get(idx) > (this.gamePanel.FPS * 3)) {
                     this.messages.remove(idx);
+                    this.messagesColor.remove(idx);
                     this.messagesCounter.remove(idx);
                 }
             }
@@ -258,7 +262,7 @@ public class GUI {
         textY += lineSpacing + 15;
         this.graphics2D.drawString("Shield", textX, textY);
 
-        // attribuet values
+        // attribute values
         int rightX = (frameX + frameWidth) - 30;
         textY = frameY + this.gamePanel.tileSize;
 
@@ -274,22 +278,22 @@ public class GUI {
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
-        textValue = String.valueOf(this.gamePanel.player.strength);
+        textValue = String.valueOf((double) Math.round(this.gamePanel.player.strength * 100) / 100);
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
-        textValue = String.valueOf(this.gamePanel.player.dexterity);
+        textValue = String.valueOf((double) Math.round(this.gamePanel.player.dexterity * 100) / 100);
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
         textValue = "+";
-        textValue += String.valueOf(Math.round(this.gamePanel.player.attackDamage * 100));
+        textValue += String.valueOf((double) Math.round(this.gamePanel.player.attackDamage * 100) / 100);
         textValue += "%";
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
         textValue = "+";
-        textValue += String.valueOf(Math.round(this.gamePanel.player.defenseArmor * 100));
+        textValue += String.valueOf((double) Math.round(this.gamePanel.player.defenseArmor * 100) / 100);
         textValue += "%";
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);

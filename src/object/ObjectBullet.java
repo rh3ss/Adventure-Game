@@ -6,6 +6,8 @@ import enums.EntityType;
 import enums.ObjectType;
 import main.GamePanel;
 
+import java.awt.*;
+
 public class ObjectBullet extends Projectile {
     private final GamePanel gamePanel;
 
@@ -33,4 +35,12 @@ public class ObjectBullet extends Projectile {
         this.right1 = this.setupEntityImage("/res/projectile/bullet_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.right2 = this.setupEntityImage("/res/projectile/bullet_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
+
+    public Color getParticleColor() { return new Color(0x2A2F35); }
+
+    public int getParticlePxSize() { return 10; }
+
+    public int getParticleVelocity() { return 1; }
+
+    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }

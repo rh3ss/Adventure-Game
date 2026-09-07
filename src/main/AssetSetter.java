@@ -3,6 +3,7 @@ package main;
 import entity.NPCOldMan;
 import monster.GreenSlime;
 import object.*;
+import object.potion.*;
 import tileInteractive.InteractiveTile;
 import tileInteractive.InteractiveTileDryTree;
 
@@ -18,17 +19,20 @@ public class AssetSetter {
     }
 
     public void setObjects() {
-        ObjectKeySilver key1 = new ObjectKeySilver(this.gamePanel, 22, 22);
-        ObjectKeySilver key2 = new ObjectKeySilver(this.gamePanel, 20, 25);
-        ObjectKeySilver key3 = new ObjectKeySilver(this.gamePanel, 24, 25);
-        ObjectCoin coin1 = new ObjectCoin(this.gamePanel, 20, 24);
-        ObjectCoin coin2 = new ObjectCoin(this.gamePanel, 24, 24);
-        ObjectHeart heart1 = new ObjectHeart(this.gamePanel, 22, 24);
-        ObjectManaCrystal mana1 = new ObjectManaCrystal(this.gamePanel, 22, 26);
+        ObjectKeySilver key1 = new ObjectKeySilver(this.gamePanel, 27, 25);
+        ObjectKeySilver key2 = new ObjectKeySilver(this.gamePanel, 28, 25);
+        ObjectKeySilver key3 = new ObjectKeySilver(this.gamePanel, 29, 25);
+        ObjectCoin coin1 = new ObjectCoin(this.gamePanel, 22, 23);
+        ObjectCoin coin2 = new ObjectCoin(this.gamePanel, 23, 23);
+        ObjectHeart heart1 = new ObjectHeart(this.gamePanel, 25, 23);
+        ObjectManaCrystal mana1 = new ObjectManaCrystal(this.gamePanel, 26, 23);
         ObjectDoor door1 = new ObjectDoor(this.gamePanel, 22, 42);
-        ObjectAxe axe1 = new ObjectAxe(this.gamePanel, 28, 24);
-        ObjectShieldBlue shieldBlue1 = new ObjectShieldBlue(this.gamePanel, 16, 24);
-        ObjectPotion potion1 = new ObjectPotion(this.gamePanel, 22, 28);
+        ObjectAxe axe1 = new ObjectAxe(this.gamePanel, 24, 23);
+        ObjectShieldBlue shieldBlue1 = new ObjectShieldBlue(this.gamePanel, 27, 23);
+        Potion potion1 = new PotionExperience(this.gamePanel, 21, 25);
+        Potion potion2 = new PotionHeal(this.gamePanel, 21, 26);
+        Potion potion3 = new PotionSpeed(this.gamePanel, 21, 27);
+        Potion potion4 = new PotionStrength(this.gamePanel, 21, 28);
 
         this.gamePanel.entities.add(key1);
         this.gamePanel.entities.add(key2);
@@ -41,6 +45,9 @@ public class AssetSetter {
         this.gamePanel.entities.add(axe1);
         this.gamePanel.entities.add(shieldBlue1);
         this.gamePanel.entities.add(potion1);
+        this.gamePanel.entities.add(potion2);
+        this.gamePanel.entities.add(potion3);
+        this.gamePanel.entities.add(potion4);
     }
 
     public void setNPCs() {

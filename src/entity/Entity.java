@@ -92,6 +92,30 @@ public class Entity {
 
     public void damageReaction() {}
 
+    public Color getParticleColor() { return null; }
+
+    public int getParticlePxSize() { return 0; }
+
+    public int getParticleVelocity() { return 0; }
+
+    public int getParticleMaxHearts() { return 0; }
+
+    public void generateParticle(Entity producerEntity, Entity targetEntity) {
+        Color color = producerEntity.getParticleColor();
+        int pxSize = producerEntity.getParticlePxSize();
+        int velocity = producerEntity.getParticleVelocity();
+        int maxHearts = producerEntity.getParticleMaxHearts();
+
+        Particle p1 = new Particle(this.gamePanel, targetEntity, color, pxSize, velocity, maxHearts, -2, -1);
+        Particle p2 = new Particle(this.gamePanel, targetEntity, color, pxSize, velocity, maxHearts,  2, -1);
+        Particle p3 = new Particle(this.gamePanel, targetEntity, color, pxSize, velocity, maxHearts, -2,  1);
+        Particle p4 = new Particle(this.gamePanel, targetEntity, color, pxSize, velocity, maxHearts,  2,  1);
+        this.gamePanel.entities.add(p1);
+        this.gamePanel.entities.add(p2);
+        this.gamePanel.entities.add(p3);
+        this.gamePanel.entities.add(p4);
+    }
+
     public void speak() {
         this.gamePanel.gui.currentDialogueMessage = this.dialogues.get(this.dialogueIndex);
         this.dialogueIndex++;

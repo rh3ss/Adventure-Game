@@ -25,6 +25,7 @@ public class Projectile extends Entity {
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
             if (entityIndex != Integer.MAX_VALUE) {
                 this.gamePanel.player.playerAttacksMonster(entityIndex, this.attackDamage);
+                this.generateParticle(this.userOfProjectile.currentProjectile, this.gamePanel.entities.get(entityIndex));
                 this.isAlive = false;
             }
         }
@@ -32,6 +33,7 @@ public class Projectile extends Entity {
             boolean collisionWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
             if (!this.gamePanel.player.isInvincible && collisionWithPlayer) {
                 this.entityDamagePlayer(this.attackDamage);
+                this.generateParticle(this.userOfProjectile.currentProjectile, this.gamePanel.player);
                 this.isAlive = false;
             }
         }

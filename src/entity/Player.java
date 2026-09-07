@@ -276,7 +276,7 @@ public class Player extends Entity {
             } else {
                 collisionMessage = "Inventory full!";
             }
-            this.gamePanel.gui.addMessage(collisionMessage);
+            this.gamePanel.gui.addMessage(collisionMessage, Color.WHITE);
         }
     }
 
@@ -289,15 +289,15 @@ public class Player extends Entity {
                     dealtDamage = 0;
                 }
 
-                this.gamePanel.gui.addMessage("Hit " + dealtDamage + "!");
+                this.gamePanel.gui.addMessage("Hit " + (double) Math.round(dealtDamage * 100) / 100 + "!", Color.WHITE);
                 monster.currentHearts -= dealtDamage;
                 monster.isInvincible = true;
                 monster.damageReaction();
                 if (monster.currentHearts < 1) {
                     this.gamePanel.entities.get(entityIndex).isDying = true;
-                    this.gamePanel.gui.addMessage("Kill " + monster.monsterType.toString() + "!");
+                    this.gamePanel.gui.addMessage("Kill " + monster.monsterType.toString() + "!", Color.WHITE);
                     this.currentExperience += monster.currentExperience;
-                    this.gamePanel.gui.addMessage("Exp. +" + monster.currentExperience);
+                    this.gamePanel.gui.addMessage("Exp. +" + monster.currentExperience, Color.WHITE);
                     this.checkPlayerLevelUp();
                 }
             }
@@ -313,6 +313,7 @@ public class Player extends Entity {
             if (tile.entityType == EntityType.INTERACTIVE_TILE && !tile.isInvincible && tile.isDestructible && tile.isCorrectObjectEquipped(this)) {
                 tile.maxHearts -= attackDamage;
                 tile.isInvincible = true;
+                this.generateParticle(tile, tile);
                 if (tile.maxHearts < 0) {
                     this.gamePanel.entities.set(tileIndex, tile.getFollowingTileAfterDestruction());
                     if (tile.interactiveTileType == InteractiveTileType.DRY_TREE) {

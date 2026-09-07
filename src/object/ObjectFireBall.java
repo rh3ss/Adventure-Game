@@ -6,6 +6,8 @@ import enums.EntityType;
 import enums.ObjectType;
 import main.GamePanel;
 
+import java.awt.*;
+
 public class ObjectFireBall extends Projectile {
     private final GamePanel gamePanel;
 
@@ -42,4 +44,12 @@ public class ObjectFireBall extends Projectile {
     public void subtractManaByUsageCost(Entity user) {
         user.currentMana -= this.projectileUsageCostValue;
     }
+
+    public Color getParticleColor() { return new Color(0x780606); }
+
+    public int getParticlePxSize() { return 10; }
+
+    public int getParticleVelocity() { return 1; }
+
+    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }

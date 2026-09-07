@@ -6,6 +6,8 @@ import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
+import java.awt.*;
+
 public class ObjectCoin extends Entity {
 
     public ObjectCoin(GamePanel gamePanel, int worldColumn, int worldRow) {
@@ -22,7 +24,7 @@ public class ObjectCoin extends Entity {
     }
 
     public void use(Entity entity) {
-        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue);
+        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, Color.WHITE);
         this.gamePanel.player.coins += this.objectBenefitValue;
     }
 }
