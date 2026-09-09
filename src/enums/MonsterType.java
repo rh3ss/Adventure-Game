@@ -1,6 +1,7 @@
 package enums;
 
 public enum MonsterType {
-    SLIME
+    SLIME_GREEN,
+    SLIME_RED
 }
 

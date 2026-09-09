@@ -8,8 +8,8 @@ import enums.*;
 import main.GamePanel;
 import main.Keyboard;
 import object.ObjectFireBall;
-import object.ObjectShield;
-import object.ObjectSword;
+import object.shield.ShieldWood;
+import object.weapon.SwordIron;
 import object.ObjectWood;
 import tileInteractive.InteractiveTile;
 
@@ -43,8 +43,8 @@ public class Player extends Entity {
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
         this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;
-        this.currentWeapon = new ObjectSword(this.gamePanel, -1, -1);
-        this.currentShield = new ObjectShield(this.gamePanel, -1, -1);
+        this.currentWeapon = new SwordIron(this.gamePanel, -1, -1);
+        this.currentShield = new ShieldWood(this.gamePanel, -1, -1);
         this.currentProjectile = new ObjectFireBall(this.gamePanel);
         this.attackDamage = this.getAttackDamage();
         this.defenseArmor = this.getDefenseArmor();
@@ -61,38 +61,38 @@ public class Player extends Entity {
 
     private void getMovingImages() {
         // MOVEMENT
-        this.up1 = this.setupEntityImage("/res/player/boy_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.up2 = this.setupEntityImage("/res/player/boy_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.down1 = this.setupEntityImage("/res/player/boy_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.down2 = this.setupEntityImage("/res/player/boy_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.left1 = this.setupEntityImage("/res/player/boy_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.left2 = this.setupEntityImage("/res/player/boy_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.right1 = this.setupEntityImage("/res/player/boy_right_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.right2 = this.setupEntityImage("/res/player/boy_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.up1 = this.setupEntityImage("/res/player/moving/player_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.up2 = this.setupEntityImage("/res/player/moving/player_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/player/moving/player_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down2 = this.setupEntityImage("/res/player/moving/player_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.left1 = this.setupEntityImage("/res/player/moving/player_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.left2 = this.setupEntityImage("/res/player/moving/player_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.right1 = this.setupEntityImage("/res/player/moving/player_right_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.right2 = this.setupEntityImage("/res/player/moving/player_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
 
     private void getAttackImages() {
         if (this.currentWeapon.objectType == ObjectType.SWORD) {
             // SWORD
-            this.attackUp1 = this.setupEntityImage("/res/player/boy_attack_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackUp2 = this.setupEntityImage("/res/player/boy_attack_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown1 = this.setupEntityImage("/res/player/boy_attack_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown2 = this.setupEntityImage("/res/player/boy_attack_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackLeft1 = this.setupEntityImage("/res/player/boy_attack_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackLeft2 = this.setupEntityImage("/res/player/boy_attack_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight1 = this.setupEntityImage("/res/player/boy_attack_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight2 = this.setupEntityImage("/res/player/boy_attack_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackUp1 = this.setupEntityImage("/res/player/attack/boy_attack_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackUp2 = this.setupEntityImage("/res/player/attack/boy_attack_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown1 = this.setupEntityImage("/res/player/attack/boy_attack_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown2 = this.setupEntityImage("/res/player/attack/boy_attack_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackLeft1 = this.setupEntityImage("/res/player/attack/boy_attack_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackLeft2 = this.setupEntityImage("/res/player/attack/boy_attack_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight1 = this.setupEntityImage("/res/player/attack/boy_attack_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight2 = this.setupEntityImage("/res/player/attack/boy_attack_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
         }
         else if (this.currentWeapon.objectType == ObjectType.AXE) {
             // AXE
-            this.attackUp1 = this.setupEntityImage("/res/player/boy_axe_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackUp2 = this.setupEntityImage("/res/player/boy_axe_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown1 = this.setupEntityImage("/res/player/boy_axe_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown2 = this.setupEntityImage("/res/player/boy_axe_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackLeft1 = this.setupEntityImage("/res/player/boy_axe_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackLeft2 = this.setupEntityImage("/res/player/boy_axe_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight1 = this.setupEntityImage("/res/player/boy_axe_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight2 = this.setupEntityImage("/res/player/boy_axe_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackUp1 = this.setupEntityImage("/res/player/attack/boy_axe_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackUp2 = this.setupEntityImage("/res/player/attack/boy_axe_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown1 = this.setupEntityImage("/res/player/attack/boy_axe_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackDown2 = this.setupEntityImage("/res/player/attack/boy_axe_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+            this.attackLeft1 = this.setupEntityImage("/res/player/attack/boy_axe_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackLeft2 = this.setupEntityImage("/res/player/attack/boy_axe_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight1 = this.setupEntityImage("/res/player/attack/boy_axe_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+            this.attackRight2 = this.setupEntityImage("/res/player/attack/boy_axe_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
         }
     }
 
@@ -289,7 +289,7 @@ public class Player extends Entity {
                     dealtDamage = 0;
                 }
 
-                this.gamePanel.gui.addMessage("Hit " + (double) Math.round(dealtDamage * 100) / 100 + "!", Color.WHITE);
+                this.gamePanel.gui.addMessage("Hit " + (double) Math.round(dealtDamage * 100) + "%", Color.WHITE);
                 monster.currentHearts -= dealtDamage;
                 monster.isInvincible = true;
                 monster.damageReaction();

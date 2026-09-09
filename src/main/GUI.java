@@ -4,9 +4,9 @@ package main;
 import entity.Entity;
 import enums.GameState;
 import enums.Menu;
-import object.ObjectCoin;
-import object.ObjectHeart;
-import object.ObjectManaCrystal;
+import object.pickup.PickUpCoin;
+import object.pickup.PickUpHeart;
+import object.pickup.PickUpManaCrystal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -43,13 +43,13 @@ public class GUI {
         this.messagesCounter = new ArrayList<>();
         this.messageOn = this.gameFinished = false;
 
-        Entity heart = new ObjectHeart(this.gamePanel, -1, -1);
+        Entity heart = new PickUpHeart(this.gamePanel, -1, -1);
         this.heartFull = heart.image1;
         this.heartBlank = heart.image2;
         this.healthBarHeart = heart.setupEntityImage("/res/objects/health_bar_heart.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        Entity coin = new ObjectCoin(this.gamePanel, -1, -1);
+        Entity coin = new PickUpCoin(this.gamePanel, -1, -1);
         this.playerCoins = coin.down1;
-        Entity manaCrystal = new ObjectManaCrystal(this.gamePanel, -1, -1);
+        Entity manaCrystal = new PickUpManaCrystal(this.gamePanel, -1, -1);
         this.manaCrystalFull = manaCrystal.image1;
         this.manaCrystalBlank = manaCrystal.image2;
 
@@ -270,7 +270,7 @@ public class GUI {
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
-        textValue = String.valueOf(this.gamePanel.player.currentHearts + "/" + this.gamePanel.player.maxHearts);
+        textValue = String.valueOf((double) Math.round(this.gamePanel.player.currentHearts) + "/" + this.gamePanel.player.maxHearts);
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
@@ -287,13 +287,15 @@ public class GUI {
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
         textValue = "+";
-        textValue += String.valueOf((double) Math.round(this.gamePanel.player.attackDamage * 100) / 100);
+        double attackDamae = (double) Math.round(this.gamePanel.player.attackDamage * 100);
+        textValue += String.valueOf(attackDamae);
         textValue += "%";
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);
         textY += lineSpacing;
         textValue = "+";
-        textValue += String.valueOf((double) Math.round(this.gamePanel.player.defenseArmor * 100) / 100);
+        double defenseArmor = (double) Math.round(this.gamePanel.player.defenseArmor * 100);
+        textValue += String.valueOf(defenseArmor);
         textValue += "%";
         textX = this.calcXPositionForAlignToRightText(textValue, rightX);
         this.graphics2D.drawString(textValue, textX, textY);

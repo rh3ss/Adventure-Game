@@ -1,22 +1,18 @@
-package object;
+package object.weapon;
 
-import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
-public class ObjectSword extends Entity {
 
-    public ObjectSword(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+public class SwordIron extends Weapon {
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.WEAPON;
+    public SwordIron(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
+
         this.objectType = ObjectType.SWORD;
-        this.down1 = this.setupEntityImage("/res/objects/sword_normal.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/objects/sword_iron.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
         this.attackArea = new Rectangle(0, 0, 36, 36);

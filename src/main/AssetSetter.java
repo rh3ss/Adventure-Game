@@ -1,9 +1,17 @@
 package main;
 
 import entity.NPCOldMan;
-import monster.GreenSlime;
+import monster.MonsterSlimeGreen;
+import monster.MonsterSlimeRed;
 import object.*;
+import object.pickup.PickUpHeart;
+import object.pickup.PickUpManaCrystal;
+import object.pickup.PickUpCoin;
 import object.potion.*;
+import object.shield.ShieldBlue;
+import object.weapon.AxeIron;
+import object.weapon.SwordGold;
+import object.weapon.SwordIron;
 import tileInteractive.InteractiveTile;
 import tileInteractive.InteractiveTileDryTree;
 
@@ -19,24 +27,24 @@ public class AssetSetter {
     }
 
     public void setObjects() {
-        ObjectKeySilver key1 = new ObjectKeySilver(this.gamePanel, 27, 25);
-        ObjectKeySilver key2 = new ObjectKeySilver(this.gamePanel, 28, 25);
-        ObjectKeySilver key3 = new ObjectKeySilver(this.gamePanel, 29, 25);
-        ObjectCoin coin1 = new ObjectCoin(this.gamePanel, 22, 23);
-        ObjectCoin coin2 = new ObjectCoin(this.gamePanel, 23, 23);
-        ObjectHeart heart1 = new ObjectHeart(this.gamePanel, 25, 23);
-        ObjectManaCrystal mana1 = new ObjectManaCrystal(this.gamePanel, 26, 23);
+        KeySilver key1 = new KeySilver(this.gamePanel, 27, 25);
+        KeyGold key2 = new KeyGold(this.gamePanel, 28, 25);
+        PickUpCoin coin1 = new PickUpCoin(this.gamePanel, 22, 23);
+        PickUpCoin coin2 = new PickUpCoin(this.gamePanel, 23, 23);
+        PickUpHeart heart1 = new PickUpHeart(this.gamePanel, 25, 23);
+        PickUpManaCrystal mana1 = new PickUpManaCrystal(this.gamePanel, 26, 23);
         ObjectDoor door1 = new ObjectDoor(this.gamePanel, 22, 42);
-        ObjectAxe axe1 = new ObjectAxe(this.gamePanel, 24, 23);
-        ObjectShieldBlue shieldBlue1 = new ObjectShieldBlue(this.gamePanel, 27, 23);
         Potion potion1 = new PotionExperience(this.gamePanel, 21, 25);
         Potion potion2 = new PotionHeal(this.gamePanel, 21, 26);
         Potion potion3 = new PotionSpeed(this.gamePanel, 21, 27);
         Potion potion4 = new PotionStrength(this.gamePanel, 21, 28);
+        AxeIron axe1 = new AxeIron(this.gamePanel, 23, 25);
+        ShieldBlue shieldBlue1 = new ShieldBlue(this.gamePanel, 23, 26);
+        SwordIron swordIron1 = new SwordIron(this.gamePanel, 23, 27);
+        SwordGold swordGold1 = new SwordGold(this.gamePanel, 23, 28);
 
         this.gamePanel.entities.add(key1);
         this.gamePanel.entities.add(key2);
-        this.gamePanel.entities.add(key3);
         this.gamePanel.entities.add(coin1);
         this.gamePanel.entities.add(coin2);
         this.gamePanel.entities.add(heart1);
@@ -48,6 +56,8 @@ public class AssetSetter {
         this.gamePanel.entities.add(potion2);
         this.gamePanel.entities.add(potion3);
         this.gamePanel.entities.add(potion4);
+        this.gamePanel.entities.add(swordIron1);
+        this.gamePanel.entities.add(swordGold1);
     }
 
     public void setNPCs() {
@@ -56,15 +66,24 @@ public class AssetSetter {
     }
 
     public void setMonsters() {
-        GreenSlime slime = new GreenSlime(this.gamePanel, 23, 38);
-        GreenSlime slime1 = new GreenSlime(this.gamePanel, 23, 40);
-        GreenSlime slime2 = new GreenSlime(this.gamePanel, 23, 43);
-        GreenSlime slime3 = new GreenSlime(this.gamePanel, 23, 42);
+        MonsterSlimeGreen slime = new MonsterSlimeGreen(this.gamePanel, 23, 38);
+        MonsterSlimeGreen slime1 = new MonsterSlimeGreen(this.gamePanel, 23, 40);
+        MonsterSlimeGreen slime2 = new MonsterSlimeGreen(this.gamePanel, 23, 43);
+        MonsterSlimeGreen slime3 = new MonsterSlimeGreen(this.gamePanel, 23, 42);
+
+        MonsterSlimeRed monsterSlimeRed1 = new MonsterSlimeRed(this.gamePanel, 21, 38);
+        MonsterSlimeRed monsterSlimeRed2 = new MonsterSlimeRed(this.gamePanel, 21, 40);
+        MonsterSlimeRed monsterSlimeRed3 = new MonsterSlimeRed(this.gamePanel, 21, 43);
+        MonsterSlimeRed monsterSlimeRed4 = new MonsterSlimeRed(this.gamePanel, 21, 42);
 
         this.gamePanel.entities.add(slime);
         this.gamePanel.entities.add(slime1);
         this.gamePanel.entities.add(slime2);
         this.gamePanel.entities.add(slime3);
+        this.gamePanel.entities.add(monsterSlimeRed1);
+        this.gamePanel.entities.add(monsterSlimeRed2);
+        this.gamePanel.entities.add(monsterSlimeRed3);
+        this.gamePanel.entities.add(monsterSlimeRed4);
     }
 
     public void setInteractiveTiles() {

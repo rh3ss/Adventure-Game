@@ -1,23 +1,18 @@
-package object;
+package object.shield;
 
-import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-public class ObjectShieldBlue extends Entity {
+public class ShieldBlue extends Shield {
 
-    public ObjectShieldBlue(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+    public ShieldBlue(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.SHIELD;
         this.objectType = ObjectType.SHIELD_BLUE;
         this.down1 = this.setupEntityImage("/res/objects/shield_blue.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
-        this.objectDamageReductionMultiplier = 0.5;
+        this.objectDamageReductionMultiplier = 0.4;
         this.objectDescription = "[" + this.objectType.toString() + "]\nAn epic blue shield.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Defense reduction.";
     }
 }

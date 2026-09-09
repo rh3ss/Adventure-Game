@@ -1,23 +1,18 @@
-package object;
+package object.shield;
 
-import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-public class ObjectShield extends Entity {
+public class ShieldWood extends Shield {
 
-    public ObjectShield(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+    public ShieldWood(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.SHIELD;
         this.objectType = ObjectType.SHIELD_WOOD;
         this.down1 = this.setupEntityImage("/res/objects/shield_wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
-        this.objectDamageReductionMultiplier = 0.25;
+        this.objectDamageReductionMultiplier = 0.2;
         this.objectDescription = "[" + this.objectType.toString() + "]\nAn old wooden shield.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Defense reduction.";
     }
 }

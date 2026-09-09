@@ -1,22 +1,19 @@
-package object;
+package object.pickup;
 
 import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Color;
 
-public class ObjectCoin extends Entity {
+public class PickUpCoin extends PickUp {
 
-    public ObjectCoin(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+    public PickUpCoin(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.PICKUP;
         this.objectType = ObjectType.COIN;
         this.down1 = this.setupEntityImage("/res/objects/coin.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.color = Color.WHITE;
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
 
@@ -24,7 +21,7 @@ public class ObjectCoin extends Entity {
     }
 
     public void use(Entity entity) {
-        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, Color.WHITE);
+        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, this.color);
         this.gamePanel.player.coins += this.objectBenefitValue;
     }
 }

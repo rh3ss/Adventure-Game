@@ -15,7 +15,7 @@ public class PotionHeal extends Potion {
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
         this.objectBenefitValue = 2;
-        this.objectDescription = "[Heal Potion]\nHeals your life by " + this.objectBenefitValue + " hearts.";
+        this.objectDescription = "[Heal Potion]\nHeals +" + this.objectBenefitValue + " Hearts.";
     }
 
     public void use(Entity entity) {

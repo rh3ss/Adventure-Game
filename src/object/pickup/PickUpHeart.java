@@ -1,24 +1,21 @@
-package object;
+package object.pickup;
 
 import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Color;
 
-public class ObjectHeart extends Entity {
+public class PickUpHeart extends PickUp {
 
-    public ObjectHeart(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+    public PickUpHeart(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.PICKUP;
         this.objectType = ObjectType.HEART;
         this.down1 = this.setupEntityImage("/res/objects/heart_full.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.image1 = this.setupEntityImage("/res/objects/heart_full.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.image2 = this.setupEntityImage("/res/objects/heart_blank.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.color = Color.WHITE;
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
 
@@ -26,7 +23,7 @@ public class ObjectHeart extends Entity {
     }
 
     public void use(Entity entity) {
-        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, Color.WHITE);
+        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, this.color);
         entity.currentHearts += this.objectBenefitValue;
     }
 }

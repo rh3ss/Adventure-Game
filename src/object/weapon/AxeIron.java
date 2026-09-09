@@ -1,20 +1,16 @@
-package object;
+package object.weapon;
 
-import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
-public class ObjectAxe extends Entity {
 
-    public ObjectAxe(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+public class AxeIron extends Weapon {
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.WEAPON;
+    public AxeIron(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
+
         this.objectType = ObjectType.AXE;
         this.down1 = this.setupEntityImage("/res/objects/axe.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
