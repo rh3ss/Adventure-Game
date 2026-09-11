@@ -3,7 +3,7 @@ package tileInteractive;
 import enums.InteractiveTileType;
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
 public class InteractiveTileTrunk extends InteractiveTile{
 

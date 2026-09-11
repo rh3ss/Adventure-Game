@@ -1,12 +1,10 @@
 package tileInteractive;
 
 import entity.Entity;
-import enums.Direction;
 import enums.EntityType;
 import main.GamePanel;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 
 public class InteractiveTile extends Entity {
     public final GamePanel gamePanel;
@@ -20,18 +18,14 @@ public class InteractiveTile extends Entity {
         this.isDestructible = false;
     }
 
-    public boolean isCorrectObjectEquipped(Entity user) {
-        return false;
-    }
+    public boolean isCorrectObjectEquipped(Entity user) { return false; }
 
-    public InteractiveTile getFollowingTileAfterDestruction() {
-        return null;
-    }
+    public InteractiveTile getFollowingTileAfterDestruction() { return null; }
 
     public void update() {
-        if (isInvincible) {
+        if (this.isInvincible) {
             this.invincibleCounterFrames++;
-            if (this.invincibleCounterFrames > (this.gamePanel.FPS - 40)) {
+            if (this.invincibleCounterFrames > (this.gamePanel.FPS - 20)) {
                 this.isInvincible = false;
                 this.invincibleCounterFrames = 0;
             }

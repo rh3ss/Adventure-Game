@@ -224,10 +224,12 @@ public class Player extends Entity {
     private void interactWithCollidedEntity(int entityIndex) {
         if (entityIndex != Integer.MAX_VALUE) {
             Entity entity = this.gamePanel.entities.get(entityIndex);
-            switch (entity.entityType) {
-                case EntityType.NPC -> { this.playerCollisionWithNPC(entity); }
-                case EntityType.MONSTER -> { this.playerCollisionWithMonster(entity); }
-                case EntityType.OBJECT -> { this.playerCollisionWithObject(entity); }
+            if (entity.entityType != null) {
+                switch (entity.entityType) {
+                    case EntityType.NPC -> { this.playerCollisionWithNPC(entity); }
+                    case EntityType.MONSTER -> { this.playerCollisionWithMonster(entity); }
+                    case EntityType.OBJECT -> { this.playerCollisionWithObject(entity); }
+                }
             }
         }
         else {
@@ -311,7 +313,7 @@ public class Player extends Entity {
             }
             InteractiveTile tile = (InteractiveTile) this.gamePanel.entities.get(tileIndex);
             if (tile.entityType == EntityType.INTERACTIVE_TILE && !tile.isInvincible && tile.isDestructible && tile.isCorrectObjectEquipped(this)) {
-                tile.maxHearts -= attackDamage;
+                tile.maxHearts -= 1;
                 tile.isInvincible = true;
                 this.generateParticle(tile, tile);
                 if (tile.maxHearts < 0) {

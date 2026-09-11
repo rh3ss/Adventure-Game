@@ -101,9 +101,11 @@ public class CollisionDetector {
                     case Direction.RIGHT -> { entity.solidArea.x += entity.velocity; }
                 }
                 // check if entity area intersects with idxEntity area
-                if (entity.solidArea.intersects(idxEntity.solidArea) && idxEntity.isSolid) {
-                    entity.collisionDetected = true;
+                if (entity.solidArea.intersects(idxEntity.solidArea)) {
                     entityIndex = idx;
+                    if (idxEntity.isSolid) {
+                        entity.collisionDetected = true;
+                    }
                 }
                 // reset areas
                 entity.solidArea.x = entity.solidAreaDefaultX;

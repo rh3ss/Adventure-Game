@@ -13,6 +13,7 @@ import object.weapon.AxeIron;
 import object.weapon.SwordGold;
 import object.weapon.SwordIron;
 import tileInteractive.InteractiveTile;
+import tileInteractive.InteractiveTileBush;
 import tileInteractive.InteractiveTileDryTree;
 
 public class AssetSetter {
@@ -94,9 +95,9 @@ public class AssetSetter {
         InteractiveTile it5 = new InteractiveTileDryTree(this.gamePanel, 30, 15);
         InteractiveTile it6 = new InteractiveTileDryTree(this.gamePanel, 31, 15);
         InteractiveTile it7 = new InteractiveTileDryTree(this.gamePanel, 32, 15);
-        InteractiveTile it8 = new InteractiveTileDryTree(this.gamePanel, 19, 23);
-        InteractiveTile it9 = new InteractiveTileDryTree(this.gamePanel, 19, 24);
-        InteractiveTile it10 = new InteractiveTileDryTree(this.gamePanel, 19, 25);
+        InteractiveTile it8 = new InteractiveTileBush(this.gamePanel, "bush_2", 19, 23);
+        InteractiveTile it9 = new InteractiveTileBush(this.gamePanel, "bush_1", 19, 24);
+        InteractiveTile it10 = new InteractiveTileBush(this.gamePanel, "bush_2", 19, 25);
 
         this.gamePanel.entities.add(it1);
         this.gamePanel.entities.add(it2);
