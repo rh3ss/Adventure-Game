@@ -35,6 +35,7 @@ public class Entity {
     public boolean isAlive = true;
     public boolean isDying = false;
     public boolean showHealthBar = false;
+    public boolean showReceivedDamage = false;
     public boolean collisionDetected = false;
 
     // COUNTER
@@ -43,6 +44,7 @@ public class Entity {
     public int invincibleCounterFrames = 0;
     public int dyingCounterFrames = 0;
     public int healthBarCounterFrames = 0;
+    public int receivedDamageCounterFrames = 0;
     public int shootingAvailableCounter = 0;
 
     // TYPES
@@ -60,7 +62,7 @@ public class Entity {
     public int currentLevel, currentExperience, nextLevelExperience;
     public double strength, dexterity;
     public double maxHearts, currentHearts;
-    public double attackDamage, defenseArmor;
+    public double attackDamage, receivedDamage, defenseArmor;
     public Entity currentWeapon, currentShield;
     public Projectile currentProjectile;
 
@@ -219,8 +221,9 @@ public class Entity {
                 image = this.down1;
             }
             // draw current entity state
-            if (this.entityType == EntityType.MONSTER && this.showHealthBar) {
-                this.drawHealthBar(g2, screenX, screenY);
+            if (this.entityType == EntityType.MONSTER) {
+                if (this.showHealthBar) { this.drawHealthBar(g2, screenX, screenY); }
+                if (this.showReceivedDamage) { this.drawReceivedDamage(g2, screenX, screenY); }
             }
             if (this.isInvincible) {
                 this.showHealthBar = true;
@@ -239,21 +242,35 @@ public class Entity {
         double healthBarScale = (double) this.gamePanel.tileSize / this.maxHearts;
         double healthBarValue = healthBarScale * this.currentHearts;
         int healthBarWidth = this.gamePanel.tileSize;
-        int healthBarHeight = 9;
+        int healthBarHeight = 6;
         int healthBarYPositionAboveEntity = 5;
 
-        g2.setColor(new Color(207, 181, 59));
+        g2.setColor(new Color(0xe7e7e7));
         g2.fillRect(screenX - 2, screenY - healthBarYPositionAboveEntity - 1, healthBarWidth + 2, healthBarHeight + 2);
-        g2.setColor(new Color(30, 30, 30));
-        g2.fillRect(screenX, screenY - healthBarYPositionAboveEntity, healthBarWidth - 1, healthBarHeight);
-        g2.setColor(new Color(139, 0, 0));
+        g2.setColor(new Color(0x780606));
         g2.fillRect(screenX, screenY - healthBarYPositionAboveEntity, (int) healthBarValue, healthBarHeight);
-        g2.drawImage(this.gamePanel.gui.healthBarHeart, screenX - 10, screenY - healthBarYPositionAboveEntity - 4, healthBarHeight + 7, healthBarHeight + 7, null);
 
         this.healthBarCounterFrames++;
         if (this.healthBarCounterFrames > (this.gamePanel.FPS * 10)) {
             this.showHealthBar = false;
             this.healthBarCounterFrames = 0;
+        }
+    }
+
+    private void drawReceivedDamage(Graphics2D g2, int screenX, int screenY) {
+        String textReceivedDamage = String.valueOf(Math.round(this.receivedDamage * 100));;
+
+        screenX -= 25; screenY -= 15;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+        g2.setColor(new Color(0xe7e7e7));
+        g2.drawString("-" + textReceivedDamage + "%", screenX + 2, screenY + 2);
+        g2.setColor(new Color(0x780606));
+        g2.drawString("-" + textReceivedDamage + "%", screenX, screenY);
+
+        this.receivedDamageCounterFrames++;
+        if (this.receivedDamageCounterFrames > (this.gamePanel.FPS)) {
+            this.showReceivedDamage = false;
+            this.receivedDamageCounterFrames = 0;
         }
     }
 

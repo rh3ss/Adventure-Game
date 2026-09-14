@@ -9,9 +9,7 @@ import object.pickup.PickUpManaCrystal;
 import object.pickup.PickUpCoin;
 import object.potion.*;
 import object.shield.ShieldBlue;
-import object.weapon.AxeIron;
-import object.weapon.SwordGold;
-import object.weapon.SwordIron;
+import object.weapon.*;
 import tileInteractive.InteractiveTile;
 import tileInteractive.InteractiveTileBush;
 import tileInteractive.InteractiveTileDryTree;
@@ -39,10 +37,10 @@ public class AssetSetter {
         Potion potion2 = new PotionHeal(this.gamePanel, 21, 26);
         Potion potion3 = new PotionSpeed(this.gamePanel, 21, 27);
         Potion potion4 = new PotionStrength(this.gamePanel, 21, 28);
-        AxeIron axe1 = new AxeIron(this.gamePanel, 23, 25);
-        ShieldBlue shieldBlue1 = new ShieldBlue(this.gamePanel, 23, 26);
-        SwordIron swordIron1 = new SwordIron(this.gamePanel, 23, 27);
-        SwordGold swordGold1 = new SwordGold(this.gamePanel, 23, 28);
+        Weapon axeiron1 = new AxeIron(this.gamePanel, 23, 25);
+        Weapon axegold1 = new AxeGold(this.gamePanel, 23, 26);
+        Weapon swordGold1 = new SwordGold(this.gamePanel, 23, 27);
+        ShieldBlue shieldBlue1 = new ShieldBlue(this.gamePanel, 23, 28);
 
         this.gamePanel.entities.add(key1);
         this.gamePanel.entities.add(key2);
@@ -51,13 +49,13 @@ public class AssetSetter {
         this.gamePanel.entities.add(heart1);
         this.gamePanel.entities.add(mana1);
         this.gamePanel.entities.add(door1);
-        this.gamePanel.entities.add(axe1);
+        this.gamePanel.entities.add(axeiron1);
+        this.gamePanel.entities.add(axegold1);
         this.gamePanel.entities.add(shieldBlue1);
         this.gamePanel.entities.add(potion1);
         this.gamePanel.entities.add(potion2);
         this.gamePanel.entities.add(potion3);
         this.gamePanel.entities.add(potion4);
-        this.gamePanel.entities.add(swordIron1);
         this.gamePanel.entities.add(swordGold1);
     }
 

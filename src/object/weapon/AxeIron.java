@@ -12,7 +12,7 @@ public class AxeIron extends Weapon {
         super(gamePanel, worldColumn, worldRow);
 
         this.objectType = ObjectType.AXE;
-        this.down1 = this.setupEntityImage("/res/objects/axe.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/objects/axe_iron.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
         this.attackArea = new Rectangle(0, 0, 30, 30);

@@ -72,7 +72,7 @@ public class TileManager {
         // environment
         setupTiles(39, "017", false);
         setupTiles(40, "032", true);
-        setupTiles(41, "016", true);
+        setupTiles(41, "016_1", true);
     }
 
     private void setupTiles(int keyIndex, String imageName, boolean collision) {

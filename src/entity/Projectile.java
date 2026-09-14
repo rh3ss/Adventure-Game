@@ -23,7 +23,7 @@ public class Projectile extends Entity {
     public void update() {
         if (this.userOfProjectile == this.gamePanel.player) {
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
-            if (entityIndex != Integer.MAX_VALUE) {
+            if (entityIndex != Integer.MAX_VALUE && (this.gamePanel.entities.get(entityIndex) != this.gamePanel.player)) {
                 this.gamePanel.player.playerAttacksMonster(entityIndex, this.attackDamage);
                 this.generateParticle(this.userOfProjectile.currentProjectile, this.gamePanel.entities.get(entityIndex));
                 this.isAlive = false;

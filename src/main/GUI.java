@@ -26,7 +26,6 @@ public class GUI {
     public boolean messageOn;
     public boolean gameFinished;
     public String currentDialogueMessage;
-    public BufferedImage healthBarHeart;
     public int inventorySlotColumnSelected, inventorySlotRowSelected;
 
     public GUI(GamePanel p) {
@@ -46,7 +45,6 @@ public class GUI {
         Entity heart = new PickUpHeart(this.gamePanel, -1, -1);
         this.heartFull = heart.image1;
         this.heartBlank = heart.image2;
-        this.healthBarHeart = heart.setupEntityImage("/res/objects/health_bar_heart.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         Entity coin = new PickUpCoin(this.gamePanel, -1, -1);
         this.playerCoins = coin.down1;
         Entity manaCrystal = new PickUpManaCrystal(this.gamePanel, -1, -1);
@@ -73,6 +71,7 @@ public class GUI {
                 this.drawPlayerHearts();
                 this.drawPlayerCoins();
                 this.drawPlayerMana();
+                this.drawPlayerEquipment();
                 this.drawMessages();
             }
             case GameState.PAUSED -> { this.drawPausedScreen(); }
@@ -173,6 +172,23 @@ public class GUI {
         this.graphics2D.drawImage(this.playerCoins, xPos, yPos, null);
     }
 
+    private void drawPlayerEquipment() {
+        int equipmentPosX = this.gamePanel.tileSize / 2;
+        int equipmentPosY = (int) (this.gamePanel.screenHeight - (this.gamePanel.tileSize * 1.5));
+        int blackShadowWidth = 2;
+        this.graphics2D.setColor(new Color(0x000000));
+        this.graphics2D.fillRoundRect(equipmentPosX - blackShadowWidth, equipmentPosY - blackShadowWidth, this.gamePanel.tileSize + blackShadowWidth * 2, this.gamePanel.tileSize + blackShadowWidth * 2, 10, 10);
+        this.graphics2D.setColor(new Color(0xf0be5a));
+        this.graphics2D.fillRoundRect(equipmentPosX, equipmentPosY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
+        this.graphics2D.drawImage(this.gamePanel.player.currentWeapon.down1, equipmentPosX, equipmentPosY, null);
+        equipmentPosX += (this.gamePanel.tileSize + (blackShadowWidth * 2));
+        this.graphics2D.setColor(new Color(0x000000));
+        this.graphics2D.fillRoundRect(equipmentPosX - blackShadowWidth, equipmentPosY - blackShadowWidth, this.gamePanel.tileSize + blackShadowWidth * 2, this.gamePanel.tileSize + blackShadowWidth * 2, 10, 10);
+        this.graphics2D.setColor(new Color(0xf0be5a));
+        this.graphics2D.fillRoundRect(equipmentPosX, equipmentPosY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
+        this.graphics2D.drawImage(this.gamePanel.player.currentShield.down1, equipmentPosX, equipmentPosY, null);
+    }
+
     private void drawMessages() {
         int messageX = this.gamePanel.tileSize;
         int messageY = this.gamePanel.tileSize * 4;
@@ -226,7 +242,7 @@ public class GUI {
 
     private void drawPlayerAttributes() {
         // create a frame
-        int frameX = this.gamePanel.tileSize;
+        int frameX = this.gamePanel.tileSize * 2;
         int frameY = this.gamePanel.tileSize;
         int frameWidth = this.gamePanel.tileSize * 5;
         int frameHeight = this.gamePanel.tileSize * 10;
@@ -315,7 +331,7 @@ public class GUI {
 
     private void drawPlayerInventory() {
         // inventory window frame
-        int inventoryWindowFrameX = this.gamePanel.tileSize * 9;
+        int inventoryWindowFrameX = this.gamePanel.tileSize * 12;
         int inventoryWindowFrameY = this.gamePanel.tileSize;
         int inventoryWindowFrameWidth = this.gamePanel.tileSize * (this.gamePanel.player.inventoryColumnSize + 1);
         int inventoryWindowFrameHeight = this.gamePanel.tileSize * (this.gamePanel.player.inventoryRowSize + 1);

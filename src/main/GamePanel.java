@@ -3,10 +3,9 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
@@ -22,10 +21,16 @@ public class GamePanel extends JPanel implements Runnable{
     public final int tileSize = this.originalTileSize * this.scale;
 
     // SCREEN
-    public final int maxScreenColumns = 16;
+    public final int maxScreenColumns = 20;
     public final int maxScreenRows = 12;
-    public final int screenWidth = this.tileSize * this.maxScreenColumns;   // 768px
+    public final int screenWidth = this.tileSize * this.maxScreenColumns;   // 960px
     public final int screenHeight = this.tileSize * this.maxScreenRows;     // 576px
+
+    // FULL SCREEN
+    public int screenWidthFull = this.screenWidth;
+    public int screenHeightFull = this.screenHeight;
+    public BufferedImage fullScreen;
+    public Graphics2D graphics2D;
 
     // WORLD
     public final int maxWorldColumns = 50;
@@ -64,6 +69,21 @@ public class GamePanel extends JPanel implements Runnable{
         this.assetSetter.setInteractiveTiles();
         this.gameState = GameState.TITLE;
         this.gui.menuSelection = Menu.NEW_GAME;
+        // set drawing to the new bufferedImage graphic
+        this.fullScreen = new BufferedImage(this.screenWidth, this.screenHeight, BufferedImage.TYPE_INT_ARGB);
+        this.graphics2D = (Graphics2D) this.fullScreen.getGraphics();
+        // set local game to current device full screen
+        // this.setFullScreen();
+    }
+
+    public void setFullScreen() {
+        // get local screen device
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
+        graphicsDevice.setFullScreenWindow(Main.window);
+        // get full screen width and height
+        this.screenWidthFull = Main.window.getWidth();
+        this.screenHeightFull = Main.window.getHeight();
     }
 
     public void startGame() {
@@ -86,7 +106,8 @@ public class GamePanel extends JPanel implements Runnable{
             
             if(deltaTime >= 1) {
                 update();
-                repaint();
+                this.drawGameScreen();      // draw everything to BufferedImage
+                this.drawToFullScreen();    // draw BufferedImage to the screen
                 deltaTime--;
             }
         }
@@ -111,27 +132,29 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
+    public void drawGameScreen() {
         if (this.gameState == GameState.TITLE) {
-            this.drawTitleScreen(g2);
+            this.drawTitleScreen();
         }
         else {
-            this.drawGame(g2);
+            this.drawGame();
         }
-        g2.dispose();
     }
 
-    private void drawTitleScreen(Graphics2D g2) {
+    public void drawToFullScreen() {
+        Graphics g = this.getGraphics();
+        g.drawImage(this.fullScreen, 0, 0, this.screenWidthFull, screenHeightFull, null);
+        g.dispose();
+    }
+
+    private void drawTitleScreen() {
         // GUI
-        this.gui.draw(g2);
+        this.gui.draw(this.graphics2D);
     }
 
-    private void drawGame(Graphics2D g2) {
+    private void drawGame() {
         // draw map layer
-        this.tileManager.draw(g2);
+        this.tileManager.draw(this.graphics2D);
 
         // sorting entities by worldY pos
         entities.removeIf(Objects::isNull);
@@ -139,9 +162,9 @@ public class GamePanel extends JPanel implements Runnable{
 
         // draw entities
         for (Entity entity : entities) {
-            if (entity != null) { entity.draw(g2); }
+            if (entity != null) { entity.draw(this.graphics2D); }
         }
         // GUI
-        this.gui.draw(g2);
+        this.gui.draw(this.graphics2D);
     }
 }

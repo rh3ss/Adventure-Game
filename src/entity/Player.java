@@ -50,7 +50,7 @@ public class Player extends Entity {
         this.defenseArmor = this.getDefenseArmor();
     }
 
-    private double getAttackDamage() {
+    public double getAttackDamage() {
         this.attackArea = this.currentWeapon.attackArea;
         return this.strength + (this.strength * this.currentWeapon.objectAttackDamageMultiplier);
     }
@@ -293,7 +293,9 @@ public class Player extends Entity {
 
                 this.gamePanel.gui.addMessage("Hit " + (double) Math.round(dealtDamage * 100) + "%", Color.WHITE);
                 monster.currentHearts -= dealtDamage;
+                monster.receivedDamage = dealtDamage;
                 monster.isInvincible = true;
+                monster.showReceivedDamage = true;
                 monster.damageReaction();
                 if (monster.currentHearts < 1) {
                     this.gamePanel.entities.get(entityIndex).isDying = true;
