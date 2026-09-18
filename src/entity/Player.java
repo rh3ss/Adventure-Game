@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import enums.*;
 import main.GamePanel;
 import main.Keyboard;
+import object.armor.Armor;
+import object.shield.Shield;
+import object.weapon.Weapon;
 import projectile.Fireball;
 import object.armor.ArmorIron;
 import object.shield.ShieldWood;
@@ -354,16 +357,16 @@ public class Player extends Entity {
             if (selectedItem.entityType == EntityType.OBJECT) {
                 switch (selectedItem.objectCategory) {
                     case ObjectCategory.WEAPON:
-                        this.currentWeapon = selectedItem;
+                        this.currentWeapon = (Weapon) selectedItem;
                         this.attackDamage = this.getAttackDamage();
                         this.getAttackImages();
                         break;
                     case ObjectCategory.SHIELD:
-                        this.currentShield = selectedItem;
+                        this.currentShield = (Shield) selectedItem;
                         this.defenseArmor = this.getDefenseArmor();
                         break;
                     case ObjectCategory.ARMOR:
-                        this.currentArmor = selectedItem;
+                        this.currentArmor = (Armor) selectedItem;
                         break;
                     case ObjectCategory.CONSUMABLE:
                         selectedItem.use(this);

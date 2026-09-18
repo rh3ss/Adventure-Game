@@ -1,21 +1,18 @@
 package object.pickup;
 
 import entity.Entity;
-import enums.EntityType;
 import enums.ObjectCategory;
 import main.GamePanel;
+import object.GameObject;
 
-import java.awt.Color;
 
-public class PickUp extends Entity {
+public class PickUp extends GameObject {
     public final GamePanel gamePanel;
-    public Color color;
 
     public PickUp(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+        super(gamePanel, worldColumn, worldRow);
         this.gamePanel = gamePanel;
 
-        this.entityType = EntityType.OBJECT;
         this.objectCategory = ObjectCategory.PICKUP;
     }
 

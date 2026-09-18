@@ -11,16 +11,14 @@ public class PotionExperience extends Potion {
         super(gamePanel, worldColumn, worldRow);
 
         this.down1 = this.setupEntityImage("/res/objects/potion_green.png", gamePanel.tileSize, gamePanel.tileSize);
-        this.color = new Color(0x7cce97);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
+        this.objectColor = new Color(0x7cce97);
         this.objectBenefitValue = 5;
         this.objectDescription = "[Experience Potion]\nReceive +" + this.objectBenefitValue + " Experience.";
     }
 
     public void use(Entity entity) {
         String message = "+" + this.objectBenefitValue + " Experience";
-        this.gamePanel.gui.addMessage(message, this.color);
+        this.gamePanel.gui.addMessage(message, this.objectColor);
         entity.currentExperience += this.objectBenefitValue;
         this.gamePanel.player.checkPlayerLevelUp();
     }

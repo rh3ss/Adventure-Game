@@ -10,8 +10,6 @@ public class ArmorGold extends Armor {
 
         this.objectType = ObjectType.ARMOR;
         this.down1 = this.setupEntityImage("/res/objects/armor_gold.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
         this.objectDamageReductionMultiplier = 0.30;
         this.objectDescription = "[" + this.objectType.toString() + "]\nAn legendary golden armor.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Armor.";
     }

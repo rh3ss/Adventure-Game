@@ -1,17 +1,15 @@
 package object.weapon;
 
-import entity.Entity;
-import enums.EntityType;
 import enums.ObjectCategory;
 import main.GamePanel;
+import object.GameObject;
 
 
-public class Weapon extends Entity {
+public class Weapon extends GameObject {
 
     public Weapon(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
         this.objectCategory = ObjectCategory.WEAPON;
     }
 }

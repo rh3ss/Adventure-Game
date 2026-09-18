@@ -4,6 +4,7 @@ package main;
 import entity.Entity;
 import enums.GameState;
 import enums.Menu;
+import object.GameObject;
 import object.pickup.PickUpCoin;
 import object.pickup.PickUpHeart;
 import object.pickup.PickUpManaCrystal;
@@ -378,8 +379,9 @@ public class GUI {
         int itemIndex = this.getSelectedInventoryItemIndexOnSlot();
         if (itemIndex < this.gamePanel.player.inventory.size()) {
             this.drawSubWindowScreen(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight);
-            String itemDescription = this.gamePanel.player.inventory.get(itemIndex).objectDescription;
-            for (String line : itemDescription.split("\n")) {
+            GameObject object = (GameObject) this.gamePanel.player.inventory.get(itemIndex);
+            String objectDescription = object.objectDescription;
+            for (String line : objectDescription.split("\n")) {
                 this.graphics2D.drawString(line, descriptionTextX, descriptionTextY);
                 descriptionTextY += 32;
             }

@@ -11,16 +11,14 @@ public class PotionStrength extends Potion {
         super(gamePanel, worldColumn, worldRow);
 
         this.down1 = this.setupEntityImage("/res/objects/potion_blue.png", gamePanel.tileSize, gamePanel.tileSize);
-        this.color = new Color(0x040273);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
+        this.objectColor = new Color(0x040273);
         this.objectBenefitValue = 1;
         this.objectDescription = "[Blue Potion]\nReceive +" + this.objectBenefitValue * 10 + "% Strength.";
     }
 
     public void use(Entity entity) {
         String message = "+" + this.objectBenefitValue * 10 + " % Strength";
-        this.gamePanel.gui.addMessage(message, this.color);
+        this.gamePanel.gui.addMessage(message, this.objectColor);
         entity.strength += (double) this.objectBenefitValue / 10;
     }
 }

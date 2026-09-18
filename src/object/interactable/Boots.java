@@ -10,7 +10,5 @@ public class Boots extends Interactable {
 
         this.objectType = ObjectType.BOOTS;
         this.down1 = this.setupEntityImage("/res/objects/boots.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
     }
 }

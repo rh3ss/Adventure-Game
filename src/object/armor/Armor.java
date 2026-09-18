@@ -1,17 +1,15 @@
 package object.armor;
 
-import entity.Entity;
-import enums.EntityType;
 import enums.ObjectCategory;
 import main.GamePanel;
+import object.GameObject;
 
 
-public class Armor extends Entity {
+public class Armor extends GameObject {
 
     public Armor(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
         this.objectCategory = ObjectCategory.ARMOR;
     }
 }

@@ -1,17 +1,15 @@
 package object.shield;
 
-import entity.Entity;
-import enums.EntityType;
 import enums.ObjectCategory;
 import main.GamePanel;
+import object.GameObject;
 
 
-public class Shield extends Entity {
+public class Shield extends GameObject {
 
     public Shield(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
         this.objectCategory = ObjectCategory.SHIELD;
     }
 }

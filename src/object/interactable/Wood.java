@@ -10,8 +10,6 @@ public class Wood extends Interactable {
 
         this.objectType = ObjectType.WOOD;
         this.down1 = this.setupEntityImage("/res/objects/wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
         this.objectDescription = "[" + this.objectType.toString() + "]\nWood from a tree.";
     }
 }

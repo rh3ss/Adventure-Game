@@ -13,15 +13,12 @@ public class PickUpCoin extends PickUp {
 
         this.objectType = ObjectType.COIN;
         this.down1 = this.setupEntityImage("/res/objects/coin.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.color = Color.WHITE;
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
-
+        this.objectColor = Color.WHITE;
         this.objectBenefitValue = 1;
     }
 
     public void use(Entity entity) {
-        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, this.color);
+        this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, this.objectColor);
         this.gamePanel.player.coins += this.objectBenefitValue;
     }
 }

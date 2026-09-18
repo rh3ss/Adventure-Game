@@ -11,16 +11,14 @@ public class PotionSpeed extends Potion {
         super(gamePanel, worldColumn, worldRow);
 
         this.down1 = this.setupEntityImage("/res/objects/potion_yellow.png", gamePanel.tileSize, gamePanel.tileSize);
-        this.color = new Color(0xffee8c);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
+        this.objectColor = new Color(0xffee8c);
         this.objectBenefitValue = 1;
         this.objectDescription = "[Speed Potion]\nReceive +" + this.objectBenefitValue * 10 + "% Velocity.";
     }
 
     public void use(Entity entity) {
         String message = "+" + this.objectBenefitValue * 10 + "% Velocity";
-        this.gamePanel.gui.addMessage(message, this.color);
+        this.gamePanel.gui.addMessage(message, this.objectColor);
         entity.velocity += this.objectBenefitValue / 10;
     }
 }

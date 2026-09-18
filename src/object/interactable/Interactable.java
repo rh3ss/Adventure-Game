@@ -1,16 +1,14 @@
 package object.interactable;
 
-import entity.Entity;
-import enums.EntityType;
 import enums.ObjectCategory;
 import main.GamePanel;
+import object.GameObject;
 
-public class Interactable extends Entity {
+public class Interactable extends GameObject {
 
     public Interactable(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
         this.objectCategory = ObjectCategory.INTERACTABLE;
     }
 }

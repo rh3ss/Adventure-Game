@@ -10,8 +10,6 @@ public class KeySilver extends Interactable {
 
         this.objectType = ObjectType.KEY;
         this.down1 = this.setupEntityImage("/res/objects/key_silver.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
         this.objectDescription = "[" + this.objectType.toString() + "]\nA silver key.";
     }
 }

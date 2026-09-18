@@ -13,8 +13,6 @@ public class SwordGold extends Weapon {
 
         this.objectType = ObjectType.SWORD;
         this.down1 = this.setupEntityImage("/res/objects/sword_gold.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.worldX = worldColumn * gamePanel.tileSize;
-        this.worldY = worldRow * gamePanel.tileSize;
         this.attackArea = new Rectangle(0, 0, 36, 36);
         this.objectAttackDamageMultiplier = 0.2;
         this.objectDescription = "[" + this.objectType.toString() + "]\nAn old golden sword.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";

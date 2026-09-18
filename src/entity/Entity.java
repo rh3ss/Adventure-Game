@@ -3,6 +3,9 @@ package entity;
 import enums.*;
 import main.GamePanel;
 import main.UtilityTool;
+import object.armor.Armor;
+import object.shield.Shield;
+import object.weapon.Weapon;
 import projectile.Projectile;
 
 import javax.imageio.ImageIO;
@@ -64,13 +67,10 @@ public class Entity {
     public double strength, dexterity;
     public double maxHearts, currentHearts;
     public double attackDamage, receivedDamage, defenseArmor;
-    public Entity currentWeapon, currentShield, currentArmor;
+    public Weapon currentWeapon;
+    public Shield currentShield;
+    public Armor currentArmor;
     public Projectile currentProjectile;
-
-    // OBJECT ATTRIBUTES
-    public int objectBenefitValue;
-    public double objectAttackDamageMultiplier, objectDamageReductionMultiplier;
-    public String objectDescription = "";
 
     public Entity(GamePanel p) {
         this.gamePanel = p;
