@@ -5,6 +5,8 @@ import enums.Direction;
 import enums.EntityType;
 import main.GamePanel;
 
+import java.awt.Color;
+
 public class Projectile extends Entity {
     private Entity userOfProjectile;
 
@@ -13,7 +15,12 @@ public class Projectile extends Entity {
 
         this.entityType = EntityType.PROJECTILE;
 
+        this.maxHearts = 100;
+        this.currentHearts = this.maxHearts;
+        this.isAlive = false;
     }
+
+    public void getImages() {}
 
     public void set(int worldX, int worldY, Direction direction, boolean isAlive, Entity user) {
         this.worldX = worldX;
@@ -66,4 +73,12 @@ public class Projectile extends Entity {
     }
 
     public void subtractManaByUsageCost(Entity user) { }
+
+    public Color getParticleColor() { return new Color(0xffffff); }
+
+    public int getParticlePxSize() { return 10; }
+
+    public int getParticleVelocity() { return 1; }
+
+    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }

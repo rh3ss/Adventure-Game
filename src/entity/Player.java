@@ -297,15 +297,13 @@ public class Player extends Entity {
                     dealtDamage = 0;
                 }
 
-                this.gamePanel.gui.addMessage("Hit " + (double) Math.round(dealtDamage * 100) + "%", Color.WHITE);
                 monster.currentHearts -= dealtDamage;
-                monster.receivedDamage = dealtDamage;
+                // monster.receivedDamage = dealtDamage;
                 monster.isInvincible = true;
-                monster.showReceivedDamage = true;
+                // monster.showReceivedDamage = true;
                 monster.damageReaction();
                 if (monster.currentHearts < 1) {
                     this.gamePanel.entities.get(entityIndex).isDying = true;
-                    this.gamePanel.gui.addMessage("Kill " + monster.monsterType.toString() + "!", Color.WHITE);
                     this.currentExperience += monster.currentExperience;
                     this.gamePanel.gui.addMessage("Exp. +" + monster.currentExperience, Color.WHITE);
                     this.checkPlayerLevelUp();

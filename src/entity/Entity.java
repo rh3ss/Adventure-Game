@@ -224,7 +224,7 @@ public class Entity {
             // draw current entity state
             if (this.entityType == EntityType.MONSTER) {
                 if (this.showHealthBar) { this.drawHealthBar(g2, screenX, screenY); }
-                if (this.showReceivedDamage) { this.drawReceivedDamage(g2, screenX, screenY); }
+                // if (this.showReceivedDamage) { this.drawReceivedDamage(g2, screenX, screenY); }
             }
             if (this.isInvincible) {
                 this.showHealthBar = true;

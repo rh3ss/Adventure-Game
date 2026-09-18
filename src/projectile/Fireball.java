@@ -15,15 +15,12 @@ public class Fireball extends Projectile {
 
         this.objectType = ObjectType.FIREBALL;
         this.velocity = 7;
-        this.maxHearts = 100;
-        this.currentHearts = this.maxHearts;
         this.attackDamage = 2;
         this.projectileUsageCostValue = 1;
-        this.isAlive = false;
         this.getImages();
     }
 
-    private void getImages() {
+    public void getImages() {
         this.up1 = this.setupEntityImage("/res/projectile/fireball_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.up2 = this.setupEntityImage("/res/projectile/fireball_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.down1 = this.setupEntityImage("/res/projectile/fireball_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
@@ -43,10 +40,4 @@ public class Fireball extends Projectile {
     }
 
     public Color getParticleColor() { return new Color(0x780606); }
-
-    public int getParticlePxSize() { return 10; }
-
-    public int getParticleVelocity() { return 1; }
-
-    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }

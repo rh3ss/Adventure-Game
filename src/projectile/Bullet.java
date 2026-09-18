@@ -14,14 +14,11 @@ public class Bullet extends Projectile {
 
         this.objectType = ObjectType.BULLET;
         this.velocity = 9;
-        this.maxHearts = 100;
-        this.currentHearts = this.maxHearts;
         this.attackDamage = 2;
-        this.isAlive = false;
         this.getImages();
     }
 
-    private void getImages() {
+    public void getImages() {
         this.up1 = this.setupEntityImage("/res/projectile/bullet_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.up2 = this.setupEntityImage("/res/projectile/bullet_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.down1 = this.setupEntityImage("/res/projectile/bullet_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
@@ -33,10 +30,4 @@ public class Bullet extends Projectile {
     }
 
     public Color getParticleColor() { return new Color(0x2A2F35); }
-
-    public int getParticlePxSize() { return 10; }
-
-    public int getParticleVelocity() { return 1; }
-
-    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }
