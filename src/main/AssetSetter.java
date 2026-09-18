@@ -1,18 +1,30 @@
 package main;
 
+import entity.Entity;
 import entity.NPCOldMan;
 import monster.MonsterSlimeGreen;
 import monster.MonsterSlimeRed;
-import object.*;
+import object.armor.Armor;
+import object.armor.ArmorGold;
+import object.armor.ArmorIron;
+import object.interactable.KeyGold;
+import object.interactable.KeySilver;
+import object.interactable.Door;
+import object.pickup.PickUp;
 import object.pickup.PickUpHeart;
 import object.pickup.PickUpManaCrystal;
 import object.pickup.PickUpCoin;
 import object.potion.*;
+import object.shield.Shield;
 import object.shield.ShieldBlue;
+import object.shield.ShieldWood;
 import object.weapon.*;
 import tileInteractive.InteractiveTile;
 import tileInteractive.InteractiveTileBush;
 import tileInteractive.InteractiveTileDryTree;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AssetSetter {
     private final GamePanel gamePanel;
@@ -28,35 +40,35 @@ public class AssetSetter {
     public void setObjects() {
         KeySilver key1 = new KeySilver(this.gamePanel, 27, 25);
         KeyGold key2 = new KeyGold(this.gamePanel, 28, 25);
-        PickUpCoin coin1 = new PickUpCoin(this.gamePanel, 22, 23);
-        PickUpCoin coin2 = new PickUpCoin(this.gamePanel, 23, 23);
-        PickUpHeart heart1 = new PickUpHeart(this.gamePanel, 25, 23);
-        PickUpManaCrystal mana1 = new PickUpManaCrystal(this.gamePanel, 26, 23);
-        ObjectDoor door1 = new ObjectDoor(this.gamePanel, 22, 42);
+        PickUp coin1 = new PickUpCoin(this.gamePanel, 22, 23);
+        PickUp coin2 = new PickUpCoin(this.gamePanel, 23, 23);
+        PickUp heart1 = new PickUpHeart(this.gamePanel, 25, 23);
+        PickUp mana1 = new PickUpManaCrystal(this.gamePanel, 26, 23);
+        Door door1 = new Door(this.gamePanel, 22, 42);
         Potion potion1 = new PotionExperience(this.gamePanel, 21, 25);
         Potion potion2 = new PotionHeal(this.gamePanel, 21, 26);
         Potion potion3 = new PotionSpeed(this.gamePanel, 21, 27);
         Potion potion4 = new PotionStrength(this.gamePanel, 21, 28);
-        Weapon axeiron1 = new AxeIron(this.gamePanel, 23, 25);
-        Weapon axegold1 = new AxeGold(this.gamePanel, 23, 26);
-        Weapon swordGold1 = new SwordGold(this.gamePanel, 23, 27);
-        ShieldBlue shieldBlue1 = new ShieldBlue(this.gamePanel, 23, 28);
+        Weapon axeiron1 = new AxeIron(this.gamePanel, 22, 25);
+        Weapon swordIron1 = new SwordIron(this.gamePanel, 22, 26);
+        Weapon axegold1 = new AxeGold(this.gamePanel, 22, 27);
+        Weapon swordGold1 = new SwordGold(this.gamePanel, 22, 28);
+        Shield shieldWood1 = new ShieldWood(this.gamePanel, 23, 25);
+        Shield shieldBlue1 = new ShieldBlue(this.gamePanel, 23, 26);
+        Armor armorIron1 = new ArmorIron(this.gamePanel, 23, 27);
+        Armor armorGold1 = new ArmorGold(this.gamePanel, 23, 28);
 
-        this.gamePanel.entities.add(key1);
-        this.gamePanel.entities.add(key2);
-        this.gamePanel.entities.add(coin1);
-        this.gamePanel.entities.add(coin2);
-        this.gamePanel.entities.add(heart1);
-        this.gamePanel.entities.add(mana1);
-        this.gamePanel.entities.add(door1);
-        this.gamePanel.entities.add(axeiron1);
-        this.gamePanel.entities.add(axegold1);
-        this.gamePanel.entities.add(shieldBlue1);
-        this.gamePanel.entities.add(potion1);
-        this.gamePanel.entities.add(potion2);
-        this.gamePanel.entities.add(potion3);
-        this.gamePanel.entities.add(potion4);
-        this.gamePanel.entities.add(swordGold1);
+        List<Entity> objects = new ArrayList<>(List.of(
+                key1, key2,
+                coin1, coin2,
+                heart1, mana1,
+                door1,
+                potion1, potion2, potion3, potion4,
+                axeiron1, swordIron1, axegold1, swordGold1,
+                shieldWood1, shieldBlue1,
+                armorIron1, armorGold1
+        ));
+        this.gamePanel.entities.addAll(objects);
     }
 
     public void setNPCs() {

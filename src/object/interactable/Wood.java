@@ -1,18 +1,13 @@
-package object;
+package object.interactable;
 
-import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-public class ObjectWood extends Entity {
+public class Wood extends Interactable {
 
-    public ObjectWood(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+    public Wood(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.INTERACTABLE;
         this.objectType = ObjectType.WOOD;
         this.down1 = this.setupEntityImage("/res/objects/wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;

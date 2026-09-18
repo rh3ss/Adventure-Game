@@ -4,7 +4,7 @@ import entity.Entity;
 import enums.Direction;
 import enums.MonsterType;
 import main.GamePanel;
-import object.ObjectBullet;
+import projectile.Bullet;
 import object.pickup.PickUpManaCrystal;
 import object.potion.PotionExperience;
 import object.potion.PotionHeal;
@@ -30,7 +30,7 @@ public class MonsterSlimeRed extends Monster {
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
 
-        this.currentProjectile = new ObjectBullet(gamePanel);
+        this.currentProjectile = new Bullet(gamePanel);
         this.getImages();
     }
 

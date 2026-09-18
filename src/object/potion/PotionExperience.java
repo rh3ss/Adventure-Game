@@ -22,5 +22,6 @@ public class PotionExperience extends Potion {
         String message = "+" + this.objectBenefitValue + " Experience";
         this.gamePanel.gui.addMessage(message, this.color);
         entity.currentExperience += this.objectBenefitValue;
+        this.gamePanel.player.checkPlayerLevelUp();
     }
 }

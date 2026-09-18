@@ -8,7 +8,7 @@ public class ShieldWood extends Shield {
     public ShieldWood(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
-        this.objectType = ObjectType.SHIELD_WOOD;
+        this.objectType = ObjectType.SHIELD;
         this.down1 = this.setupEntityImage("/res/objects/shield_wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;

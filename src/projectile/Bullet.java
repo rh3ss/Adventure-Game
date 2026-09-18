@@ -1,21 +1,17 @@
-package object;
+package projectile;
 
-import entity.Entity;
-import entity.Projectile;
-import enums.EntityType;
 import enums.ObjectType;
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Color;
 
-public class ObjectBullet extends Projectile {
+public class Bullet extends Projectile {
     private final GamePanel gamePanel;
 
-    public ObjectBullet(GamePanel p) {
+    public Bullet(GamePanel p) {
         super(p);
         this.gamePanel = p;
 
-        this.entityType = EntityType.PROJECTILE;
         this.objectType = ObjectType.BULLET;
         this.velocity = 9;
         this.maxHearts = 100;

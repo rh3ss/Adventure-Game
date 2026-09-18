@@ -3,6 +3,7 @@ package entity;
 import enums.*;
 import main.GamePanel;
 import main.UtilityTool;
+import projectile.Projectile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -63,7 +64,7 @@ public class Entity {
     public double strength, dexterity;
     public double maxHearts, currentHearts;
     public double attackDamage, receivedDamage, defenseArmor;
-    public Entity currentWeapon, currentShield;
+    public Entity currentWeapon, currentShield, currentArmor;
     public Projectile currentProjectile;
 
     // OBJECT ATTRIBUTES

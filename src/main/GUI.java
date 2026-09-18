@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GUI {
     private final GamePanel gamePanel;
@@ -176,17 +177,20 @@ public class GUI {
         int equipmentPosX = this.gamePanel.tileSize / 2;
         int equipmentPosY = (int) (this.gamePanel.screenHeight - (this.gamePanel.tileSize * 1.5));
         int blackShadowWidth = 2;
-        this.graphics2D.setColor(new Color(0x000000));
-        this.graphics2D.fillRoundRect(equipmentPosX - blackShadowWidth, equipmentPosY - blackShadowWidth, this.gamePanel.tileSize + blackShadowWidth * 2, this.gamePanel.tileSize + blackShadowWidth * 2, 10, 10);
-        this.graphics2D.setColor(new Color(0xf0be5a));
-        this.graphics2D.fillRoundRect(equipmentPosX, equipmentPosY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
-        this.graphics2D.drawImage(this.gamePanel.player.currentWeapon.down1, equipmentPosX, equipmentPosY, null);
-        equipmentPosX += (this.gamePanel.tileSize + (blackShadowWidth * 2));
-        this.graphics2D.setColor(new Color(0x000000));
-        this.graphics2D.fillRoundRect(equipmentPosX - blackShadowWidth, equipmentPosY - blackShadowWidth, this.gamePanel.tileSize + blackShadowWidth * 2, this.gamePanel.tileSize + blackShadowWidth * 2, 10, 10);
-        this.graphics2D.setColor(new Color(0xf0be5a));
-        this.graphics2D.fillRoundRect(equipmentPosX, equipmentPosY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
-        this.graphics2D.drawImage(this.gamePanel.player.currentShield.down1, equipmentPosX, equipmentPosY, null);
+
+        List<Image> equipmentImages = new ArrayList<>(List.of(
+                this.gamePanel.player.currentWeapon.down1,
+                this.gamePanel.player.currentShield.down1,
+                this.gamePanel.player.currentArmor.down1
+        ));
+        for (Image image : equipmentImages) {
+            this.graphics2D.setColor(new Color(0x000000));
+            this.graphics2D.fillRoundRect(equipmentPosX - blackShadowWidth, equipmentPosY - blackShadowWidth, this.gamePanel.tileSize + blackShadowWidth * 2, this.gamePanel.tileSize + blackShadowWidth * 2, 10, 10);
+            this.graphics2D.setColor(new Color(0xf0be5a));
+            this.graphics2D.fillRoundRect(equipmentPosX, equipmentPosY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
+            this.graphics2D.drawImage(image, equipmentPosX, equipmentPosY, null);
+            equipmentPosX += (this.gamePanel.tileSize + (blackShadowWidth * 2));
+        }
     }
 
     private void drawMessages() {
@@ -344,7 +348,7 @@ public class GUI {
         for (int idx = 1; idx < this.gamePanel.player.inventory.size() + 1; idx++) {
             Entity item = this.gamePanel.player.inventory.get(idx - 1);
             // highlight players equipped items
-            if (item == this.gamePanel.player.currentWeapon || item == this.gamePanel.player.currentShield) {
+            if (item == this.gamePanel.player.currentWeapon || item == this.gamePanel.player.currentShield || item == this.gamePanel.player.currentArmor) {
                 this.graphics2D.setColor(new Color(240, 190, 90));
                 this.graphics2D.fillRoundRect(inventorySlotX, inventorySlotY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
             }

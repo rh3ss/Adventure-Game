@@ -1,6 +1,8 @@
-package entity;
+package projectile;
 
+import entity.Entity;
 import enums.Direction;
+import enums.EntityType;
 import main.GamePanel;
 
 public class Projectile extends Entity {
@@ -8,6 +10,8 @@ public class Projectile extends Entity {
 
     public Projectile(GamePanel p) {
         super(p);
+
+        this.entityType = EntityType.PROJECTILE;
 
     }
 

@@ -3,8 +3,8 @@ package enums;
 public enum ObjectType {
     SWORD,
     AXE,
-    SHIELD_WOOD,
-    SHIELD_BLUE,
+    SHIELD,
+    ARMOR,
 
     DOOR,
     CHEST,

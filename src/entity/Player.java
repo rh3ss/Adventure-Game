@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import enums.*;
 import main.GamePanel;
 import main.Keyboard;
-import object.ObjectFireBall;
+import projectile.Fireball;
+import object.armor.ArmorIron;
 import object.shield.ShieldWood;
 import object.weapon.SwordIron;
-import object.ObjectWood;
+import object.interactable.Wood;
 import tileInteractive.InteractiveTile;
 
 public class Player extends Entity {
@@ -45,7 +46,8 @@ public class Player extends Entity {
         this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;
         this.currentWeapon = new SwordIron(this.gamePanel, -1, -1);
         this.currentShield = new ShieldWood(this.gamePanel, -1, -1);
-        this.currentProjectile = new ObjectFireBall(this.gamePanel);
+        this.currentArmor = new ArmorIron(this.gamePanel, -1, -1);
+        this.currentProjectile = new Fireball(this.gamePanel);
         this.attackDamage = this.getAttackDamage();
         this.defenseArmor = this.getDefenseArmor();
     }
@@ -105,6 +107,7 @@ public class Player extends Entity {
 
         this.inventory.add(this.currentWeapon);
         this.inventory.add(this.currentShield);
+        this.inventory.add(this.currentArmor);
     }
 
     public void update() {
@@ -321,7 +324,7 @@ public class Player extends Entity {
                 if (tile.maxHearts < 0) {
                     this.gamePanel.entities.set(tileIndex, tile.getFollowingTileAfterDestruction());
                     if (tile.interactiveTileType == InteractiveTileType.DRY_TREE) {
-                        ObjectWood droppedWood = new ObjectWood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, tile.worldY / this.gamePanel.tileSize);
+                        Wood droppedWood = new Wood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, tile.worldY / this.gamePanel.tileSize);
                         this.gamePanel.entities.add(droppedWood);
                     }
                 }
@@ -329,7 +332,7 @@ public class Player extends Entity {
         }
     }
 
-    private void checkPlayerLevelUp() {
+    public void checkPlayerLevelUp() {
         if (this.currentExperience >= this.nextLevelExperience) {
             this.currentLevel++;
             this.maxHearts++;
@@ -358,6 +361,9 @@ public class Player extends Entity {
                     case ObjectCategory.SHIELD:
                         this.currentShield = selectedItem;
                         this.defenseArmor = this.getDefenseArmor();
+                        break;
+                    case ObjectCategory.ARMOR:
+                        this.currentArmor = selectedItem;
                         break;
                     case ObjectCategory.CONSUMABLE:
                         selectedItem.use(this);

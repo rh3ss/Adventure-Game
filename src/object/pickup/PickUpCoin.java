@@ -12,7 +12,7 @@ public class PickUpCoin extends PickUp {
         super(gamePanel, worldColumn, worldRow);
 
         this.objectType = ObjectType.COIN;
-        this.down1 = this.setupEntityImage("/res/objects/coin1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/objects/coin.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.color = Color.WHITE;
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;

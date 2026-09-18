@@ -1,18 +1,13 @@
-package object;
+package object.interactable;
 
-import entity.Entity;
-import enums.EntityType;
-import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
 
-public class KeyGold extends Entity {
+public class KeyGold extends Interactable {
 
     public KeyGold(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.OBJECT;
-        this.objectCategory = ObjectCategory.INTERACTABLE;
         this.objectType = ObjectType.KEY;
         this.down1 = this.setupEntityImage("/res/objects/key_gold.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
