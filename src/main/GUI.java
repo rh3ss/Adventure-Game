@@ -4,6 +4,8 @@ package main;
 import entity.Entity;
 import enums.GameState;
 import enums.Menu;
+import enums.OptionsState;
+import enums.OptionsSelected;
 import object.GameObject;
 import object.pickup.PickUpCoin;
 import object.pickup.PickUpHeart;
@@ -22,11 +24,12 @@ public class GUI {
     private final BufferedImage heartFull, heartBlank, playerCoins, manaCrystalFull, manaCrystalBlank;
     private Graphics2D graphics2D;
     public Menu menuSelection;
+    public OptionsState optionsState;
+    public OptionsSelected optionsSelected;
     public ArrayList<String> messages;
     public ArrayList<Color> messagesColor;
     public ArrayList<Integer> messagesCounter;
-    public boolean messageOn;
-    public boolean gameFinished;
+    public boolean messageOn, gameFinished;
     public String currentDialogueMessage;
     public int inventorySlotColumnSelected, inventorySlotRowSelected;
 
@@ -43,6 +46,10 @@ public class GUI {
         this.messagesColor = new ArrayList<>();
         this.messagesCounter = new ArrayList<>();
         this.messageOn = this.gameFinished = false;
+
+        this.menuSelection = Menu.NEW_GAME;
+        this.optionsState = OptionsState.STATE_1;
+        this.optionsSelected = OptionsSelected.SELECTED_1;
 
         Entity heart = new PickUpHeart(this.gamePanel, -1, -1);
         this.heartFull = heart.image1;
@@ -82,6 +89,7 @@ public class GUI {
                 this.drawPlayerAttributes();
                 this.drawPlayerInventory();
             }
+            case GameState.OPTIONS -> { this.drawOptionsScreen(); }
         }
     }
 
@@ -384,6 +392,177 @@ public class GUI {
             for (String line : objectDescription.split("\n")) {
                 this.graphics2D.drawString(line, descriptionTextX, descriptionTextY);
                 descriptionTextY += 32;
+            }
+        }
+    }
+
+    private void drawOptionsScreen() {
+        this.graphics2D.setColor(new Color(0xffffff));
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+
+        int optionsWindowFrameX = this.gamePanel.tileSize * 6;
+        int optionsWindowFrameY = this.gamePanel.tileSize;
+        int optionsWindowFrameWidth = this.gamePanel.tileSize * 8;
+        int optionsWindowFrameHeight = this.gamePanel.tileSize * 10;
+        this.drawSubWindowScreen(optionsWindowFrameX, optionsWindowFrameY, optionsWindowFrameWidth, optionsWindowFrameHeight);
+
+        switch (this.optionsState) {
+            case OptionsState.STATE_1 -> { this.optionsTop(optionsWindowFrameX, optionsWindowFrameY); }
+            case OptionsState.STATE_2 -> { this.optionsFullScreenNotification(optionsWindowFrameX, optionsWindowFrameY); }
+            case OptionsState.STATE_3 -> { this.optionsControls(optionsWindowFrameX, optionsWindowFrameY); }
+            case OptionsState.STATE_4 -> { this.optionsEndGameConfirmation(optionsWindowFrameX, optionsWindowFrameY); }
+        }
+
+        this.gamePanel.keyboard.isEnterPressed = false;
+    }
+
+    private void optionsTop(int optionsWindowFrameX, int optionsWindowFrameY) {
+        String optionsText = "Options";
+        int textX = this.calcXPositionForCenteredText(optionsText);
+        int textY = optionsWindowFrameY + this.gamePanel.tileSize;
+        this.graphics2D.drawString(optionsText, textX, textY);
+
+        textX = optionsWindowFrameX + this.gamePanel.tileSize;
+        // full screen
+        textY += this.gamePanel.tileSize * 2;
+        this.graphics2D.drawString("Full Screen", textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.gamePanel.fullScreenOn = !this.gamePanel.fullScreenOn;
+                this.optionsState = OptionsState.STATE_2;
+            }
+        }
+        // control
+        textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Control", textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_2) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.optionsState = OptionsState.STATE_3;
+                this.optionsSelected = OptionsSelected.SELECTED_1;
+            }
+        }
+        // end game
+        textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("End Game", textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_3) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.optionsState = OptionsState.STATE_4;
+                this.optionsSelected = OptionsSelected.SELECTED_1;
+            }
+        }
+        // back
+        textY += this.gamePanel.tileSize * 4;
+        this.graphics2D.drawString("Back", textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_4) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.gamePanel.gameState = GameState.PLAYING;
+                this.optionsSelected = OptionsSelected.SELECTED_1;
+            }
+        }
+
+        // full screen check box
+        textX = optionsWindowFrameX + this.gamePanel.tileSize * 5;
+        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 2) + (this.gamePanel.tileSize / 2);
+        this.graphics2D.setStroke(new BasicStroke(3));
+        this.graphics2D.drawRect(textX, textY, (this.gamePanel.tileSize / 2), (this.gamePanel.tileSize / 2));
+        if (this.gamePanel.fullScreenOn) {
+            this.graphics2D.fillRect(textX, textY, (this.gamePanel.tileSize / 2), (this.gamePanel.tileSize / 2));
+        }
+    }
+
+    private void optionsFullScreenNotification(int optionsWindowFrameX, int optionsWindowFrameY) {
+        int textX = optionsWindowFrameX + this.gamePanel.tileSize;
+        int textY = optionsWindowFrameY + (this.gamePanel.tileSize * 3);
+
+        this.currentDialogueMessage = "The change will take \neffect after restarting \nthe game.";
+        for (String line : this.currentDialogueMessage.split("\n")) {
+            this.graphics2D.drawString(line, textX, textY);
+            textY += 40;
+        }
+        // back
+        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 9);
+        this.graphics2D.drawString("Back", textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.optionsState = OptionsState.STATE_1;
+            }
+        }
+    }
+
+    private void optionsControls(int optionsWindowFrameX, int optionsWindowFrameY) {
+        String optionsText = "Controls";
+        int textX = this.calcXPositionForCenteredText(optionsText);
+        int textY = optionsWindowFrameY + this.gamePanel.tileSize;
+        this.graphics2D.drawString(optionsText, textX, textY);
+
+        textX = optionsWindowFrameX + this.gamePanel.tileSize;
+        textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Move", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Confirm/Attack", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Shooting", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Inventory", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Pause", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Options", textX, textY);
+
+        textX = optionsWindowFrameX + (this.gamePanel.tileSize * 6);
+        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 2);
+        this.graphics2D.drawString("WASD", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("ENTER", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("F", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("C", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("P", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("ESC", textX, textY);
+
+        // back
+        textX = optionsWindowFrameX + this.gamePanel.tileSize;
+        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 9);
+        this.graphics2D.drawString("Back", textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.optionsState = OptionsState.STATE_1;
+                this.optionsSelected = OptionsSelected.SELECTED_2;
+            }
+        }
+
+    }
+
+    private void optionsEndGameConfirmation(int optionsWindowFrameX, int optionsWindowFrameY) {
+        int textX = optionsWindowFrameX + this.gamePanel.tileSize;
+        int textY = optionsWindowFrameY + (this.gamePanel.tileSize * 3);
+
+        this.currentDialogueMessage = "Quit the game and return \nto the title screen?";
+        for (String line : this.currentDialogueMessage.split("\n")) {
+            this.graphics2D.drawString(line, textX, textY);
+            textY += 40;
+        }
+        // yes
+        String text = "Yes";
+        textX = this.calcXPositionForCenteredText(text);
+        textY += this.gamePanel.tileSize * 3;
+        this.graphics2D.drawString(text, textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.optionsState = OptionsState.STATE_1;
+                this.gamePanel.gameState = GameState.TITLE;
+            }
+        }
+        // no
+        text = "No";
+        textX = this.calcXPositionForCenteredText(text);
+        textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString(text, textX, textY);
+        if (this.optionsSelected == OptionsSelected.SELECTED_2) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.optionsState = OptionsState.STATE_1;
+                this.optionsSelected = OptionsSelected.SELECTED_3;
             }
         }
     }

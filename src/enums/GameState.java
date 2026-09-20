@@ -5,6 +5,7 @@ public enum GameState {
     PREPARING,
     PLAYING,
     PAUSED,
+    OPTIONS,
     DIALOGUE,
     CHARACTER,
     GAME_OVER

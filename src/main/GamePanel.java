@@ -12,10 +12,9 @@ import java.util.Objects;
 import javax.swing.JPanel;
 
 import enums.GameState;
-import enums.Menu;
 import tile.TileManager;
 
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel extends JPanel implements Runnable {
     private final int originalTileSize = 16;
     private final int scale = 3;
     public final int tileSize = this.originalTileSize * this.scale;
@@ -31,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable{
     public int screenHeightFull = this.screenHeight;
     public BufferedImage fullScreen;
     public Graphics2D graphics2D;
+    public boolean fullScreenOn;
 
     // WORLD
     public final int maxWorldColumns = 50;
@@ -59,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(this.keyboard);
         this.setFocusable(true);
         this.gameState = GameState.PREPARING;
+        this.fullScreenOn = false;
     }
 
     public void setupGame() {
@@ -68,7 +69,6 @@ public class GamePanel extends JPanel implements Runnable{
         this.assetSetter.setMonsters();
         this.assetSetter.setInteractiveTiles();
         this.gameState = GameState.TITLE;
-        this.gui.menuSelection = Menu.NEW_GAME;
         // set drawing to the new bufferedImage graphic
         this.fullScreen = new BufferedImage(this.screenWidth, this.screenHeight, BufferedImage.TYPE_INT_ARGB);
         this.graphics2D = (Graphics2D) this.fullScreen.getGraphics();
