@@ -1,6 +1,6 @@
 package enums;
 
-public enum OptionsSelected {
+public enum OptionsSelection {
     SELECTED_1,
     SELECTED_2,
     SELECTED_3,

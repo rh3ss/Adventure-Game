@@ -79,6 +79,21 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    public void respawn() {
+        this.player.setDefaultValuesAfterRespawn();
+    }
+
+    public void restart() {
+        this.entities.clear();
+        this.assetSetter.setPlayer();
+        this.assetSetter.setObjects();
+        this.assetSetter.setNPCs();
+        this.assetSetter.setMonsters();
+        this.assetSetter.setInteractiveTiles();
+        this.player.setDefaultValues();
+        this.player.setInventoryObjects();
+    }
+
     public void setFullScreen() {
         // get local screen device
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -94,6 +109,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.gameThread.start();
     }
 
+    public void quitGame() {
+        this.gameThread = null;
+    }
+
     @Override
     public void run() {
         double drawInterval = 1000000000 / this.FPS;
@@ -102,7 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
         long currentTime;
 
         // GAME LOOP
-        while(this.gameState != GameState.GAME_OVER) {
+        while(this.gameThread != null) {
             currentTime = System.nanoTime();
             deltaTime += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
@@ -114,7 +133,7 @@ public class GamePanel extends JPanel implements Runnable {
                 deltaTime--;
             }
         }
-        this.gameThread = null;
+        System.exit(0);
     }
 
     public void update() {

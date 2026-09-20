@@ -1,10 +1,7 @@
 package main;
 
 
-import enums.GameState;
-import enums.Menu;
-import enums.OptionsState;
-import enums.OptionsSelected;
+import enums.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -25,24 +22,13 @@ public class Keyboard implements KeyListener{
         int keyboardCode = e.getKeyCode();
 
         switch (this.gamePanel.gameState) {
-            case GameState.TITLE -> {
-                this.titleKeyEvent(keyboardCode);
-            }
-            case GameState.PLAYING -> {
-                this.playingKeyEvent(keyboardCode);
-            }
-            case GameState.PAUSED -> {
-                if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PLAYING; }
-            }
-            case GameState.DIALOGUE -> {
-                if (keyboardCode == KeyEvent.VK_ENTER) { this.gamePanel.gameState = GameState.PLAYING; }
-            }
-            case GameState.CHARACTER -> {
-                this.characterKeyEvent(keyboardCode);
-            }
-            case GameState.OPTIONS -> {
-                this.optionsKeyEvent(keyboardCode);
-            }
+            case GameState.TITLE -> { this.titleKeyEvent(keyboardCode); }
+            case GameState.PLAYING -> { this.playingKeyEvent(keyboardCode); }
+            case GameState.PAUSED -> { this.pausedKeyEvent(keyboardCode); }
+            case GameState.DIALOGUE -> { this.dialogueKeyEvent(keyboardCode); }
+            case GameState.CHARACTER -> { this.characterKeyEvent(keyboardCode); }
+            case GameState.OPTIONS -> { this.optionsKeyEvent(keyboardCode); }
+            case GameState.GAME_OVER -> { this.gameOverKeyEvent(keyboardCode); }
         }
     }
 
@@ -67,7 +53,7 @@ public class Keyboard implements KeyListener{
                 case Menu.LOAD_GAME -> {
                     // later
                 }
-                case Menu.QUIT -> { System.exit(0); }
+                case Menu.QUIT -> { this.gamePanel.quitGame(); }
             }
         }
     }
@@ -82,6 +68,14 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
         if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.CHARACTER; }
         if (keyboardCode == KeyEvent.VK_ESCAPE) { this.gamePanel.gameState = GameState.OPTIONS; }
+    }
+
+    private void pausedKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PLAYING; }
+    }
+
+    private void dialogueKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_ENTER) { this.gamePanel.gameState = GameState.PLAYING; }
     }
 
     private void characterKeyEvent(int keyboardCode) {
@@ -122,20 +116,20 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_UP) {
             switch (this.gamePanel.gui.optionsState) {
                 case OptionsState.STATE_1 -> {
-                    switch (this.gamePanel.gui.optionsSelected) {
-                        case OptionsSelected.SELECTED_1 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_4; }
-                        case OptionsSelected.SELECTED_2 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_1; }
-                        case OptionsSelected.SELECTED_3 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_2; }
-                        case OptionsSelected.SELECTED_4 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_3; }
+                    switch (this.gamePanel.gui.optionsSelection) {
+                        case OptionsSelection.SELECTED_1 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_4; }
+                        case OptionsSelection.SELECTED_2 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_1; }
+                        case OptionsSelection.SELECTED_3 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_2; }
+                        case OptionsSelection.SELECTED_4 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_3; }
                     }
                 }
                 case OptionsState.STATE_2, OptionsState.STATE_3 -> {
                     // nothing
                 }
                 case OptionsState.STATE_4 -> {
-                    switch (this.gamePanel.gui.optionsSelected) {
-                        case OptionsSelected.SELECTED_1 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_2; }
-                        case OptionsSelected.SELECTED_2 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_1; }
+                    switch (this.gamePanel.gui.optionsSelection) {
+                        case OptionsSelection.SELECTED_1 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_2; }
+                        case OptionsSelection.SELECTED_2 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_1; }
                     }
                 }
             }
@@ -144,21 +138,52 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_DOWN) {
             switch (this.gamePanel.gui.optionsState) {
                 case OptionsState.STATE_1 -> {
-                    switch (this.gamePanel.gui.optionsSelected) {
-                        case OptionsSelected.SELECTED_1 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_2; }
-                        case OptionsSelected.SELECTED_2 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_3; }
-                        case OptionsSelected.SELECTED_3 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_4; }
-                        case OptionsSelected.SELECTED_4 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_1; }
+                    switch (this.gamePanel.gui.optionsSelection) {
+                        case OptionsSelection.SELECTED_1 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_2; }
+                        case OptionsSelection.SELECTED_2 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_3; }
+                        case OptionsSelection.SELECTED_3 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_4; }
+                        case OptionsSelection.SELECTED_4 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_1; }
                     }
                 }
                 case OptionsState.STATE_2, OptionsState.STATE_3 -> {
                     // nothing
                 }
                 case OptionsState.STATE_4 -> {
-                    switch (this.gamePanel.gui.optionsSelected) {
-                        case OptionsSelected.SELECTED_2 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_1; }
-                        case OptionsSelected.SELECTED_1 -> { this.gamePanel.gui.optionsSelected = OptionsSelected.SELECTED_2; }
+                    switch (this.gamePanel.gui.optionsSelection) {
+                        case OptionsSelection.SELECTED_2 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_1; }
+                        case OptionsSelection.SELECTED_1 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_2; }
                     }
+                }
+            }
+        }
+    }
+
+    private void gameOverKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_UP) {
+            if (this.gamePanel.gui.gameOverSelection == GameOverSelection.RESPAWN) {
+                this.gamePanel.gui.gameOverSelection = GameOverSelection.QUIT;
+            }
+            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.QUIT) {
+                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_DOWN) {
+            if (this.gamePanel.gui.gameOverSelection == GameOverSelection.RESPAWN) {
+                this.gamePanel.gui.gameOverSelection = GameOverSelection.QUIT;
+            }
+            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.QUIT) {
+                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_ENTER) {
+            switch (this.gamePanel.gui.gameOverSelection) {
+                case GameOverSelection.RESPAWN -> {
+                    this.gamePanel.gameState = GameState.PLAYING;
+                    this.gamePanel.respawn();
+                }
+                case GameOverSelection.QUIT -> { 
+                    this.gamePanel.gameState = GameState.TITLE;
+                    this.gamePanel.restart();
                 }
             }
         }

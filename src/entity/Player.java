@@ -35,13 +35,13 @@ public class Player extends Entity {
         this.setInventory();
     }
 
-    private void setDefaultValues() {
+    public void setDefaultValues() {
         this.entityType = EntityType.PLAYER;
         // centering player
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
-        this.worldX = (this.gamePanel.worldWidth / 2);
-        this.worldY = (this.gamePanel.worldHeight / 2);
+        this.worldX = (this.gamePanel.tileSize * 22);
+        this.worldY = (this.gamePanel.tileSize * 24);
         // player status
         this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 0;
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
@@ -53,6 +53,21 @@ public class Player extends Entity {
         this.currentProjectile = new Fireball(this.gamePanel);
         this.attackDamage = this.getAttackDamage();
         this.defenseArmor = this.getDefenseArmor();
+    }
+
+    public void setDefaultValuesAfterRespawn() {
+        this.worldX = (this.gamePanel.tileSize * 22);
+        this.worldY = (this.gamePanel.tileSize * 24);
+        this.maxHearts = 5; this.currentHearts = this.maxHearts;
+        this.maxMana = 3; this.currentMana = this.maxMana;
+        this.isInvincible = false;
+    }
+
+    public void setInventoryObjects() {
+        this.inventory.clear();
+        this.inventory.add(this.currentWeapon);
+        this.inventory.add(this.currentShield);
+        this.inventory.add(this.currentArmor);
     }
 
     public double getAttackDamage() {
@@ -146,6 +161,10 @@ public class Player extends Entity {
         }
         if (this.currentMana > this.maxMana) {
             this.currentMana = this.maxMana;
+        }
+
+        if (this.currentHearts <= 0) {
+            this.gamePanel.gameState = GameState.GAME_OVER;
         }
     }
 

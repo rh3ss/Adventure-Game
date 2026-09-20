@@ -2,10 +2,8 @@ package main;
 
 
 import entity.Entity;
-import enums.GameState;
+import enums.*;
 import enums.Menu;
-import enums.OptionsState;
-import enums.OptionsSelected;
 import object.GameObject;
 import object.pickup.PickUpCoin;
 import object.pickup.PickUpHeart;
@@ -25,7 +23,8 @@ public class GUI {
     private Graphics2D graphics2D;
     public Menu menuSelection;
     public OptionsState optionsState;
-    public OptionsSelected optionsSelected;
+    public OptionsSelection optionsSelection;
+    public GameOverSelection gameOverSelection;
     public ArrayList<String> messages;
     public ArrayList<Color> messagesColor;
     public ArrayList<Integer> messagesCounter;
@@ -49,7 +48,8 @@ public class GUI {
 
         this.menuSelection = Menu.NEW_GAME;
         this.optionsState = OptionsState.STATE_1;
-        this.optionsSelected = OptionsSelected.SELECTED_1;
+        this.optionsSelection = OptionsSelection.SELECTED_1;
+        this.gameOverSelection = GameOverSelection.RESPAWN;
 
         Entity heart = new PickUpHeart(this.gamePanel, -1, -1);
         this.heartFull = heart.image1;
@@ -90,10 +90,13 @@ public class GUI {
                 this.drawPlayerInventory();
             }
             case GameState.OPTIONS -> { this.drawOptionsScreen(); }
+            case GameState.GAME_OVER -> { this.drawGameOverScreen(); }
         }
     }
 
     private void drawTitleScreen() {
+        this.graphics2D.setColor(new Color(0x000000));
+        this.graphics2D.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 96F));
 
         String titleText = "Adventure Game";
@@ -131,7 +134,6 @@ public class GUI {
         if (this.menuSelection == Menu.QUIT) {
             this.graphics2D.drawString(">", xPos - this.gamePanel.tileSize, yPos);
         }
-
     }
 
     private void drawPlayerHearts() {
@@ -426,7 +428,7 @@ public class GUI {
         // full screen
         textY += this.gamePanel.tileSize * 2;
         this.graphics2D.drawString("Full Screen", textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_1) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.gamePanel.fullScreenOn = !this.gamePanel.fullScreenOn;
@@ -436,31 +438,31 @@ public class GUI {
         // control
         textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Control", textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_2) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_2) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_3;
-                this.optionsSelected = OptionsSelected.SELECTED_1;
+                this.optionsSelection = OptionsSelection.SELECTED_1;
             }
         }
         // end game
         textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("End Game", textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_3) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_3) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_4;
-                this.optionsSelected = OptionsSelected.SELECTED_1;
+                this.optionsSelection = OptionsSelection.SELECTED_1;
             }
         }
         // back
         textY += this.gamePanel.tileSize * 4;
         this.graphics2D.drawString("Back", textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_4) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_4) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.gamePanel.gameState = GameState.PLAYING;
-                this.optionsSelected = OptionsSelected.SELECTED_1;
+                this.optionsSelection = OptionsSelection.SELECTED_1;
             }
         }
         // full screen check box
@@ -487,7 +489,7 @@ public class GUI {
         // back
         textY = optionsWindowFrameY + (this.gamePanel.tileSize * 9);
         this.graphics2D.drawString("Back", textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_1) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_1;
@@ -523,11 +525,11 @@ public class GUI {
         textX = optionsWindowFrameX + this.gamePanel.tileSize;
         textY = optionsWindowFrameY + (this.gamePanel.tileSize * 9);
         this.graphics2D.drawString("Back", textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_1) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_1;
-                this.optionsSelected = OptionsSelected.SELECTED_2;
+                this.optionsSelection = OptionsSelection.SELECTED_2;
             }
         }
 
@@ -547,7 +549,7 @@ public class GUI {
         textX = this.calcXPositionForCenteredText(text);
         textY += this.gamePanel.tileSize * 3;
         this.graphics2D.drawString(text, textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_1) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_1) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_1;
@@ -559,12 +561,51 @@ public class GUI {
         textX = this.calcXPositionForCenteredText(text);
         textY += this.gamePanel.tileSize;
         this.graphics2D.drawString(text, textX, textY);
-        if (this.optionsSelected == OptionsSelected.SELECTED_2) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_2) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_1;
-                this.optionsSelected = OptionsSelected.SELECTED_3;
+                this.optionsSelection = OptionsSelection.SELECTED_3;
             }
+        }
+    }
+
+    private void drawGameOverScreen() {
+        this.graphics2D.setColor(new Color(255, 16, 16, 60));
+        this.graphics2D.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(110f));
+
+        String text = "GAME OVER";
+        int textX = this.calcXPositionForCenteredText(text);
+        int textY = this.gamePanel.tileSize * 4;
+        this.graphics2D.setColor(Color.DARK_GRAY);
+        this.graphics2D.drawString(text, textX + 5, textY + 5);
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.drawString(text, textX, textY);
+
+        // respawn
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(50f));
+        text = "Respawn";
+        textX = this.calcXPositionForCenteredText(text);
+        textY += this.gamePanel.tileSize * 3;
+        this.graphics2D.setColor(Color.DARK_GRAY);
+        this.graphics2D.drawString(text, textX + 5, textY + 5);
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.drawString(text, textX, textY);
+        if (this.gameOverSelection == GameOverSelection.RESPAWN) {
+            this.graphics2D.drawString(">", textX - 40, textY);
+        }
+
+        // back to main menu
+        text = "Quit";
+        textX = this.calcXPositionForCenteredText(text);
+        textY += this.gamePanel.tileSize;
+        this.graphics2D.setColor(Color.DARK_GRAY);
+        this.graphics2D.drawString(text, textX + 5, textY + 5);
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.drawString(text, textX, textY);
+        if (this.gameOverSelection == GameOverSelection.QUIT) {
+            this.graphics2D.drawString(">", textX - 40, textY);
         }
     }
 
