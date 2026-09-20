@@ -46,6 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter assetSetter = new AssetSetter(this);
     public GUI gui = new GUI(this);
     public EventHandler eventHandler = new EventHandler(this);
+    public Config config = new Config(this);
     public Player player = new Player(this, this.keyboard);
     public ArrayList<Entity> entities = new ArrayList<>();
 
@@ -73,7 +74,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.fullScreen = new BufferedImage(this.screenWidth, this.screenHeight, BufferedImage.TYPE_INT_ARGB);
         this.graphics2D = (Graphics2D) this.fullScreen.getGraphics();
         // set local game to current device full screen
-        // this.setFullScreen();
+        if (this.fullScreenOn) {
+            this.setFullScreen();
+        }
     }
 
     public void setFullScreen() {

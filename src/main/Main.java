@@ -14,6 +14,10 @@ class Main{
         // Create game panel and attach it to the window
         GamePanel panel = new GamePanel();
         window.add(panel);
+        panel.config.loadCurrentConfig();
+        if (panel.fullScreenOn) {
+            window.setUndecorated(true);
+        }
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);

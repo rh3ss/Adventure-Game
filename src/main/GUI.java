@@ -463,7 +463,6 @@ public class GUI {
                 this.optionsSelected = OptionsSelected.SELECTED_1;
             }
         }
-
         // full screen check box
         textX = optionsWindowFrameX + this.gamePanel.tileSize * 5;
         textY = optionsWindowFrameY + (this.gamePanel.tileSize * 2) + (this.gamePanel.tileSize / 2);
@@ -472,6 +471,8 @@ public class GUI {
         if (this.gamePanel.fullScreenOn) {
             this.graphics2D.fillRect(textX, textY, (this.gamePanel.tileSize / 2), (this.gamePanel.tileSize / 2));
         }
+        // save current options
+        this.gamePanel.config.saveCurrentConfig();
     }
 
     private void optionsFullScreenNotification(int optionsWindowFrameX, int optionsWindowFrameY) {
