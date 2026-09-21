@@ -40,6 +40,7 @@ public class AssetSetter {
     }
 
     public void setPlayer() {
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.remove(this.gamePanel.player);
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.gamePanel.player);
     }
 
