@@ -14,15 +14,16 @@ import main.UtilityTool;
 public class TileManager {
     private final GamePanel gamePanel;
     public final HashMap<Integer, Tile> tiles;
-    public final int[][] mapTileNumbers;
+    public final int[][][] mapTileNumbers;
 
-    public TileManager(GamePanel p) {
-        this.gamePanel = p;
+    public TileManager(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
         this.tiles = new HashMap<>();
-        this.mapTileNumbers = new int[this.gamePanel.maxWorldColumns][this.gamePanel.maxWorldRows];
+        this.mapTileNumbers = new int[gamePanel.maxNumberOfMaps][gamePanel.maxWorldColumns][gamePanel.maxWorldRows];
 
         this.getTileImages();
-        this.loadMap("/res/maps/world02.txt");
+        this.loadMap("/res/maps/world02.txt", 0);
+        this.loadMap("/res/maps/interior01.txt", 1);
     }
 
     private void getTileImages() {
@@ -73,6 +74,10 @@ public class TileManager {
         setupTiles(39, "017", false);
         setupTiles(40, "032", true);
         setupTiles(41, "016_1", true);
+        // indoor
+        setupTiles(42, "033", false);
+        setupTiles(43, "034", false);
+        setupTiles(44, "035", true);
     }
 
     private void setupTiles(int keyIndex, String imageName, boolean collision) {
@@ -85,7 +90,7 @@ public class TileManager {
         catch (IOException _) {}
     }
 
-    private void loadMap(String filePath) {
+    private void loadMap(String filePath, int mapNumber) {
         try {
             InputStream stream = getClass().getResourceAsStream(filePath);
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -93,7 +98,7 @@ public class TileManager {
             for (int row = 0; row < this.gamePanel.maxWorldRows; row++) {
                 String[] rowNumbers = reader.readLine().split(" ");
                 for (int col = 0; col < this.gamePanel.maxWorldColumns; col++) {
-                    this.mapTileNumbers[col][row] = Integer.parseInt(rowNumbers[col]);
+                    this.mapTileNumbers[mapNumber][col][row] = Integer.parseInt(rowNumbers[col]);
                 }
             }
         } 
@@ -103,7 +108,7 @@ public class TileManager {
     public void draw(Graphics2D g2) {
         for (int row = 0; row < this.gamePanel.maxWorldRows; row++) {
             for (int col = 0; col < this.gamePanel.maxWorldColumns; col++) {
-                int tileNumber = this.mapTileNumbers[col][row];
+                int tileNumber = this.mapTileNumbers[this.gamePanel.currentMapNumber][col][row];
                 int worldX = col * this.gamePanel.tileSize;
                 int worldY = row * this.gamePanel.tileSize;
                 int screenX = worldX - this.gamePanel.player.worldX + this.gamePanel.player.screenX;

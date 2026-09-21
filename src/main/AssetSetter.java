@@ -2,6 +2,7 @@ package main;
 
 import entity.Entity;
 import entity.NPCOldMan;
+import monster.Monster;
 import monster.MonsterSlimeGreen;
 import monster.MonsterSlimeRed;
 import object.armor.Armor;
@@ -29,12 +30,17 @@ import java.util.List;
 public class AssetSetter {
     private final GamePanel gamePanel;
 
-    public AssetSetter(GamePanel p) {
-        this.gamePanel = p;
+    public AssetSetter(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
+
+        MapData world = new MapData();
+        MapData hutIndoor = new MapData();
+        this.gamePanel.maps.put(0, world);
+        this.gamePanel.maps.put(1, hutIndoor);
     }
 
     public void setPlayer() {
-        this.gamePanel.entities.add(this.gamePanel.player);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.gamePanel.player);
     }
 
     public void setObjects() {
@@ -58,7 +64,8 @@ public class AssetSetter {
         Armor armorIron1 = new ArmorIron(this.gamePanel, 23, 27);
         Armor armorGold1 = new ArmorGold(this.gamePanel, 23, 28);
 
-        List<Entity> objects = new ArrayList<>(List.of(
+        // objects for world map 0
+        ArrayList<Entity> objects = new ArrayList<>(List.of(
                 key1, key2,
                 coin1, coin2,
                 heart1, mana1,
@@ -68,33 +75,39 @@ public class AssetSetter {
                 shieldWood1, shieldBlue1,
                 armorIron1, armorGold1
         ));
-        this.gamePanel.entities.addAll(objects);
+        this.gamePanel.maps.get(0).entities.addAll(objects);
+
+//        // objects for world map 1
+//        objects = new ArrayList<>(List.of(
+//                key1
+//        ));
+//        this.gamePanel.maps.get(1).entities.addAll(objects);
     }
 
     public void setNPCs() {
         NPCOldMan oldMan = new NPCOldMan(this.gamePanel, 21, 21);
-        this.gamePanel.entities.add(oldMan);
+
+        ArrayList<Entity> npcs = new ArrayList<>(List.of(
+                oldMan
+        ));
+        this.gamePanel.maps.get(0).entities.addAll(npcs);
     }
 
     public void setMonsters() {
-        MonsterSlimeGreen slime = new MonsterSlimeGreen(this.gamePanel, 23, 38);
-        MonsterSlimeGreen slime1 = new MonsterSlimeGreen(this.gamePanel, 23, 40);
-        MonsterSlimeGreen slime2 = new MonsterSlimeGreen(this.gamePanel, 23, 43);
-        MonsterSlimeGreen slime3 = new MonsterSlimeGreen(this.gamePanel, 23, 42);
+        Monster slime = new MonsterSlimeGreen(this.gamePanel, 23, 38);
+        Monster slime1 = new MonsterSlimeGreen(this.gamePanel, 23, 40);
+        Monster slime2 = new MonsterSlimeGreen(this.gamePanel, 23, 43);
+        Monster slime3 = new MonsterSlimeGreen(this.gamePanel, 23, 42);
+        Monster monsterSlimeRed1 = new MonsterSlimeRed(this.gamePanel, 21, 38);
+        Monster monsterSlimeRed2 = new MonsterSlimeRed(this.gamePanel, 21, 40);
+        Monster monsterSlimeRed3 = new MonsterSlimeRed(this.gamePanel, 21, 43);
+        Monster monsterSlimeRed4 = new MonsterSlimeRed(this.gamePanel, 21, 42);
 
-        MonsterSlimeRed monsterSlimeRed1 = new MonsterSlimeRed(this.gamePanel, 21, 38);
-        MonsterSlimeRed monsterSlimeRed2 = new MonsterSlimeRed(this.gamePanel, 21, 40);
-        MonsterSlimeRed monsterSlimeRed3 = new MonsterSlimeRed(this.gamePanel, 21, 43);
-        MonsterSlimeRed monsterSlimeRed4 = new MonsterSlimeRed(this.gamePanel, 21, 42);
-
-        this.gamePanel.entities.add(slime);
-        this.gamePanel.entities.add(slime1);
-        this.gamePanel.entities.add(slime2);
-        this.gamePanel.entities.add(slime3);
-        this.gamePanel.entities.add(monsterSlimeRed1);
-        this.gamePanel.entities.add(monsterSlimeRed2);
-        this.gamePanel.entities.add(monsterSlimeRed3);
-        this.gamePanel.entities.add(monsterSlimeRed4);
+        ArrayList<Entity> monster = new ArrayList<>(List.of(
+                slime, slime1, slime2, slime3,
+                monsterSlimeRed1, monsterSlimeRed2, monsterSlimeRed3, monsterSlimeRed4
+        ));
+        this.gamePanel.maps.get(0).entities.addAll(monster);
     }
 
     public void setInteractiveTiles() {
@@ -109,15 +122,9 @@ public class AssetSetter {
         InteractiveTile it9 = new InteractiveTileBush(this.gamePanel, "bush_1", 19, 24);
         InteractiveTile it10 = new InteractiveTileBush(this.gamePanel, "bush_2", 19, 25);
 
-        this.gamePanel.entities.add(it1);
-        this.gamePanel.entities.add(it2);
-        this.gamePanel.entities.add(it3);
-        this.gamePanel.entities.add(it4);
-        this.gamePanel.entities.add(it5);
-        this.gamePanel.entities.add(it6);
-        this.gamePanel.entities.add(it7);
-        this.gamePanel.entities.add(it8);
-        this.gamePanel.entities.add(it9);
-        this.gamePanel.entities.add(it10);
+        ArrayList<Entity> interactiveTiles = new ArrayList<>(List.of(
+                it1, it2, it3, it4, it5, it6, it7, it8, it9, it10
+        ));
+        this.gamePanel.maps.get(0).entities.addAll(interactiveTiles);
     }
 }

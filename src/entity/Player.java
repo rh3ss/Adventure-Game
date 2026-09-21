@@ -165,6 +165,7 @@ public class Player extends Entity {
 
         if (this.currentHearts <= 0) {
             this.gamePanel.gameState = GameState.GAME_OVER;
+            this.gamePanel.gui.gameOverSelection = GameOverSelection.NEGATIVE;
         }
     }
 
@@ -242,13 +243,13 @@ public class Player extends Entity {
     private void playerIsShooting() {
         this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
         this.currentProjectile.subtractManaByUsageCost(this);
-        this.gamePanel.entities.add(this.currentProjectile);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentProjectile);
         this.shootingAvailableCounter = 0;
     }
 
     private void interactWithCollidedEntity(int entityIndex) {
         if (entityIndex != Integer.MAX_VALUE) {
-            Entity entity = this.gamePanel.entities.get(entityIndex);
+            Entity entity = this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex);
             if (entity.entityType != null) {
                 switch (entity.entityType) {
                     case EntityType.NPC -> { this.playerCollisionWithNPC(entity); }
@@ -291,7 +292,7 @@ public class Player extends Entity {
         // PICKUP ITEMS
         if (object.objectCategory == ObjectCategory.PICKUP) {
             object.use(this);
-            this.gamePanel.entities.remove(object);
+            this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.remove(object);
         }
         // INVENTORY
         else {
@@ -299,7 +300,7 @@ public class Player extends Entity {
             if (this.inventory.size() < this.maxInventorySize) {
                 collisionMessage = "You found a " + object.objectType.toString();
                 this.inventory.add(object);
-                this.gamePanel.entities.remove(object);
+                this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.remove(object);
             } else {
                 collisionMessage = "Inventory full!";
             }
@@ -309,7 +310,7 @@ public class Player extends Entity {
 
     public void playerAttacksMonster(int entityIndex, double attackDamage) {
         if (entityIndex != Integer.MAX_VALUE) {
-            Entity monster = this.gamePanel.entities.get(entityIndex);
+            Entity monster = this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex);
             if (monster.entityType == EntityType.MONSTER && !monster.isInvincible) {
                 double dealtDamage = attackDamage - monster.defenseArmor;
                 if (dealtDamage < 0) {
@@ -322,7 +323,7 @@ public class Player extends Entity {
                 // monster.showReceivedDamage = true;
                 monster.damageReaction();
                 if (monster.currentHearts < 1) {
-                    this.gamePanel.entities.get(entityIndex).isDying = true;
+                    this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex).isDying = true;
                     this.currentExperience += monster.currentExperience;
                     this.gamePanel.gui.addMessage("Exp. +" + monster.currentExperience, Color.WHITE);
                     this.checkPlayerLevelUp();
@@ -333,19 +334,19 @@ public class Player extends Entity {
 
     private void playerAttacksInteractiveTile(int tileIndex, double attackDamage) {
         if (tileIndex != Integer.MAX_VALUE) {
-            if (this.gamePanel.entities.get(tileIndex).entityType != EntityType.INTERACTIVE_TILE) {
+            if (this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(tileIndex).entityType != EntityType.INTERACTIVE_TILE) {
                 return;
             }
-            InteractiveTile tile = (InteractiveTile) this.gamePanel.entities.get(tileIndex);
+            InteractiveTile tile = (InteractiveTile) this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(tileIndex);
             if (tile.entityType == EntityType.INTERACTIVE_TILE && !tile.isInvincible && tile.isDestructible && tile.isCorrectObjectEquipped(this)) {
                 tile.maxHearts -= 1;
                 tile.isInvincible = true;
                 this.generateParticle(tile, tile);
                 if (tile.maxHearts < 0) {
-                    this.gamePanel.entities.set(tileIndex, tile.getFollowingTileAfterDestruction());
+                    this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.set(tileIndex, tile.getFollowingTileAfterDestruction());
                     if (tile.interactiveTileType == InteractiveTileType.DRY_TREE) {
                         Wood droppedWood = new Wood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, tile.worldY / this.gamePanel.tileSize);
-                        this.gamePanel.entities.add(droppedWood);
+                        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(droppedWood);
                     }
                 }
             }

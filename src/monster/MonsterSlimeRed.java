@@ -61,7 +61,7 @@ public class MonsterSlimeRed extends Monster {
         int randomNumber = this.random.nextInt(101);
         if (randomNumber > 99 && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
             this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
-            this.gamePanel.entities.add(this.currentProjectile);
+            this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentProjectile);
             this.shootingAvailableCounter = 0;
         }
     }

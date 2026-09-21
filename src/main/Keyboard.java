@@ -159,22 +159,28 @@ public class Keyboard implements KeyListener{
     }
 
     private void gameOverKeyEvent(int keyboardCode) {
-        if (keyboardCode == KeyEvent.VK_UP) {
-            if (this.gamePanel.gui.gameOverSelection == GameOverSelection.RESPAWN) {
+        if (keyboardCode == KeyEvent.VK_UP || keyboardCode == KeyEvent.VK_DOWN) {
+            if (this.gamePanel.gui.gameOverSelection == GameOverSelection.NEGATIVE) {
+                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
+            }
+            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.RESPAWN) {
                 this.gamePanel.gui.gameOverSelection = GameOverSelection.QUIT;
             }
             else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.QUIT) {
                 this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
             }
         }
-        if (keyboardCode == KeyEvent.VK_DOWN) {
-            if (this.gamePanel.gui.gameOverSelection == GameOverSelection.RESPAWN) {
-                this.gamePanel.gui.gameOverSelection = GameOverSelection.QUIT;
-            }
-            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.QUIT) {
-                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
-            }
-        }
+//        if (keyboardCode == KeyEvent.VK_DOWN) {
+//            if (this.gamePanel.gui.gameOverSelection == GameOverSelection.NEGATIVE) {
+//                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
+//            }
+//            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.RESPAWN) {
+//                this.gamePanel.gui.gameOverSelection = GameOverSelection.QUIT;
+//            }
+//            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.QUIT) {
+//                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
+//            }
+//        }
         if (keyboardCode == KeyEvent.VK_ENTER) {
             switch (this.gamePanel.gui.gameOverSelection) {
                 case GameOverSelection.RESPAWN -> {

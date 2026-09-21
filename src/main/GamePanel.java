@@ -6,9 +6,7 @@ import entity.Player;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
 import javax.swing.JPanel;
 
 import enums.GameState;
@@ -38,20 +36,24 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldWidth = this.tileSize * this.maxWorldColumns;
     public final int worldHeight = this.tileSize * this.maxWorldRows;
 
-    public final int FPS = 60;
+    // MAP
+    public final int maxNumberOfMaps = 5;
+    public int currentMapNumber = 0;
 
+    // CLASSES
     public Keyboard keyboard = new Keyboard(this);
     public TileManager tileManager = new TileManager(this);
     public CollisionDetector collisionDetector = new CollisionDetector(this);
+    public Map<Integer, MapData> maps = new HashMap<>();
     public AssetSetter assetSetter = new AssetSetter(this);
     public GUI gui = new GUI(this);
     public EventHandler eventHandler = new EventHandler(this);
     public Config config = new Config(this);
     public Player player = new Player(this, this.keyboard);
-    public ArrayList<Entity> entities = new ArrayList<>();
 
     public GameState gameState;
     public Thread gameThread;
+    public final int FPS = 60;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(this.screenWidth, this.screenHeight));
@@ -84,7 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void restart() {
-        this.entities.clear();
+        this.maps.get(this.currentMapNumber).entities.clear();
         this.assetSetter.setPlayer();
         this.assetSetter.setObjects();
         this.assetSetter.setNPCs();
@@ -139,15 +141,15 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         if (this.gameState == GameState.PLAYING) {
             // draw all entities (npc, monster, projectiles)
-            for (int idx = 0; idx < this.entities.size(); idx++) {
-                Entity entity = this.entities.get(idx);
+            for (int idx = 0; idx < this.maps.get(this.currentMapNumber).entities.size(); idx++) {
+                Entity entity = this.maps.get(this.currentMapNumber).entities.get(idx);
                 if (entity != null) {
                     if (entity.isAlive && !entity.isDying) {
                         entity.update();
                     }
                     else if (!entity.isAlive){
                         entity.chooseObjectToDrop();
-                        this.entities.set(idx, null);
+                        this.maps.get(this.currentMapNumber).entities.set(idx, null);
                     }
                 }
             }
@@ -179,12 +181,14 @@ public class GamePanel extends JPanel implements Runnable {
         this.tileManager.draw(this.graphics2D);
 
         // sorting entities by worldY pos
-        entities.removeIf(Objects::isNull);
-        entities.sort(Comparator.comparingInt(entity -> entity.worldY));
+        this.maps.get(this.currentMapNumber).entities.removeIf(Objects::isNull);
+        this.maps.get(this.currentMapNumber).entities.sort(Comparator.comparingInt(entity -> entity.worldY));
 
         // draw entities
-        for (Entity entity : entities) {
-            if (entity != null) { entity.draw(this.graphics2D); }
+        for (Entity entity : this.maps.get(this.currentMapNumber).entities) {
+            if (entity != null) {
+                entity.draw(this.graphics2D);
+            }
         }
         // GUI
         this.gui.draw(this.graphics2D);

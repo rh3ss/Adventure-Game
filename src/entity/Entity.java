@@ -113,10 +113,10 @@ public class Entity {
         Particle p2 = new Particle(this.gamePanel, targetEntity, color, pxSize, velocity, maxHearts,  2, -1);
         Particle p3 = new Particle(this.gamePanel, targetEntity, color, pxSize, velocity, maxHearts, -2,  1);
         Particle p4 = new Particle(this.gamePanel, targetEntity, color, pxSize, velocity, maxHearts,  2,  1);
-        this.gamePanel.entities.add(p1);
-        this.gamePanel.entities.add(p2);
-        this.gamePanel.entities.add(p3);
-        this.gamePanel.entities.add(p4);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(p1);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(p2);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(p3);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(p4);
     }
 
     public void speak() {
@@ -141,7 +141,7 @@ public class Entity {
     public void dropObject(Entity objectToDrop) {
         objectToDrop.worldX = this.worldX;
         objectToDrop.worldY = this.worldY;
-        this.gamePanel.entities.add(objectToDrop);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(objectToDrop);
     }
 
     public void update() {

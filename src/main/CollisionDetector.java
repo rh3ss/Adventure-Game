@@ -7,8 +7,8 @@ import enums.EntityType;
 public class CollisionDetector {
     private final GamePanel gamePanel;
 
-    public CollisionDetector(GamePanel p) {
-        this.gamePanel = p;
+    public CollisionDetector(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     public void detectEntityCollisionWithTile(Entity entity) {
@@ -26,23 +26,23 @@ public class CollisionDetector {
         switch (entity.direction) {
             case Direction.UP -> {
                 entityTopRow = (entityTopWorldY - entity.velocity) / this.gamePanel.tileSize;
-                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[entityLeftColumn][entityTopRow];
-                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[entityRightColumn][entityTopRow];
+                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityLeftColumn][entityTopRow];
+                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityRightColumn][entityTopRow];
             }
             case Direction.DOWN -> {
                 entityBottomRow = (entityBottomWorldY + entity.velocity) / this.gamePanel.tileSize;
-                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[entityLeftColumn][entityBottomRow];
-                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[entityRightColumn][entityBottomRow];
+                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityLeftColumn][entityBottomRow];
+                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityRightColumn][entityBottomRow];
             }
             case Direction.LEFT -> {
                 entityLeftColumn = (entityLeftWorldX - entity.velocity) / this.gamePanel.tileSize;
-                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[entityLeftColumn][entityTopRow];
-                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[entityLeftColumn][entityBottomRow];
+                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityLeftColumn][entityTopRow];
+                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityLeftColumn][entityBottomRow];
             }
             case Direction.RIGHT -> {
                 entityRightColumn = (entityRightWorldX + entity.velocity) / this.gamePanel.tileSize;
-                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[entityRightColumn][entityTopRow];
-                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[entityRightColumn][entityBottomRow];
+                tileNumber1 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityRightColumn][entityTopRow];
+                tileNumber2 = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][entityRightColumn][entityBottomRow];
             }
         }
         // if entity hits solid tile then collision detected
@@ -53,8 +53,8 @@ public class CollisionDetector {
 
     public int detectEntityCollisionWithObject(Entity entity, boolean player) {
         int objectIndex = Integer.MAX_VALUE;
-        for (int idx = 0; idx < this.gamePanel.entities.size(); idx++) {
-            Entity object = this.gamePanel.entities.get(idx);
+        for (int idx = 0; idx < this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.size(); idx++) {
+            Entity object = this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(idx);
             if (object != null && object != entity && object.entityType == EntityType.OBJECT) {
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
@@ -87,8 +87,8 @@ public class CollisionDetector {
 
     public int detectEntityCollisionWithEntities(Entity entity) {
         int entityIndex = Integer.MAX_VALUE;
-        for (int idx = 0; idx < this.gamePanel.entities.size(); idx++) {
-            Entity idxEntity = this.gamePanel.entities.get(idx);
+        for (int idx = 0; idx < this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.size(); idx++) {
+            Entity idxEntity = this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(idx);
             if (idxEntity != null && entity != idxEntity && entity.entityType != EntityType.OBJECT) {
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
