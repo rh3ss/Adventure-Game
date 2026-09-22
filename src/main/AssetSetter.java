@@ -97,8 +97,10 @@ public class AssetSetter {
 
 
         Trader trader = new Trader(this.gamePanel, 22, 20);
+        Potion p = new PotionHeal(this.gamePanel, 22, 20);
+        p.worldX += 20;
         ArrayList<Entity> npcs2 = new ArrayList<>(List.of(
-                trader
+                p, trader
         ));
         this.gamePanel.maps.get(0).entities.addAll(npcs2);
     }
