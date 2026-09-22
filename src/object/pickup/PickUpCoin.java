@@ -19,6 +19,6 @@ public class PickUpCoin extends PickUp {
 
     public void use(Entity entity) {
         this.gamePanel.gui.addMessage(this.objectType.toString() + " +" + this.objectBenefitValue, this.objectColor);
-        this.gamePanel.player.coins += this.objectBenefitValue;
+        entity.coins += this.objectBenefitValue;
     }
 }

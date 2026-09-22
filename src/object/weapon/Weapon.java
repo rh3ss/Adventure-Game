@@ -5,7 +5,7 @@ import main.GamePanel;
 import object.GameObject;
 
 
-public class Weapon extends GameObject {
+public abstract class Weapon extends GameObject {
 
     public Weapon(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);

@@ -7,7 +7,7 @@ import main.GamePanel;
 import object.GameObject;
 
 
-public class Potion extends GameObject {
+public abstract class Potion extends GameObject {
     public final GamePanel gamePanel;
 
     public Potion(GamePanel gamePanel, int worldColumn, int worldRow) {
@@ -18,5 +18,5 @@ public class Potion extends GameObject {
         this.objectType = ObjectType.POTION;
     }
 
-    public void use(Entity entity) { }
+    public abstract void use(Entity entity);
 }

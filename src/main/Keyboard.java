@@ -28,6 +28,7 @@ public class Keyboard implements KeyListener{
             case GameState.DIALOGUE -> { this.dialogueKeyEvent(keyboardCode); }
             case GameState.CHARACTER -> { this.characterKeyEvent(keyboardCode); }
             case GameState.OPTIONS -> { this.optionsKeyEvent(keyboardCode); }
+            case GameState.TRADING -> { this.tradingKeyEvent(keyboardCode); }
             case GameState.GAME_OVER -> { this.gameOverKeyEvent(keyboardCode); }
         }
     }
@@ -80,32 +81,64 @@ public class Keyboard implements KeyListener{
 
     private void characterKeyEvent(int keyboardCode) {
         if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.PLAYING; }
-        if (keyboardCode == KeyEvent.VK_W) {
-            this.gamePanel.gui.inventorySlotRowSelected--;
-            if (this.gamePanel.gui.inventorySlotRowSelected < 0) {
-                this.gamePanel.gui.inventorySlotRowSelected = this.gamePanel.player.inventoryRowSize - 1;
-            }
-        }
-        if (keyboardCode == KeyEvent.VK_S) {
-            this.gamePanel.gui.inventorySlotRowSelected++;
-            if (this.gamePanel.gui.inventorySlotRowSelected > this.gamePanel.player.inventoryRowSize - 1) {
-                this.gamePanel.gui.inventorySlotRowSelected = 0;
-            }
-        }
-        if (keyboardCode == KeyEvent.VK_A) {
-            this.gamePanel.gui.inventorySlotColumnSelected--;
-            if (this.gamePanel.gui.inventorySlotColumnSelected < 0) {
-                this.gamePanel.gui.inventorySlotColumnSelected = this.gamePanel.player.inventoryColumnSize - 1;
-            }
-        }
-        if (keyboardCode == KeyEvent.VK_D) {
-            this.gamePanel.gui.inventorySlotColumnSelected++;
-            if (this.gamePanel.gui.inventorySlotColumnSelected > this.gamePanel.player.inventoryColumnSize - 1) {
-                this.gamePanel.gui.inventorySlotColumnSelected = 0;
-            }
-        }
+
         if (keyboardCode == KeyEvent.VK_ENTER) {
             this.gamePanel.player.equipCurrentSelectedInventoryItem();
+        }
+        this.playerInventoryKeyEvent(keyboardCode);
+    }
+
+    private void playerInventoryKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_UP) {
+            this.gamePanel.gui.playerInventorySlotRowSelected--;
+            if (this.gamePanel.gui.playerInventorySlotRowSelected < 0) {
+                this.gamePanel.gui.playerInventorySlotRowSelected = this.gamePanel.player.inventoryRowSize - 1;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_DOWN) {
+            this.gamePanel.gui.playerInventorySlotRowSelected++;
+            if (this.gamePanel.gui.playerInventorySlotRowSelected > this.gamePanel.player.inventoryRowSize - 1) {
+                this.gamePanel.gui.playerInventorySlotRowSelected = 0;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_LEFT) {
+            this.gamePanel.gui.playerInventorySlotColumnSelected--;
+            if (this.gamePanel.gui.playerInventorySlotColumnSelected < 0) {
+                this.gamePanel.gui.playerInventorySlotColumnSelected = this.gamePanel.player.inventoryColumnSize - 1;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_RIGHT) {
+            this.gamePanel.gui.playerInventorySlotColumnSelected++;
+            if (this.gamePanel.gui.playerInventorySlotColumnSelected > this.gamePanel.player.inventoryColumnSize - 1) {
+                this.gamePanel.gui.playerInventorySlotColumnSelected = 0;
+            }
+        }
+    }
+
+    private void npcInventoryKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_UP) {
+            this.gamePanel.gui.npcInventorySlotRowSelected--;
+            if (this.gamePanel.gui.npcInventorySlotRowSelected < 0) {
+                this.gamePanel.gui.npcInventorySlotRowSelected = this.gamePanel.gui.interactedNPC.inventoryRowSize - 1;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_DOWN) {
+            this.gamePanel.gui.npcInventorySlotRowSelected++;
+            if (this.gamePanel.gui.npcInventorySlotRowSelected > this.gamePanel.gui.interactedNPC.inventoryRowSize - 1) {
+                this.gamePanel.gui.npcInventorySlotRowSelected = 0;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_LEFT) {
+            this.gamePanel.gui.npcInventorySlotColumnSelected--;
+            if (this.gamePanel.gui.npcInventorySlotColumnSelected < 0) {
+                this.gamePanel.gui.npcInventorySlotColumnSelected = this.gamePanel.gui.interactedNPC.inventoryColumnSize - 1;
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_RIGHT) {
+            this.gamePanel.gui.npcInventorySlotColumnSelected++;
+            if (this.gamePanel.gui.npcInventorySlotColumnSelected > this.gamePanel.gui.interactedNPC.inventoryColumnSize - 1) {
+                this.gamePanel.gui.npcInventorySlotColumnSelected = 0;
+            }
         }
     }
 
@@ -158,6 +191,38 @@ public class Keyboard implements KeyListener{
         }
     }
 
+    private void tradingKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
+
+        if (keyboardCode == KeyEvent.VK_UP) {
+            switch (this.gamePanel.gui.tradingSelection) {
+                case TradingSelection.BUY -> { this.gamePanel.gui.tradingSelection = TradingSelection.LEAVE; }
+                case TradingSelection.SELL -> { this.gamePanel.gui.tradingSelection = TradingSelection.BUY; }
+                case TradingSelection.LEAVE -> { this.gamePanel.gui.tradingSelection = TradingSelection.SELL; }
+            }
+        }
+        if (keyboardCode == KeyEvent.VK_DOWN) {
+            switch (this.gamePanel.gui.tradingSelection) {
+                case TradingSelection.BUY -> { this.gamePanel.gui.tradingSelection = TradingSelection.SELL; }
+                case TradingSelection.SELL -> { this.gamePanel.gui.tradingSelection = TradingSelection.LEAVE; }
+                case TradingSelection.LEAVE -> { this.gamePanel.gui.tradingSelection = TradingSelection.BUY; }
+            }
+        }
+        // cursor npc inventory
+        if (this.gamePanel.gui.tradingState == TradingState.BUY) {
+            this.npcInventoryKeyEvent(keyboardCode);
+            if (keyboardCode == KeyEvent.VK_ESCAPE) {
+                this.gamePanel.gui.tradingState = TradingState.SELECT;
+            }
+        }
+        if (this.gamePanel.gui.tradingState == TradingState.SELL) {
+            this.playerInventoryKeyEvent(keyboardCode);
+            if (keyboardCode == KeyEvent.VK_ESCAPE) {
+                this.gamePanel.gui.tradingState = TradingState.SELECT;
+            }
+        }
+    }
+
     private void gameOverKeyEvent(int keyboardCode) {
         if (keyboardCode == KeyEvent.VK_UP || keyboardCode == KeyEvent.VK_DOWN) {
             if (this.gamePanel.gui.gameOverSelection == GameOverSelection.NEGATIVE) {
@@ -170,17 +235,6 @@ public class Keyboard implements KeyListener{
                 this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
             }
         }
-//        if (keyboardCode == KeyEvent.VK_DOWN) {
-//            if (this.gamePanel.gui.gameOverSelection == GameOverSelection.NEGATIVE) {
-//                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
-//            }
-//            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.RESPAWN) {
-//                this.gamePanel.gui.gameOverSelection = GameOverSelection.QUIT;
-//            }
-//            else if (this.gamePanel.gui.gameOverSelection == GameOverSelection.QUIT) {
-//                this.gamePanel.gui.gameOverSelection = GameOverSelection.RESPAWN;
-//            }
-//        }
         if (keyboardCode == KeyEvent.VK_ENTER) {
             switch (this.gamePanel.gui.gameOverSelection) {
                 case GameOverSelection.RESPAWN -> {

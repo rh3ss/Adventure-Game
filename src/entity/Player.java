@@ -21,9 +21,6 @@ public class Player extends Entity {
     private final Keyboard keyboard;
     public int screenX;
     public int screenY;
-    public ArrayList<Entity> inventory;
-    public int inventoryColumnSize, inventoryRowSize;
-    public int maxInventorySize;
 
     public Player(GamePanel p, Keyboard k) {
         super(p);
@@ -43,7 +40,7 @@ public class Player extends Entity {
         this.worldX = (this.gamePanel.tileSize * 22);
         this.worldY = (this.gamePanel.tileSize * 24);
         // player status
-        this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 0;
+        this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 500;
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
         this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;
@@ -369,7 +366,9 @@ public class Player extends Entity {
     }
 
     public void equipCurrentSelectedInventoryItem() {
-        int itemIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot();
+        int itemIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(
+                this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected
+        );
         if (itemIndex < this.inventory.size()) {
             Entity selectedItem = this.inventory.get(itemIndex);
             if (selectedItem.entityType == EntityType.OBJECT) {

@@ -6,7 +6,7 @@ import main.GamePanel;
 import object.GameObject;
 
 
-public class PickUp extends GameObject {
+public abstract class PickUp extends GameObject {
     public final GamePanel gamePanel;
 
     public PickUp(GamePanel gamePanel, int worldColumn, int worldRow) {
@@ -16,5 +16,5 @@ public class PickUp extends GameObject {
         this.objectCategory = ObjectCategory.PICKUP;
     }
 
-    public void use(Entity entity) { }
+    public abstract void use(Entity entity);
 }

@@ -67,6 +67,10 @@ public class Entity {
     public double strength, dexterity;
     public double maxHearts, currentHearts;
     public double attackDamage, receivedDamage, defenseArmor;
+
+    // OBJECT ATTRIBUTES
+    public ArrayList<Entity> inventory;
+    public int inventoryColumnSize, inventoryRowSize, maxInventorySize;
     public Weapon currentWeapon;
     public Shield currentShield;
     public Armor currentArmor;
@@ -171,8 +175,8 @@ public class Entity {
         }
 
         this.animationCounterFrames++;
-        // entity image should change ever FPS / 4 = 15 frames
-        if (this.animationCounterFrames > (this.gamePanel.FPS / 4)) {
+        // entity image should change ever FPS / 3 = 20 frames
+        if (this.animationCounterFrames > (this.gamePanel.FPS / 3)) {
             this.animationFrame = (this.animationFrame == 1) ? 2 : 1;
             this.animationCounterFrames = 0;
         }

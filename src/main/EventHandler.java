@@ -6,8 +6,9 @@ import enums.GameState;
 public class EventHandler {
     private final GamePanel gamePanel;
     private EventRectangle[][][] eventRectangle;
-    private int previousEventPositionX, previousEventPositionY;
     private boolean playerCanAccessEventAgain;
+    public int previousEventPositionX, previousEventPositionY;
+    public int tempMapNumber, tempColumn, tempRow;
 
     public EventHandler(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -47,10 +48,10 @@ public class EventHandler {
             if (playerHitSomething(0, 22, 18, Direction.UP)) { eventDamagePit(GameState.DIALOGUE); }
             else if (playerHitSomething(0, 22, 17, Direction.UP)) { eventHealingPool(GameState.DIALOGUE); }
             else if (playerHitSomething(0, 24, 21, Direction.ANY)) {
-                eventTeleportPlayerToNewMap(1, 12, 13);
+                eventTeleportPlayerIsTriggered(1, 12, 13);
             }
             else if (playerHitSomething(1, 12, 13, Direction.ANY)) {
-                eventTeleportPlayerToNewMap(0, 24, 21);
+                eventTeleportPlayerIsTriggered(0, 24, 21);
             }
         }
     }
@@ -98,13 +99,21 @@ public class EventHandler {
         }
     }
 
-    private void eventTeleportPlayerToNewMap(int mapNumber, int destinationColumn, int destinationRow) {
-        this.gamePanel.currentMapNumber = mapNumber;
-        this.gamePanel.player.worldX = this.gamePanel.tileSize * destinationColumn;
-        this.gamePanel.player.worldY = this.gamePanel.tileSize * destinationRow;
+    private void eventTeleportPlayerIsTriggered(int mapNumber, int destinationColumn, int destinationRow) {
+        this.gamePanel.gameState = GameState.TRANSITION;
+        this.tempMapNumber = mapNumber;
+        this.tempColumn = destinationColumn;
+        this.tempRow = destinationRow;
+        this.playerCanAccessEventAgain = false;
+    }
+
+    public void setPlayerToTeleportedDestination() {
+        this.gamePanel.gameState = GameState.PLAYING;
+        this.gamePanel.currentMapNumber = this.tempMapNumber;
+        this.gamePanel.player.worldX = this.gamePanel.tileSize * this.tempColumn;
+        this.gamePanel.player.worldY = this.gamePanel.tileSize * this.tempRow;
         this.previousEventPositionX = this.gamePanel.player.worldX;
         this.previousEventPositionY = this.gamePanel.player.worldY;
-        this.playerCanAccessEventAgain = false;
         // place player in new map
         this.gamePanel.assetSetter.setPlayer();
     }

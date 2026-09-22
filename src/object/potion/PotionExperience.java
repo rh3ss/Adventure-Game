@@ -13,6 +13,7 @@ public class PotionExperience extends Potion {
         this.down1 = this.setupEntityImage("/res/objects/potion_green.png", gamePanel.tileSize, gamePanel.tileSize);
         this.objectColor = new Color(0x7cce97);
         this.objectBenefitValue = 5;
+        this.objectCoinPrice = 10;
         this.objectDescription = "[Experience Potion]\nReceive +" + this.objectBenefitValue + " Experience.";
     }
 

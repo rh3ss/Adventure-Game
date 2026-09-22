@@ -2,12 +2,14 @@ package entity;
 
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Color;
 
 public class Particle extends Entity {
     private final Entity producerOfParticles;
     private final Color color;
-    private int pxSize, deltaX, deltaY;
+    private final int pxSize, deltaX;
+    private int deltaY;
 
     public Particle(GamePanel p, Entity producer, Color color, int pxSize, int velocity, int maxHearts, int deltaX, int deltaY) {
         super(p);

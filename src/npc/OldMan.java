@@ -1,15 +1,16 @@
-package entity;
+package npc;
 
 
+import entity.Entity;
 import enums.Direction;
 import enums.EntityType;
 import main.GamePanel;
 
 import java.util.Random;
 
-public class NPCOldMan extends Entity {
+public class OldMan extends Entity {
 
-    public NPCOldMan(GamePanel p, int worldColumn, int worldRow) {
+    public OldMan(GamePanel p, int worldColumn, int worldRow) {
         super(p);
 
         this.entityType = EntityType.NPC;

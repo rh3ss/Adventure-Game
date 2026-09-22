@@ -13,6 +13,7 @@ public class PotionStrength extends Potion {
         this.down1 = this.setupEntityImage("/res/objects/potion_blue.png", gamePanel.tileSize, gamePanel.tileSize);
         this.objectColor = new Color(0x040273);
         this.objectBenefitValue = 1;
+        this.objectCoinPrice = 10;
         this.objectDescription = "[Blue Potion]\nReceive +" + this.objectBenefitValue * 10 + "% Strength.";
     }
 

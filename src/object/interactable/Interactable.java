@@ -4,7 +4,7 @@ import enums.ObjectCategory;
 import main.GamePanel;
 import object.GameObject;
 
-public class Interactable extends GameObject {
+public abstract class Interactable extends GameObject {
 
     public Interactable(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);

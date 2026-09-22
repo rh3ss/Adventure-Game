@@ -1,10 +1,11 @@
 package main;
 
 import entity.Entity;
-import entity.NPCOldMan;
+import npc.OldMan;
 import monster.Monster;
 import monster.MonsterSlimeGreen;
 import monster.MonsterSlimeRed;
+import npc.Trader;
 import object.armor.Armor;
 import object.armor.ArmorGold;
 import object.armor.ArmorIron;
@@ -86,12 +87,20 @@ public class AssetSetter {
     }
 
     public void setNPCs() {
-        NPCOldMan oldMan = new NPCOldMan(this.gamePanel, 21, 21);
+        OldMan oldMan = new OldMan(this.gamePanel, 21, 21);
 
         ArrayList<Entity> npcs = new ArrayList<>(List.of(
                 oldMan
         ));
         this.gamePanel.maps.get(0).entities.addAll(npcs);
+
+
+
+        Trader trader = new Trader(this.gamePanel, 22, 20);
+        ArrayList<Entity> npcs2 = new ArrayList<>(List.of(
+                trader
+        ));
+        this.gamePanel.maps.get(0).entities.addAll(npcs2);
     }
 
     public void setMonsters() {
