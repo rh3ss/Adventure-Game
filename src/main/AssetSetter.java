@@ -1,6 +1,8 @@
 package main;
 
 import entity.Entity;
+import npc.Blacksmith;
+import npc.Farmer;
 import npc.OldMan;
 import monster.Monster;
 import monster.MonsterSlimeGreen;
@@ -88,21 +90,14 @@ public class AssetSetter {
 
     public void setNPCs() {
         OldMan oldMan = new OldMan(this.gamePanel, 21, 21);
+        Trader trader = new Trader(this.gamePanel, 21, 18);
+        Blacksmith blacksmith = new Blacksmith(this.gamePanel, 23, 18);
+        Farmer farmer = new Farmer(this.gamePanel, 18 ,24);
 
         ArrayList<Entity> npcs = new ArrayList<>(List.of(
-                oldMan
+                oldMan, trader, blacksmith, farmer
         ));
         this.gamePanel.maps.get(0).entities.addAll(npcs);
-
-
-
-        Trader trader = new Trader(this.gamePanel, 22, 20);
-        Potion p = new PotionHeal(this.gamePanel, 22, 20);
-        p.worldX += 20;
-        ArrayList<Entity> npcs2 = new ArrayList<>(List.of(
-                p, trader
-        ));
-        this.gamePanel.maps.get(0).entities.addAll(npcs2);
     }
 
     public void setMonsters() {

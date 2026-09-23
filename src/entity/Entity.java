@@ -19,7 +19,7 @@ public class Entity {
     public GamePanel gamePanel;
 
     // IMAGES
-    public BufferedImage image1, image2;
+    public BufferedImage image1, image2, speechBubble;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 
@@ -29,6 +29,7 @@ public class Entity {
     public Rectangle attackArea;
     public ArrayList<String> dialogues;
     public int dialogueIndex;
+    public int activationRadius;
 
     // STATE
     public int worldX, worldY;
@@ -123,21 +124,6 @@ public class Entity {
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(p4);
     }
 
-    public void speak() {
-        this.gamePanel.gui.currentDialogueMessage = this.dialogues.get(this.dialogueIndex);
-        this.dialogueIndex++;
-        if (this.dialogueIndex > this.dialogues.size() - 1) {
-            this.dialogueIndex = 0;
-        }
-        // entity should look in players direction while dialogue
-        switch (this.gamePanel.player.direction) {
-            case Direction.UP -> { this.direction = Direction.DOWN; }
-            case Direction.DOWN -> { this.direction = Direction.UP; }
-            case Direction.LEFT -> { this.direction = Direction.RIGHT; }
-            case Direction.RIGHT -> { this.direction = Direction.LEFT; }
-        }
-    }
-
     public void use(Entity entity) { }
 
     public void chooseObjectToDrop() { }
@@ -146,6 +132,12 @@ public class Entity {
         objectToDrop.worldX = this.worldX;
         objectToDrop.worldY = this.worldY;
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(objectToDrop);
+    }
+
+    public boolean isPlayerInActivationRadius() {
+        int dx = this.gamePanel.player.worldX - this.worldX;
+        int dy = this.gamePanel.player.worldY - this.worldY;
+        return (dx * dx) + (dy * dy) <= (this.activationRadius * this.activationRadius);
     }
 
     public void update() {
@@ -175,8 +167,8 @@ public class Entity {
         }
 
         this.animationCounterFrames++;
-        // entity image should change ever FPS / 3 = 20 frames
-        if (this.animationCounterFrames > (this.gamePanel.FPS / 3)) {
+        // entity image should change ever FPS / 2 = 30 frames
+        if (this.animationCounterFrames > (this.gamePanel.FPS / 2)) {
             this.animationFrame = (this.animationFrame == 1) ? 2 : 1;
             this.animationCounterFrames = 0;
         }
@@ -230,6 +222,10 @@ public class Entity {
                 if (this.showHealthBar) { this.drawHealthBar(g2, screenX, screenY); }
                 // if (this.showReceivedDamage) { this.drawReceivedDamage(g2, screenX, screenY); }
             }
+            // draw speech bubble above head
+            if (this.entityType == EntityType.NPC) {
+                if (this.isPlayerInActivationRadius()) { this.drawSpeechBubble(g2, screenX, screenY); }
+            }
             if (this.isInvincible) {
                 this.showHealthBar = true;
                 this.healthBarCounterFrames = 0;
@@ -277,6 +273,10 @@ public class Entity {
             this.showReceivedDamage = false;
             this.receivedDamageCounterFrames = 0;
         }
+    }
+
+    private void drawSpeechBubble(Graphics2D g2, int screenX, int screenY) {
+        g2.drawImage(this.speechBubble, screenX, screenY - this.gamePanel.tileSize, null);
     }
 
     private void drawDyingAnimation(Graphics2D g2) {

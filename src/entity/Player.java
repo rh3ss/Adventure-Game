@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import enums.*;
 import main.GamePanel;
 import main.Keyboard;
+import npc.NPC;
 import object.armor.Armor;
 import object.shield.Shield;
 import object.weapon.Weapon;
@@ -249,7 +250,7 @@ public class Player extends Entity {
             Entity entity = this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex);
             if (entity.entityType != null) {
                 switch (entity.entityType) {
-                    case EntityType.NPC -> { this.playerCollisionWithNPC(entity); }
+                    case EntityType.NPC -> { this.playerCollisionWithNPC( (NPC) entity); }
                     case EntityType.MONSTER -> { this.playerCollisionWithMonster(entity); }
                     case EntityType.OBJECT -> { this.playerCollisionWithObject(entity); }
                 }
@@ -262,7 +263,7 @@ public class Player extends Entity {
         }
     }
 
-    private void playerCollisionWithNPC(Entity npc) {
+    private void playerCollisionWithNPC(NPC npc) {
         if (this.gamePanel.keyboard.isEnterPressed) {
             this.gamePanel.gameState = GameState.DIALOGUE;
             npc.speak();

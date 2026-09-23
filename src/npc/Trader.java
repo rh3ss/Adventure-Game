@@ -1,7 +1,5 @@
 package npc;
 
-import entity.Entity;
-import enums.EntityType;
 import enums.GameState;
 import main.GamePanel;
 import object.potion.PotionExperience;
@@ -10,22 +8,20 @@ import object.potion.PotionStrength;
 
 import java.util.ArrayList;
 
-public class Trader extends Entity {
+public class Trader extends NPC {
 
     public Trader(GamePanel gamePanel, int worldColumn, int worldRow) {
-        super(gamePanel);
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.NPC;
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
-        this.isSolid = true;
 
         this.getImages();
         this.setDialogues();
         this.setInventory();
     }
 
-    private void getImages() {
+    public void getImages() {
         this.up1 = this.setupEntityImage("/res/npc/trader_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.up2 = this.setupEntityImage("/res/npc/trader_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.down1 = this.setupEntityImage("/res/npc/trader_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
@@ -36,8 +32,9 @@ public class Trader extends Entity {
         this.right2 = this.setupEntityImage("/res/npc/trader_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
 
-    private void setDialogues() {
-        this.dialogues.add("Hello, I'm a wandering trader offering \nvaluable items. Would you like to trade? ");
+    public void setDialogues() {
+        this.dialogues.add("Hello, I'm a wandering trader offering \n" +
+                           "valuable items. Would you like to trade?");
     }
 
     private void setInventory() {
@@ -54,6 +51,7 @@ public class Trader extends Entity {
 
     public void speak() {
         super.speak();
+
         this.gamePanel.gameState = GameState.TRADING;
         this.gamePanel.gui.interactedNPC = this;
     }

@@ -8,22 +8,20 @@ import main.GamePanel;
 
 import java.util.Random;
 
-public class OldMan extends Entity {
+public class OldMan extends NPC {
 
-    public OldMan(GamePanel p, int worldColumn, int worldRow) {
-        super(p);
+    public OldMan(GamePanel gamePanel, int worldColumn, int worldRow) {
+        super(gamePanel, worldColumn, worldRow);
 
-        this.entityType = EntityType.NPC;
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
         this.velocity = 1;
-        this.isSolid = true;
 
         this.getImages();
         this.setDialogues();
     }
 
-    private void getImages() {
+    public void getImages() {
         this.up1 = this.setupEntityImage("/res/npc/oldman_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.up2 = this.setupEntityImage("/res/npc/oldman_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.down1 = this.setupEntityImage("/res/npc/oldman_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
@@ -34,7 +32,7 @@ public class OldMan extends Entity {
         this.right2 = this.setupEntityImage("/res/npc/oldman_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
 
-    private void setDialogues() {
+    public void setDialogues() {
         this.dialogues.add("Hello man.");
         this.dialogues.add("So you've come to this island to \nfind the treasure?");
         this.dialogues.add("I used to be a great wizard but now... \nI'm a bit too old for taking an adventure.");
