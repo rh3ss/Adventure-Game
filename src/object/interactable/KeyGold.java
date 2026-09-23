@@ -10,6 +10,8 @@ public class KeyGold extends Interactable {
 
         this.objectType = ObjectType.KEY;
         this.down1 = this.setupEntityImage("/res/objects/key_gold.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.objectDescription = "[" + this.objectType.toString() + "]\nA golden key.";
+        this.objectCoinValue = 5;
+        this.objectName = "Golden Key";
+        this.objectDescription = "[" + this.objectName + "]\nA golden key.";
     }
 }

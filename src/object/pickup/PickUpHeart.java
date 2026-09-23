@@ -17,6 +17,7 @@ public class PickUpHeart extends PickUp {
         this.image2 = this.setupEntityImage("/res/objects/heart_blank.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.objectColor = Color.WHITE;
         this.objectBenefitValue = 1;
+        this.objectName = "Heart";
     }
 
     public void use(Entity entity) {

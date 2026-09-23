@@ -679,7 +679,7 @@ public class GUI {
                 height = this.gamePanel.tileSize;
                 this.drawSubWindowScreen(x, y, width, height);
                 this.graphics2D.drawImage(this.coin, x + 10, y + 8, 32, 32, null);
-                int price = ((GameObject) selectedItem).objectCoinPrice;
+                int price = ((GameObject) selectedItem).objectCoinValue;
                 String priceText = String.valueOf(price);
                 x = this.calcXPositionForAlignToRightText(priceText, this.gamePanel.tileSize * 8);
                 this.graphics2D.drawString(priceText, x - 20, y + 32);
@@ -734,7 +734,7 @@ public class GUI {
                 height = this.gamePanel.tileSize;
                 this.drawSubWindowScreen(x, y, width, height);
                 this.graphics2D.drawImage(this.coin, x + 10, y + 8, 32, 32, null);
-                int price = ((GameObject) selectedItem).objectCoinPrice;
+                int price = ((GameObject) selectedItem).objectCoinValue;
                 String priceText = String.valueOf(price);
                 x = this.calcXPositionForAlignToRightText(priceText, this.gamePanel.tileSize * 18);
                 this.graphics2D.drawString(priceText, x - 20, y + 32);

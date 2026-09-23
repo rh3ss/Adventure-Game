@@ -1,6 +1,5 @@
 package object.pickup;
 
-import entity.Entity;
 import enums.ObjectCategory;
 import main.GamePanel;
 import object.GameObject;
@@ -14,7 +13,6 @@ public abstract class PickUp extends GameObject {
         this.gamePanel = gamePanel;
 
         this.objectCategory = ObjectCategory.PICKUP;
+        this.isTradable = false;
     }
-
-    public abstract void use(Entity entity);
 }

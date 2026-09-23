@@ -6,5 +6,6 @@ public enum ObjectCategory {
     ARMOR,
     INTERACTABLE,
     CONSUMABLE,
-    PICKUP
+    PICKUP,
+    ENVIRONMENT,
 }

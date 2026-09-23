@@ -10,5 +10,6 @@ public abstract class Interactable extends GameObject {
         super(gamePanel, worldColumn, worldRow);
 
         this.objectCategory = ObjectCategory.INTERACTABLE;
+        this.isTradable = false;
     }
 }

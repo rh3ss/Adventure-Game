@@ -11,6 +11,7 @@ public class Door extends Interactable {
 
         this.objectType = ObjectType.DOOR;
         this.down1 = this.setupEntityImage("/res/objects/door.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.objectName = "Door";
 
         this.isSolid = true;
         this.solidArea = new Rectangle(0, 16, 48, 32);

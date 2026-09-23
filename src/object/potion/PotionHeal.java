@@ -13,8 +13,9 @@ public class PotionHeal extends Potion {
         this.down1 = this.setupEntityImage("/res/objects/potion_red.png", gamePanel.tileSize, gamePanel.tileSize);
         this.objectColor = new Color(0x800517);
         this.objectBenefitValue = 2;
-        this.objectCoinPrice = 5;
-        this.objectDescription = "[Heal Potion]\nHeals +" + this.objectBenefitValue + " Hearts.";
+        this.objectCoinValue = 5;
+        this.objectName = "Heal Potion";
+        this.objectDescription = "[" + this.objectName + "]\nHeals +" + this.objectBenefitValue + " Hearts.";
     }
 
     public void use(Entity entity) {

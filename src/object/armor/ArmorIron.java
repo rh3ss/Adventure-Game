@@ -11,6 +11,8 @@ public class ArmorIron extends Armor {
         this.objectType = ObjectType.ARMOR;
         this.down1 = this.setupEntityImage("/res/objects/armor_iron.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.objectDamageReductionMultiplier = 0.15;
-        this.objectDescription = "[" + this.objectType.toString() + "]\nAn good robust iron armor.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Armor.";
+        this.objectCoinValue = 20;
+        this.objectName = "Iron Armor";
+        this.objectDescription = "[" + this.objectName + "]\nAn good robust iron armor.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Armor.";
     }
 }

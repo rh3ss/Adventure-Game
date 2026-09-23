@@ -1,6 +1,5 @@
 package object.potion;
 
-import entity.Entity;
 import enums.ObjectCategory;
 import enums.ObjectType;
 import main.GamePanel;
@@ -17,6 +16,4 @@ public abstract class Potion extends GameObject {
         this.objectCategory = ObjectCategory.CONSUMABLE;
         this.objectType = ObjectType.POTION;
     }
-
-    public abstract void use(Entity entity);
 }

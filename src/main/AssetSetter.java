@@ -26,6 +26,7 @@ import object.weapon.*;
 import tileInteractive.InteractiveTile;
 import tileInteractive.InteractiveTileBush;
 import tileInteractive.InteractiveTileDryTree;
+import tileInteractive.InteractiveTileWheat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,19 +81,13 @@ public class AssetSetter {
                 armorIron1, armorGold1
         ));
         this.gamePanel.maps.get(0).entities.addAll(objects);
-
-//        // objects for world map 1
-//        objects = new ArrayList<>(List.of(
-//                key1
-//        ));
-//        this.gamePanel.maps.get(1).entities.addAll(objects);
     }
 
     public void setNPCs() {
         OldMan oldMan = new OldMan(this.gamePanel, 21, 21);
         Trader trader = new Trader(this.gamePanel, 21, 18);
         Blacksmith blacksmith = new Blacksmith(this.gamePanel, 23, 18);
-        Farmer farmer = new Farmer(this.gamePanel, 18 ,24);
+        Farmer farmer = new Farmer(this.gamePanel, 14 , 19);
 
         ArrayList<Entity> npcs = new ArrayList<>(List.of(
                 oldMan, trader, blacksmith, farmer
@@ -129,8 +124,29 @@ public class AssetSetter {
         InteractiveTile it9 = new InteractiveTileBush(this.gamePanel, "bush_1", 19, 24);
         InteractiveTile it10 = new InteractiveTileBush(this.gamePanel, "bush_2", 19, 25);
 
+        InteractiveTile it11 = new InteractiveTileWheat(this.gamePanel, 12, 20);
+        InteractiveTile it12 = new InteractiveTileWheat(this.gamePanel, 13, 20);
+        InteractiveTile it13 = new InteractiveTileWheat(this.gamePanel, 14, 20);
+        InteractiveTile it14 = new InteractiveTileWheat(this.gamePanel, 15, 20);
+        InteractiveTile it15 = new InteractiveTileWheat(this.gamePanel, 16, 20);
+
+        InteractiveTile it16 = new InteractiveTileWheat(this.gamePanel, 12, 21);
+        InteractiveTile it17 = new InteractiveTileWheat(this.gamePanel, 13, 21);
+        InteractiveTile it18 = new InteractiveTileWheat(this.gamePanel, 14, 21);
+        InteractiveTile it19 = new InteractiveTileWheat(this.gamePanel, 15, 21);
+        InteractiveTile it20 = new InteractiveTileWheat(this.gamePanel, 16, 21);
+
+        InteractiveTile it21 = new InteractiveTileWheat(this.gamePanel, 12, 22);
+        InteractiveTile it22 = new InteractiveTileWheat(this.gamePanel, 13, 22);
+        InteractiveTile it23 = new InteractiveTileWheat(this.gamePanel, 14, 22);
+        InteractiveTile it24 = new InteractiveTileWheat(this.gamePanel, 15, 22);
+        InteractiveTile it25 = new InteractiveTileWheat(this.gamePanel, 16, 22);
+
         ArrayList<Entity> interactiveTiles = new ArrayList<>(List.of(
-                it1, it2, it3, it4, it5, it6, it7, it8, it9, it10
+                it1, it2, it3, it4, it5, it6, it7, it8, it9, it10,
+                it11, it12, it13, it14, it15,
+                it16, it17, it18, it19, it20,
+                it21, it22, it23, it24, it25
         ));
         this.gamePanel.maps.get(0).entities.addAll(interactiveTiles);
     }

@@ -17,6 +17,7 @@ public class PickUpManaCrystal extends PickUp {
         this.image2 = this.setupEntityImage("/res/objects/manacrystal_blank.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.objectColor = Color.WHITE;
         this.objectBenefitValue = 1;
+        this.objectName = "Mana Crystal";
     }
 
     public void use(Entity entity) {

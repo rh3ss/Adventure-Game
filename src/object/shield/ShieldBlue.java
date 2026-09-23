@@ -11,6 +11,8 @@ public class ShieldBlue extends Shield {
         this.objectType = ObjectType.SHIELD;
         this.down1 = this.setupEntityImage("/res/objects/shield_blue.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.objectDamageReductionMultiplier = 0.4;
-        this.objectDescription = "[" + this.objectType.toString() + "]\nAn epic blue shield.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Defense reduction.";
+        this.objectCoinValue = 30;
+        this.objectName = "Knight Shield";
+        this.objectDescription = "[" + this.objectName + "]\nAn epic knight shield.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Defense reduction.";
     }
 }

@@ -15,6 +15,7 @@ public class PickUpCoin extends PickUp {
         this.down1 = this.setupEntityImage("/res/objects/coin.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.objectColor = Color.WHITE;
         this.objectBenefitValue = 1;
+        this.objectName = "Coin";
     }
 
     public void use(Entity entity) {

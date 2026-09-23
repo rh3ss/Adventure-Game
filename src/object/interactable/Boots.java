@@ -10,5 +10,8 @@ public class Boots extends Interactable {
 
         this.objectType = ObjectType.BOOTS;
         this.down1 = this.setupEntityImage("/res/objects/boots.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.objectCoinValue = 5;
+        this.objectName = "Boots";
+        this.objectDescription = "[" + this.objectName + "]\n";
     }
 }

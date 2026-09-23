@@ -15,6 +15,8 @@ public class AxeIron extends Weapon {
         this.down1 = this.setupEntityImage("/res/objects/axe_iron.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.attackArea = new Rectangle(0, 0, 30, 30);
         this.objectAttackDamageMultiplier = 0.3;
-        this.objectDescription = "[" + this.objectType.toString() + "]\nAn heavy lumberjack axe.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
+        this.coins = 10;
+        this.objectName = "Iron Axe";
+        this.objectDescription = "[" + this.objectName + "]\nAn heavy lumberjack axe.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
     }
 }

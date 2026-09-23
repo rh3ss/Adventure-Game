@@ -5,4 +5,5 @@ public enum InteractiveTileType {
     DRY_TREE,
     BUSH,
     TRUNK,
+    WHEAT,
 }

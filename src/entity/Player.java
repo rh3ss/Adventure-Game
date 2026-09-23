@@ -15,7 +15,7 @@ import projectile.Fireball;
 import object.armor.ArmorIron;
 import object.shield.ShieldWood;
 import object.weapon.SwordIron;
-import object.interactable.Wood;
+import object.environment.Wood;
 import tileInteractive.InteractiveTile;
 
 public class Player extends Entity {
