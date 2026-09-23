@@ -222,9 +222,9 @@ public class Entity {
                 if (this.showHealthBar) { this.drawHealthBar(g2, screenX, screenY); }
                 // if (this.showReceivedDamage) { this.drawReceivedDamage(g2, screenX, screenY); }
             }
-            // draw speech bubble above head
-            if (this.entityType == EntityType.NPC) {
-                if (this.isPlayerInActivationRadius()) { this.drawSpeechBubble(g2, screenX, screenY); }
+            // check if player is nearby entity
+            if (this.isPlayerInActivationRadius()) {
+                if (this.entityType == EntityType.NPC) { this.drawSpeechBubble(g2, screenX, screenY); }
             }
             if (this.isInvincible) {
                 this.showHealthBar = true;

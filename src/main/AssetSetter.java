@@ -23,10 +23,7 @@ import object.shield.Shield;
 import object.shield.ShieldBlue;
 import object.shield.ShieldWood;
 import object.weapon.*;
-import tileInteractive.InteractiveTile;
-import tileInteractive.InteractiveTileBush;
-import tileInteractive.InteractiveTileDryTree;
-import tileInteractive.InteractiveTileWheat;
+import tileInteractive.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,13 +110,13 @@ public class AssetSetter {
     }
 
     public void setInteractiveTiles() {
-        InteractiveTile it1 = new InteractiveTileDryTree(this.gamePanel, 26, 15);
-        InteractiveTile it2 = new InteractiveTileDryTree(this.gamePanel, 27, 15);
-        InteractiveTile it3 = new InteractiveTileDryTree(this.gamePanel, 28, 15);
-        InteractiveTile it4 = new InteractiveTileDryTree(this.gamePanel, 29, 15);
-        InteractiveTile it5 = new InteractiveTileDryTree(this.gamePanel, 30, 15);
-        InteractiveTile it6 = new InteractiveTileDryTree(this.gamePanel, 31, 15);
-        InteractiveTile it7 = new InteractiveTileDryTree(this.gamePanel, 32, 15);
+        InteractiveTile it1 = new InteractiveTileDryTree(this.gamePanel, 13, 13);
+//        InteractiveTile it2 = new InteractiveTileDryTree(this.gamePanel, 27, 15);
+//        InteractiveTile it3 = new InteractiveTileDryTree(this.gamePanel, 28, 15);
+//        InteractiveTile it4 = new InteractiveTileDryTree(this.gamePanel, 29, 15);
+//        InteractiveTile it5 = new InteractiveTileDryTree(this.gamePanel, 30, 15);
+//        InteractiveTile it6 = new InteractiveTileDryTree(this.gamePanel, 31, 15);
+//        InteractiveTile it7 = new InteractiveTileDryTree(this.gamePanel, 32, 15);
         InteractiveTile it8 = new InteractiveTileBush(this.gamePanel, "bush_2", 19, 23);
         InteractiveTile it9 = new InteractiveTileBush(this.gamePanel, "bush_1", 19, 24);
         InteractiveTile it10 = new InteractiveTileBush(this.gamePanel, "bush_2", 19, 25);
@@ -142,11 +139,18 @@ public class AssetSetter {
         InteractiveTile it24 = new InteractiveTileWheat(this.gamePanel, 15, 22);
         InteractiveTile it25 = new InteractiveTileWheat(this.gamePanel, 16, 22);
 
+        InteractiveTile it26 = new InteractiveTileBigTree(this.gamePanel, 17, 21);
+        InteractiveTile it27 = new InteractiveTileBigTree(this.gamePanel, 18, 21);
+        InteractiveTile it28 = new InteractiveTileBigTree(this.gamePanel, 19, 21);
+        InteractiveTile it29 = new InteractiveTileBigTree(this.gamePanel, 20, 21);
+
         ArrayList<Entity> interactiveTiles = new ArrayList<>(List.of(
-                it1, it2, it3, it4, it5, it6, it7, it8, it9, it10,
+                it1, //it2, it3, it4, it5, it6, it7,
+                it8, it9, it10,
                 it11, it12, it13, it14, it15,
                 it16, it17, it18, it19, it20,
-                it21, it22, it23, it24, it25
+                it21, it22, it23, it24, it25,
+                it26, it27, it28, it29
         ));
         this.gamePanel.maps.get(0).entities.addAll(interactiveTiles);
     }

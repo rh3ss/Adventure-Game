@@ -346,6 +346,10 @@ public class Player extends Entity {
                         Wood droppedWood = new Wood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, tile.worldY / this.gamePanel.tileSize);
                         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(droppedWood);
                     }
+                    else if (tile.interactiveTileType == InteractiveTileType.BIG_TREE) {
+                        Wood droppedWood = new Wood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, (tile.worldY / this.gamePanel.tileSize) + 1);
+                        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(droppedWood);
+                    }
                 }
             }
         }
