@@ -24,10 +24,4 @@ public class InteractiveTileBush extends InteractiveTile {
     }
 
     public Color getParticleColor() { return new Color(0x183029); }
-
-    public int getParticlePxSize() { return 6; }
-
-    public int getParticleVelocity() { return 1; }
-
-    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }

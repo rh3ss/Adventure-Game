@@ -1,10 +1,8 @@
 package tileInteractive;
 
-import entity.Entity;
 import enums.InteractiveTileType;
 import main.GamePanel;
 
-import java.awt.Color;
 
 public class InteractiveTileWheat extends InteractiveTile {
 
@@ -16,16 +14,4 @@ public class InteractiveTileWheat extends InteractiveTile {
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
     }
-
-    public boolean isCorrectObjectEquipped(Entity user) {
-        return true;
-    }
-
-    public Color getParticleColor() { return new Color(0xad8b30); }
-
-    public int getParticlePxSize() { return 6; }
-
-    public int getParticleVelocity() { return 1; }
-
-    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }

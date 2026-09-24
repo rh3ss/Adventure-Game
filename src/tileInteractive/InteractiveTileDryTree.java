@@ -5,7 +5,7 @@ import enums.InteractiveTileType;
 import enums.ObjectType;
 import main.GamePanel;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class InteractiveTileDryTree extends InteractiveTile {
 
@@ -16,19 +16,9 @@ public class InteractiveTileDryTree extends InteractiveTile {
         this.isDestructible = true;
         this.isSolid = true;
         this.maxHearts = 3;
-        this.down1 = this.setupEntityImage("/res/tilesInteractive/farm_barn.png", this.gamePanel.tileSize * 5, this.gamePanel.tileSize * 5);
+        this.down1 = this.setupEntityImage("/res/tilesInteractive/drytree.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
-
-        int entityCollisionOffset = 16;
-        this.solidArea = new Rectangle(
-                entityCollisionOffset,
-                entityCollisionOffset * 2,
-                (gamePanel.tileSize * 5) - (entityCollisionOffset * 2),
-                (gamePanel.tileSize * 5) - (entityCollisionOffset * 2)
-        );
-        this.solidAreaDefaultX = entityCollisionOffset;
-        this.solidAreaDefaultY = (int) (entityCollisionOffset * 2.5);
     }
 
     public boolean isCorrectObjectEquipped(Entity user) {
@@ -40,10 +30,4 @@ public class InteractiveTileDryTree extends InteractiveTile {
     }
 
     public Color getParticleColor() { return new Color(0x4A2511); }
-
-    public int getParticlePxSize() { return 6; }
-
-    public int getParticleVelocity() { return 1; }
-
-    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
 }

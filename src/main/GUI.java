@@ -202,19 +202,20 @@ public class GUI {
     private void drawPlayerCoins() {
         int xPos = (int) (this.gamePanel.screenWidth - (this.gamePanel.tileSize * 1.25));
         int yPos = this.gamePanel.tileSize / 2;
-        // current coins value
-        String textValueOfCoins = String.valueOf(this.gamePanel.player.coins);
-        int textX = this.calcXPositionForAlignToRightText(textValueOfCoins, (xPos - 20));
-        // draw
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 40F));
         FontMetrics fontMetrics = this.graphics2D.getFontMetrics();
+        // current coins value
+        String textValueOfCoins = String.valueOf(this.gamePanel.player.coins);
+        int textX = this.calcXPositionForAlignToRightText(textValueOfCoins, xPos);
         int textY = yPos + (this.coin.getHeight() - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
-        this.graphics2D.setColor(Color.BLACK);
-        this.graphics2D.drawString(textValueOfCoins, textX + 2, textY + 2);
-        this.graphics2D.setColor(Color.WHITE);
-        this.graphics2D.drawString(textValueOfCoins, textX, textY);
         // coin image
         this.graphics2D.drawImage(this.coin, xPos, yPos, null);
+        // text shadow
+        this.graphics2D.setColor(Color.BLACK);
+        this.graphics2D.drawString(textValueOfCoins, textX + 2, textY + 2);
+        // text
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.drawString(textValueOfCoins, textX, textY);
     }
     private void drawPlayerEquipment() {
         int equipmentPosX = this.gamePanel.tileSize / 2;

@@ -66,11 +66,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        this.assetSetter.setPlayer();
-        this.assetSetter.setObjects();
-        this.assetSetter.setNPCs();
-        this.assetSetter.setMonsters();
-        this.assetSetter.setInteractiveTiles();
+        this.assetSetter.setAllAssetSetter();
         this.gameState = GameState.TITLE;
         // set drawing to the new bufferedImage graphic
         this.fullScreen = new BufferedImage(this.screenWidth, this.screenHeight, BufferedImage.TYPE_INT_ARGB);
@@ -87,11 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void restart() {
         this.maps.get(this.currentMapNumber).entities.clear();
-        this.assetSetter.setPlayer();
-        this.assetSetter.setObjects();
-        this.assetSetter.setNPCs();
-        this.assetSetter.setMonsters();
-        this.assetSetter.setInteractiveTiles();
+        this.assetSetter.setAllAssetSetter();
         this.player.setDefaultValues();
         this.player.setInventoryObjects();
     }

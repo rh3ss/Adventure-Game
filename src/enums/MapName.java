@@ -2,5 +2,6 @@ package enums;
 
 public enum MapName {
     WORLD,
-    HUT
+    HUT,
+    FARM_BARN,
 }

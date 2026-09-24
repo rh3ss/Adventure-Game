@@ -41,7 +41,7 @@ public class Player extends Entity {
         this.worldX = (this.gamePanel.tileSize * 22);
         this.worldY = (this.gamePanel.tileSize * 24);
         // player status
-        this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 500;
+        this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 1234;
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
         this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;

@@ -22,6 +22,12 @@ public class InteractiveTile extends Entity {
 
     public InteractiveTile getFollowingTileAfterDestruction() { return null; }
 
+    public int getParticlePxSize() { return 6; }
+
+    public int getParticleVelocity() { return 1; }
+
+    public int getParticleMaxHearts() { return (this.gamePanel.FPS / 4); }
+
     public void update() {
         if (this.isInvincible) {
             this.invincibleCounterFrames++;

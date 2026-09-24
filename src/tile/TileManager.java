@@ -22,13 +22,14 @@ public class TileManager {
         this.mapTileNumbers = new int[gamePanel.maxNumberOfMaps][gamePanel.maxWorldColumns][gamePanel.maxWorldRows];
 
         this.getTileImages();
-        this.loadMap("/res/maps/world02.txt", 0);
-        this.loadMap("/res/maps/interior01.txt", 1);
+        this.loadMap("/res/maps/world.txt", 0);
+        this.loadMap("/res/maps/hut.txt", 1);
+        this.loadMap("/res/maps/farm_barn.txt", 2);
     }
 
     private void getTileImages() {
         // placeholders
-        setupTiles(0, "000", false);
+        setupTiles(00, "000", false);
         setupTiles(1, "000", false);
         setupTiles(2, "000", false);
         setupTiles(3, "000", false);
