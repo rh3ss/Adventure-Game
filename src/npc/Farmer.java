@@ -4,8 +4,6 @@ import enums.GameState;
 import main.GamePanel;
 import object.potion.PotionHeal;
 
-import java.util.ArrayList;
-
 public class Farmer extends NPC {
 
     public Farmer(GamePanel gamePanel, int worldColumn, int worldRow) {
@@ -13,6 +11,7 @@ public class Farmer extends NPC {
 
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
+        this.isFixPlaced = true;
 
         this.getImages();
         this.setDialogues();
@@ -35,13 +34,9 @@ public class Farmer extends NPC {
                            "food. Would you like to support me? ");
     }
 
-    private void setInventory() {
+    public void setInventory() {
+        super.setInventory();
         // inventory
-        this.inventory = new ArrayList<>();
-        this.inventoryColumnSize = 5;
-        this.inventoryRowSize = 4;
-        this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
-
         this.inventory.add(new PotionHeal(this.gamePanel, -1, -1));
     }
 

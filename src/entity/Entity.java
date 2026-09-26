@@ -42,6 +42,7 @@ public class Entity {
     public boolean showHealthBar = false;
     public boolean showReceivedDamage = false;
     public boolean collisionDetected = false;
+    public boolean onTrackingPath = false;
 
     // COUNTER
     public int animationCounterFrames = 0;
@@ -101,13 +102,9 @@ public class Entity {
     public void damageReaction() {}
 
     public Color getParticleColor() { return null; }
-
     public int getParticlePxSize() { return 0; }
-
     public int getParticleVelocity() { return 0; }
-
     public int getParticleMaxHearts() { return 0; }
-
     public void generateParticle(Entity producerEntity, Entity targetEntity) {
         Color color = producerEntity.getParticleColor();
         int pxSize = producerEntity.getParticlePxSize();
@@ -127,7 +124,6 @@ public class Entity {
     public void use(Entity entity) { }
 
     public void chooseObjectToDrop() { }
-
     public void dropObject(Entity objectToDrop) {
         objectToDrop.worldX = this.worldX;
         objectToDrop.worldY = this.worldY;
@@ -140,9 +136,7 @@ public class Entity {
         return (dx * dx) + (dy * dy) <= (this.activationRadius * this.activationRadius);
     }
 
-    public void update() {
-        this.setAction();
-
+    public void checkCollision() {
         // check collision
         this.collisionDetected = false;
         this.gamePanel.collisionDetector.detectEntityCollisionWithTile(this);
@@ -151,6 +145,10 @@ public class Entity {
         if (this.entityType == EntityType.PROJECTILE && entityIndex != Integer.MAX_VALUE) {
             this.collisionDetected = true;
         }
+    }
+    public void update() {
+        this.setAction();
+        this.checkCollision();
 
         boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
         if (this.entityType == EntityType.MONSTER && entityCollidedWithPlayer) {
@@ -182,6 +180,62 @@ public class Entity {
         }
         if (this.shootingAvailableCounter < (this.gamePanel.FPS / 2)) {
             this.shootingAvailableCounter++;
+        }
+    }
+    public void searchDestinationPath(int destinationColumn, int destinationRow) {
+        int startColumn = (this.worldX + this.solidArea.x) / this.gamePanel.tileSize;
+        int startRow = (this.worldY + this.solidArea.y) / this.gamePanel.tileSize;
+        this.gamePanel.pathFinder.setNodes(startColumn, startRow, destinationColumn, destinationRow);
+        if (this.gamePanel.pathFinder.searchDestination()) {
+            // next worldX, worldY
+            int nextWorldX = this.gamePanel.pathFinder.pathList.getFirst().column * this.gamePanel.tileSize;
+            int nextWorldY = this.gamePanel.pathFinder.pathList.getFirst().row * this.gamePanel.tileSize;
+            // entity's solidArea
+            int entityLeftX = this.worldX + this.solidArea.x;
+            int entityRightX = this.worldX + this.solidArea.x + this.solidArea.width;
+            int entityTopY = this.worldY + this.solidArea.y;
+            int entityDownY = this.worldY + this.solidArea.y + this.solidArea.height;
+            // check if entity is not stuck in new path
+            // check normal UP
+            if (entityTopY > nextWorldY && entityLeftX >= nextWorldX && entityRightX < nextWorldX + this.gamePanel.tileSize) {
+                this.direction = Direction.UP;
+            }
+            // check normal DOWN
+            else if (entityTopY < nextWorldY && entityLeftX >= nextWorldX && entityRightX < nextWorldX + this.gamePanel.tileSize) {
+                this.direction = Direction.DOWN;
+            }
+            // check normal LEFT OR RIGHT
+            else if (entityTopY >= nextWorldY && entityDownY < nextWorldY + this.gamePanel.tileSize) {
+                // go left or right
+                if (entityLeftX > nextWorldX) { this.direction = Direction.LEFT; }
+                else if (entityLeftX < nextWorldX) { this.direction = Direction.RIGHT; }
+            }
+            // check UP OR LEFT with collision may happen
+            else if (entityTopY > nextWorldY && entityLeftX > nextWorldX) {
+                this.checkCollision();
+                this.direction = (this.collisionDetected) ? Direction.LEFT : Direction.UP;
+            }
+            // check UP OR RIGHT with collision may happen
+            else if (entityTopY > nextWorldY && entityLeftX < nextWorldX) {
+                this.checkCollision();
+                this.direction = (this.collisionDetected) ? Direction.RIGHT : Direction.UP;
+            }
+            // check DOWN OR LEFT with collision may happen
+            else if (entityTopY < nextWorldY && entityLeftX > nextWorldX) {
+                this.checkCollision();
+                this.direction = (this.collisionDetected) ? Direction.LEFT : Direction.DOWN;
+            }
+            // check DOWN OR RIGHT with collision may happen
+            else if (entityTopY < nextWorldY && entityLeftX < nextWorldX) {
+                this.checkCollision();
+                this.direction = (this.collisionDetected) ? Direction.RIGHT : Direction.DOWN;
+            }
+            // entity reaches destination stop searching
+            int nextColumn = this.gamePanel.pathFinder.pathList.getFirst().column;
+            int nextRow = this.gamePanel.pathFinder.pathList.getFirst().row;
+            if (nextColumn == destinationColumn && nextRow == destinationRow) {
+                this.onTrackingPath = false;
+            }
         }
     }
 
@@ -238,7 +292,6 @@ public class Entity {
             this.changeAlphaCompositeValue(g2, 1f);
         }
     }
-
     private void drawHealthBar(Graphics2D g2, int screenX, int screenY) {
         double healthBarScale = (double) this.gamePanel.tileSize / this.maxHearts;
         double healthBarValue = healthBarScale * this.currentHearts;
@@ -257,7 +310,6 @@ public class Entity {
             this.healthBarCounterFrames = 0;
         }
     }
-
     private void drawReceivedDamage(Graphics2D g2, int screenX, int screenY) {
         String textReceivedDamage = String.valueOf(Math.round(this.receivedDamage * 100));;
 
@@ -274,11 +326,9 @@ public class Entity {
             this.receivedDamageCounterFrames = 0;
         }
     }
-
     private void drawSpeechBubble(Graphics2D g2, int screenX, int screenY) {
         g2.drawImage(this.speechBubble, screenX, screenY - this.gamePanel.tileSize, null);
     }
-
     private void drawDyingAnimation(Graphics2D g2) {
         this.dyingCounterFrames++;
         // blink animation for dying entity every 5 Frames change
@@ -288,11 +338,9 @@ public class Entity {
             this.isAlive = false;
         }
     }
-
     private void changeAlphaCompositeValue(Graphics2D g2, float alpha) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
-
     public BufferedImage setupEntityImage(String filePath, int width, int height) {
         UtilityTool utilityTool = new UtilityTool();
         BufferedImage entityImage = null;

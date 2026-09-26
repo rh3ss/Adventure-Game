@@ -10,6 +10,7 @@ import object.potion.PotionExperience;
 import object.potion.PotionHeal;
 
 import java.awt.Rectangle;
+import java.util.Random;
 
 public class MonsterSlimeRed extends Monster {
 
@@ -46,23 +47,30 @@ public class MonsterSlimeRed extends Monster {
     }
 
     public void setAction() {
-        this.actionCounterFrames++;
-        if (this.actionCounterFrames > 120) {
-            double number = this.random.nextDouble();
-
-            if (number <= 0.25) { this.direction = Direction.UP; }
-            else if (number <= 0.50) { this.direction = Direction.DOWN; }
-            else if (number <= 0.75) { this.direction = Direction.LEFT; }
-            else { this.direction = Direction.RIGHT; }
-            this.actionCounterFrames = 0;
+        if (this.onTrackingPath) {
+            int destinationColumn = (this.gamePanel.player.worldX + this.gamePanel.player.solidArea.x) / this.gamePanel.tileSize;
+            int destinationRow = (this.gamePanel.player.worldY + this.gamePanel.player.solidArea.y) / this.gamePanel.tileSize;
+            this.searchDestinationPath(destinationColumn, destinationRow);
+            // shooting
+            int randomNumber = this.random.nextInt(101);
+            if (randomNumber > 99 && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
+                this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
+                this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentProjectile);
+                this.shootingAvailableCounter = 0;
+            }
         }
+        else {
+            this.actionCounterFrames++;
+            if (this.actionCounterFrames > 120) {
+                Random r = new Random();
+                double number  = r.nextDouble();
 
-        // shooting
-        int randomNumber = this.random.nextInt(101);
-        if (randomNumber > 99 && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
-            this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
-            this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentProjectile);
-            this.shootingAvailableCounter = 0;
+                if (number <= 0.25) { this.direction = Direction.UP; }
+                else if (number <= 0.50) { this.direction = Direction.DOWN; }
+                else if (number <= 0.75) { this.direction = Direction.LEFT; }
+                else { this.direction = Direction.RIGHT; }
+                this.actionCounterFrames = 0;
+            }
         }
     }
 

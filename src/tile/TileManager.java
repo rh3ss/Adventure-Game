@@ -1,6 +1,6 @@
 package tile;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,11 +15,13 @@ public class TileManager {
     private final GamePanel gamePanel;
     public final HashMap<Integer, Tile> tiles;
     public final int[][][] mapTileNumbers;
+    public boolean drawTrackingPath;
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.tiles = new HashMap<>();
         this.mapTileNumbers = new int[gamePanel.maxNumberOfMaps][gamePanel.maxWorldColumns][gamePanel.maxWorldRows];
+        this.drawTrackingPath = true;
 
         this.getTileImages();
         this.loadMap("/res/maps/world.txt", 0);
@@ -122,6 +124,17 @@ public class TileManager {
                         worldY - this.gamePanel.tileSize < this.gamePanel.player.worldY + this.gamePanel.player.screenY) {
                     g2.drawImage(this.tiles.get(tileNumber).image, screenX, screenY, this.gamePanel.tileSize, this.gamePanel.tileSize, null);
                 }
+            }
+        }
+        // draw the tracking path
+        if (this.drawTrackingPath) {
+            g2.setColor(new Color(255, 255, 255, 75));
+            for (int idx = 0; idx < this.gamePanel.pathFinder.pathList.size(); ++idx) {
+                int worldX = this.gamePanel.pathFinder.pathList.get(idx).column * this.gamePanel.tileSize;
+                int worldY = this.gamePanel.pathFinder.pathList.get(idx).row * this.gamePanel.tileSize;
+                int screenX = worldX - this.gamePanel.player.worldX + this.gamePanel.player.screenX;
+                int screenY = worldY - this.gamePanel.player.worldY + this.gamePanel.player.screenY;
+                g2.fillRect(screenX, screenY, this.gamePanel.tileSize, this.gamePanel.tileSize);
             }
         }
     }

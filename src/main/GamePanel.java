@@ -1,6 +1,7 @@
 package main;
 
 
+import algorithm.PathFinder;
 import entity.Entity;
 import entity.Player;
 
@@ -48,9 +49,11 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter assetSetter = new AssetSetter(this);
     public GUI gui = new GUI(this);
     public EventHandler eventHandler = new EventHandler(this);
+    public PathFinder pathFinder = new PathFinder(this);
     public Config config = new Config(this);
     public Player player = new Player(this, this.keyboard);
 
+    // GAME
     public GameState gameState;
     public Thread gameThread;
     public final int FPS = 60;

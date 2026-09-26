@@ -15,6 +15,7 @@ public class Trader extends NPC {
 
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
+        this.isFixPlaced = true;
 
         this.getImages();
         this.setDialogues();
@@ -37,13 +38,9 @@ public class Trader extends NPC {
                            "valuable items. Would you like to trade?");
     }
 
-    private void setInventory() {
+    public void setInventory() {
+        super.setInventory();
         // inventory
-        this.inventory = new ArrayList<>();
-        this.inventoryColumnSize = 5;
-        this.inventoryRowSize = 4;
-        this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
-
         this.inventory.add(new PotionExperience(this.gamePanel, -1, -1));
         this.inventory.add(new PotionStrength(this.gamePanel, -1, -1));
         this.inventory.add(new PotionHeal(this.gamePanel, -1, -1));

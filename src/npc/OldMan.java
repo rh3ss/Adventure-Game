@@ -1,9 +1,7 @@
 package npc;
 
 
-import entity.Entity;
 import enums.Direction;
-import enums.EntityType;
 import main.GamePanel;
 
 import java.util.Random;
@@ -40,16 +38,31 @@ public class OldMan extends NPC {
     }
 
     public void setAction() {
-        this.actionCounterFrames++;
-        if (this.actionCounterFrames > 120) {
-            Random r = new Random();
-            double number  = r.nextDouble();
-
-            if (number <= 0.25) { this.direction = Direction.UP; }
-            else if (number <= 0.50) { this.direction = Direction.DOWN; }
-            else if (number <= 0.75) { this.direction = Direction.LEFT; }
-            else { this.direction = Direction.RIGHT; }
-            this.actionCounterFrames = 0;
+        if (this.onTrackingPath) {
+//            int destinationColumn = (this.gamePanel.player.worldX + this.gamePanel.player.solidArea.x) / this.gamePanel.tileSize;
+//            int destinationRow = (this.gamePanel.player.worldY + this.gamePanel.player.solidArea.y) / this.gamePanel.tileSize;
+            int destinationColumn = 19;
+            int destinationRow = 11;
+            this.searchDestinationPath(destinationColumn, destinationRow);
         }
+        else {
+            this.actionCounterFrames++;
+            if (this.actionCounterFrames > 120) {
+                Random r = new Random();
+                double number  = r.nextDouble();
+
+                if (number <= 0.25) { this.direction = Direction.UP; }
+                else if (number <= 0.50) { this.direction = Direction.DOWN; }
+                else if (number <= 0.75) { this.direction = Direction.LEFT; }
+                else { this.direction = Direction.RIGHT; }
+                this.actionCounterFrames = 0;
+            }
+        }
+    }
+
+    public void speak() {
+        super.speak();
+
+        this.onTrackingPath = true;
     }
 }

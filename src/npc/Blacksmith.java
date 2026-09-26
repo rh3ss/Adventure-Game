@@ -9,7 +9,6 @@ import object.shield.ShieldWood;
 import object.weapon.SwordGold;
 import object.weapon.SwordIron;
 
-import java.util.ArrayList;
 
 public class Blacksmith extends NPC {
 
@@ -18,6 +17,7 @@ public class Blacksmith extends NPC {
 
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
+        this.isFixPlaced = true;
 
         this.getImages();
         this.setDialogues();
@@ -41,13 +41,9 @@ public class Blacksmith extends NPC {
                            "Are you interested?");
     }
 
-    private void setInventory() {
+    public void setInventory() {
+        super.setInventory();
         // inventory
-        this.inventory = new ArrayList<>();
-        this.inventoryColumnSize = 5;
-        this.inventoryRowSize = 4;
-        this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
-
         this.inventory.add(new SwordIron(this.gamePanel, -1, -1));
         this.inventory.add(new SwordGold(this.gamePanel, -1, -1));
         this.inventory.add(new ShieldWood(this.gamePanel, -1, -1));
