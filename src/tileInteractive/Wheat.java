@@ -4,9 +4,9 @@ import enums.InteractiveTileType;
 import main.GamePanel;
 
 
-public class InteractiveTileWheat extends InteractiveTile {
+public class Wheat extends InteractiveTile {
 
-    public InteractiveTileWheat(GamePanel gamePanel, int worldColumn, int worldRow) {
+    public Wheat(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
         this.interactiveTileType = InteractiveTileType.WHEAT;

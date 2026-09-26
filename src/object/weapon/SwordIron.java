@@ -15,6 +15,7 @@ public class SwordIron extends Weapon {
         this.down1 = this.setupEntityImage("/res/objects/sword_iron.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.attackArea = new Rectangle(0, 0, 36, 36);
         this.objectAttackDamageMultiplier = 0.15;
+        this.knockBackPower = 5;
         this.objectCoinValue = 8;
         this.objectName = "Iron Sword";
         this.objectDescription = "[" + this.objectName + "]\nAn good robust iron sword.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";

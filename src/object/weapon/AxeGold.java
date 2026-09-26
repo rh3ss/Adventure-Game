@@ -15,6 +15,7 @@ public class AxeGold extends Weapon {
         this.down1 = this.setupEntityImage("/res/objects/axe_gold.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.attackArea = new Rectangle(0, 0, 30, 30);
         this.objectAttackDamageMultiplier = 0.4;
+        this.knockBackPower = 10;
         this.objectCoinValue = 30;
         this.objectName = "Golden Axe";
         this.objectDescription = "[" + this.objectName + "]\nAn golden lumberjack axe.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";

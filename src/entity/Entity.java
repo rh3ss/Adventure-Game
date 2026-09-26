@@ -43,6 +43,7 @@ public class Entity {
     public boolean showReceivedDamage = false;
     public boolean collisionDetected = false;
     public boolean onTrackingPath = false;
+    public boolean receivedKnockBack = false;
 
     // COUNTER
     public int animationCounterFrames = 0;
@@ -51,7 +52,8 @@ public class Entity {
     public int dyingCounterFrames = 0;
     public int healthBarCounterFrames = 0;
     public int receivedDamageCounterFrames = 0;
-    public int shootingAvailableCounter = 0;
+    public int shootingAvailableCounterFrames = 0;
+    public int receivedKnockBackCounterFrames = 0;
 
     // TYPES
     public EntityType entityType;
@@ -62,8 +64,8 @@ public class Entity {
 
     // ATTRIBUTES
     public boolean isSolid = false;
-    public int velocity, coins;
-    public int projectileUsageCostValue;
+    public int defaultVelocity, velocity, coins;
+    public int projectileUsageCostValue, knockBackPower;
     public int maxMana, currentMana;
     public int currentLevel, currentExperience, nextLevelExperience;
     public double strength, dexterity;
@@ -98,7 +100,6 @@ public class Entity {
     }
 
     public void setAction() {}
-
     public void damageReaction() {}
 
     public Color getParticleColor() { return null; }
@@ -120,8 +121,6 @@ public class Entity {
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(p3);
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(p4);
     }
-
-    public void use(Entity entity) { }
 
     public void chooseObjectToDrop() { }
     public void dropObject(Entity objectToDrop) {
@@ -147,21 +146,46 @@ public class Entity {
         }
     }
     public void update() {
-        this.setAction();
-        this.checkCollision();
+        if (this.receivedKnockBack) {
+            // entity received knock back till solid instance
+            this.checkCollision();
+            if (this.collisionDetected) {
+                this.receivedKnockBackCounterFrames = 0;
+                this.receivedKnockBack = false;
+                this.velocity = this.defaultVelocity;
+            }
+            // entity is free in knock back and can be pushed
+            else {
+                switch (this.gamePanel.player.direction) {
+                    case Direction.UP -> { this.worldY -= this.velocity; }
+                    case Direction.DOWN -> { this.worldY += this.velocity; }
+                    case Direction.LEFT -> { this.worldX -= this.velocity; }
+                    case Direction.RIGHT -> { this.worldX += this.velocity; }
+                }
+            }
+            this.receivedKnockBackCounterFrames++;
+            if (this.receivedKnockBackCounterFrames > (this.gamePanel.FPS / 6)) {
+                this.receivedKnockBackCounterFrames = 0;
+                this.receivedKnockBack = false;
+                this.velocity = defaultVelocity;
+            }
+        }
+        else {
+            this.setAction();
+            this.checkCollision();
+            if (!this.collisionDetected) {
+                switch (this.direction) {
+                    case Direction.UP -> { this.worldY -= this.velocity; }
+                    case Direction.DOWN -> { this.worldY += this.velocity; }
+                    case Direction.LEFT -> { this.worldX -= this.velocity; }
+                    case Direction.RIGHT -> { this.worldX += this.velocity; }
+                }
+            }
+        }
 
         boolean entityCollidedWithPlayer = this.gamePanel.collisionDetector.detectEntityCollisionWithPlayer(this);
         if (this.entityType == EntityType.MONSTER && entityCollidedWithPlayer) {
             this.entityDamagePlayer(this.attackDamage);
-        }
-
-        if (!this.collisionDetected) {
-            switch (this.direction) {
-                case Direction.UP -> { this.worldY -= this.velocity; }
-                case Direction.DOWN -> { this.worldY += this.velocity; }
-                case Direction.LEFT -> { this.worldX -= this.velocity; }
-                case Direction.RIGHT -> { this.worldX += this.velocity; }
-            }
         }
 
         this.animationCounterFrames++;
@@ -178,8 +202,8 @@ public class Entity {
                 this.invincibleCounterFrames = 0;
             }
         }
-        if (this.shootingAvailableCounter < (this.gamePanel.FPS / 2)) {
-            this.shootingAvailableCounter++;
+        if (this.shootingAvailableCounterFrames < (this.gamePanel.FPS / 2)) {
+            this.shootingAvailableCounterFrames++;
         }
     }
     public void searchDestinationPath(int destinationColumn, int destinationRow) {

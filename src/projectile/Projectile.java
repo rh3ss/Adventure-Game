@@ -35,7 +35,7 @@ public class Projectile extends Entity {
         if (this.userOfProjectile == this.gamePanel.player) {
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
             if (entityIndex != Integer.MAX_VALUE && (this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex) != this.gamePanel.player)) {
-                this.gamePanel.player.playerAttacksMonster(entityIndex, this.attackDamage);
+                this.gamePanel.player.playerAttacksMonster(entityIndex, this.attackDamage, this.knockBackPower);
                 this.generateParticle(this.userOfProjectile.currentProjectile, this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex));
                 this.isAlive = false;
             }

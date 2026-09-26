@@ -5,9 +5,9 @@ import main.GamePanel;
 
 import java.awt.Rectangle;
 
-public class InteractiveTileTrunk extends InteractiveTile{
+public class Trunk extends InteractiveTile{
 
-    public InteractiveTileTrunk(GamePanel gamePanel, int worldColumn, int worldRow) {
+    public Trunk(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
         this.interactiveTileType = InteractiveTileType.TRUNK;

@@ -7,9 +7,9 @@ import main.GamePanel;
 
 import java.awt.Color;
 
-public class InteractiveTileDryTree extends InteractiveTile {
+public class DryTree extends InteractiveTile {
 
-    public InteractiveTileDryTree(GamePanel gamePanel, int worldColumn, int worldRow) {
+    public DryTree(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
         this.interactiveTileType = InteractiveTileType.DRY_TREE;
@@ -26,7 +26,7 @@ public class InteractiveTileDryTree extends InteractiveTile {
     }
 
     public InteractiveTile getFollowingTileAfterDestruction() {
-        return new InteractiveTileTrunk(this.gamePanel, this.worldX / this.gamePanel.tileSize, this.worldY / this.gamePanel.tileSize);
+        return new Trunk(this.gamePanel, this.worldX / this.gamePanel.tileSize, this.worldY / this.gamePanel.tileSize);
     }
 
     public Color getParticleColor() { return new Color(0x4A2511); }

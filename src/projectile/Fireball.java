@@ -17,6 +17,7 @@ public class Fireball extends Projectile {
         this.velocity = 7;
         this.attackDamage = 2;
         this.projectileUsageCostValue = 1;
+        this.knockBackPower = 0;
         this.getImages();
     }
 

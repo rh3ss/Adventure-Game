@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import enums.*;
 import main.GamePanel;
 import main.Keyboard;
+import monster.Monster;
 import npc.NPC;
+import object.GameObject;
 import object.armor.Armor;
 import object.shield.Shield;
 import object.weapon.Weapon;
@@ -16,6 +18,7 @@ import object.armor.ArmorIron;
 import object.shield.ShieldWood;
 import object.weapon.SwordIron;
 import object.environment.Wood;
+import projectile.Projectile;
 import tileInteractive.InteractiveTile;
 
 public class Player extends Entity {
@@ -41,7 +44,8 @@ public class Player extends Entity {
         this.worldX = (this.gamePanel.tileSize * 22);
         this.worldY = (this.gamePanel.tileSize * 24);
         // player status
-        this.velocity = 4; this.strength = 1; this.dexterity = 1; this.coins = 1234;
+        this.defaultVelocity = 4; this.velocity = this.defaultVelocity;
+        this.strength = 1; this.dexterity = 1; this.coins = 100;
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
         this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;
@@ -52,7 +56,6 @@ public class Player extends Entity {
         this.attackDamage = this.getAttackDamage();
         this.defenseArmor = this.getDefenseArmor();
     }
-
     public void setDefaultValuesAfterRespawn() {
         this.worldX = (this.gamePanel.tileSize * 22);
         this.worldY = (this.gamePanel.tileSize * 24);
@@ -61,6 +64,17 @@ public class Player extends Entity {
         this.isInvincible = false;
     }
 
+    private void setInventory() {
+        // inventory
+        this.inventory = new ArrayList<>();
+        this.inventoryColumnSize = 5;
+        this.inventoryRowSize = 4;
+        this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
+
+        this.inventory.add(this.currentWeapon);
+        this.inventory.add(this.currentShield);
+        this.inventory.add(this.currentArmor);
+    }
     public void setInventoryObjects() {
         this.inventory.clear();
         this.inventory.add(this.currentWeapon);
@@ -72,11 +86,9 @@ public class Player extends Entity {
         this.attackArea = this.currentWeapon.attackArea;
         return this.strength + (this.strength * this.currentWeapon.objectAttackDamageMultiplier);
     }
-
     private double getDefenseArmor() {
         return this.dexterity + (this.dexterity * this.currentShield.objectDamageReductionMultiplier);
     }
-
     private void getMovingImages() {
         // MOVEMENT
         this.up1 = this.setupEntityImage("/res/player/moving/player_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
@@ -88,7 +100,6 @@ public class Player extends Entity {
         this.right1 = this.setupEntityImage("/res/player/moving/player_right_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.right2 = this.setupEntityImage("/res/player/moving/player_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
-
     private void getAttackImages() {
         if (this.currentWeapon.objectType == ObjectType.SWORD) {
             // SWORD
@@ -114,18 +125,6 @@ public class Player extends Entity {
         }
     }
 
-    private void setInventory() {
-        // inventory
-        this.inventory = new ArrayList<>();
-        this.inventoryColumnSize = 5;
-        this.inventoryRowSize = 4;
-        this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
-
-        this.inventory.add(this.currentWeapon);
-        this.inventory.add(this.currentShield);
-        this.inventory.add(this.currentArmor);
-    }
-
     public void update() {
         // ATTACKING
         if (this.isAttacking) {
@@ -138,7 +137,7 @@ public class Player extends Entity {
         // SHOOTING PROJECTILES
         else if (this.keyboard.isShootingPressed
                 && !this.currentProjectile.isAlive
-                && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)
+                && this.shootingAvailableCounterFrames == (this.gamePanel.FPS / 2)
                 && this.currentProjectile.userCanUseManaByUsageCost(this)) {
             this.playerIsShooting();
         }
@@ -150,8 +149,8 @@ public class Player extends Entity {
                 this.invincibleCounterFrames = 0;
             }
         }
-        if (this.shootingAvailableCounter < (this.gamePanel.FPS / 2)) {
-            this.shootingAvailableCounter++;
+        if (this.shootingAvailableCounterFrames < (this.gamePanel.FPS / 2)) {
+            this.shootingAvailableCounterFrames++;
         }
         // SET MAX HEARTS
         if (this.currentHearts > this.maxHearts) {
@@ -189,8 +188,9 @@ public class Player extends Entity {
             this.solidArea.height = this.attackArea.height;
             
             int entityIndex = this.gamePanel.collisionDetector.detectEntityCollisionWithEntities(this);
-            this.playerAttacksMonster(entityIndex, this.attackDamage);
-            this.playerAttacksInteractiveTile(entityIndex, this.attackDamage);
+            this.playerAttacksMonster(entityIndex, this.attackDamage, this.currentWeapon.knockBackPower);
+            this.playerAttacksInteractiveTile(entityIndex);
+            this.playerAttacksProjectile(entityIndex);
 
             this.worldX = currentWorldX;
             this.worldY = currentWorldY;
@@ -203,7 +203,6 @@ public class Player extends Entity {
             this.isAttacking = false;
         }
     }
-
     private void playerIsMoving() {
         if (this.keyboard.isUpPressed) { this.direction = Direction.UP; }
         else if (this.keyboard.isDownPressed) { this.direction = Direction.DOWN; }
@@ -228,6 +227,7 @@ public class Player extends Entity {
                 case Direction.RIGHT -> { this.worldX += this.velocity; }
             }
         }
+        this.collisionDetected = false;
         this.gamePanel.keyboard.isEnterPressed = false;
 
         this.animationCounterFrames++;
@@ -237,12 +237,11 @@ public class Player extends Entity {
             this.animationCounterFrames = 0;
         }
     }
-
     private void playerIsShooting() {
         this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
         this.currentProjectile.subtractManaByUsageCost(this);
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentProjectile);
-        this.shootingAvailableCounter = 0;
+        this.shootingAvailableCounterFrames = 0;
     }
 
     private void interactWithCollidedEntity(int entityIndex) {
@@ -251,8 +250,8 @@ public class Player extends Entity {
             if (entity.entityType != null) {
                 switch (entity.entityType) {
                     case EntityType.NPC -> { this.playerCollisionWithNPC( (NPC) entity); }
-                    case EntityType.MONSTER -> { this.playerCollisionWithMonster(entity); }
-                    case EntityType.OBJECT -> { this.playerCollisionWithObject(entity); }
+                    case EntityType.MONSTER -> { this.playerCollisionWithMonster( (Monster) entity); }
+                    case EntityType.OBJECT -> { this.playerCollisionWithObject( (GameObject) entity); }
                 }
             }
         }
@@ -262,31 +261,24 @@ public class Player extends Entity {
             }
         }
     }
-
     private void playerCollisionWithNPC(NPC npc) {
         if (this.gamePanel.keyboard.isEnterPressed) {
             this.gamePanel.gameState = GameState.DIALOGUE;
             npc.speak();
         }
     }
-
-    private void playerCollisionWithMonster(Entity monster) {
+    private void playerCollisionWithMonster(Monster monster) {
         if (!this.isInvincible && this.currentHearts > 0 && !monster.isDying) {
             double monsterDamage = monster.attackDamage - this.defenseArmor;
             if (monsterDamage < 0) {
                 monsterDamage = 0;
             }
-            if (this.currentHearts - monsterDamage < 0) {
-                this.currentHearts = 0;
-            }
-            else {
-                this.currentHearts -= monsterDamage;
-            }
+            if (this.currentHearts - monsterDamage < 0) { this.currentHearts = 0; }
+            else { this.currentHearts -= monsterDamage; }
             this.isInvincible = true;
         }
     }
-
-    private void playerCollisionWithObject(Entity object) {
+    private void playerCollisionWithObject(GameObject object) {
         // PICKUP ITEMS
         if (object.objectCategory == ObjectCategory.PICKUP) {
             object.use(this);
@@ -306,19 +298,27 @@ public class Player extends Entity {
         }
     }
 
-    public void playerAttacksMonster(int entityIndex, double attackDamage) {
+    private void playerKnockBackEntity(Entity entity, int knockBackPower) {
+        entity.direction = this.direction;
+        entity.velocity += knockBackPower;
+        entity.receivedKnockBack = true;
+    }
+    public void playerAttacksMonster(int entityIndex, double attackDamage, int knockBackPower) {
         if (entityIndex != Integer.MAX_VALUE) {
-            Entity monster = this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex);
-            if (monster.entityType == EntityType.MONSTER && !monster.isInvincible) {
+            if (!(this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex) instanceof Monster monster)) {
+                return;
+            }
+            if (!monster.isInvincible) {
+                if (knockBackPower > 0) {
+                    this.playerKnockBackEntity(monster, knockBackPower);
+                }
                 double dealtDamage = attackDamage - monster.defenseArmor;
                 if (dealtDamage < 0) {
                     dealtDamage = 0;
                 }
 
                 monster.currentHearts -= dealtDamage;
-                // monster.receivedDamage = dealtDamage;
                 monster.isInvincible = true;
-                // monster.showReceivedDamage = true;
                 monster.damageReaction();
                 if (monster.currentHearts < 1) {
                     this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(entityIndex).isDying = true;
@@ -329,14 +329,12 @@ public class Player extends Entity {
             }
         }
     }
-
-    private void playerAttacksInteractiveTile(int tileIndex, double attackDamage) {
+    private void playerAttacksInteractiveTile(int tileIndex) {
         if (tileIndex != Integer.MAX_VALUE) {
-            if (this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(tileIndex).entityType != EntityType.INTERACTIVE_TILE) {
+            if (!(this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(tileIndex) instanceof InteractiveTile tile)) {
                 return;
             }
-            InteractiveTile tile = (InteractiveTile) this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(tileIndex);
-            if (tile.entityType == EntityType.INTERACTIVE_TILE && !tile.isInvincible && tile.isDestructible && tile.isCorrectObjectEquipped(this)) {
+            if (!tile.isInvincible && tile.isDestructible && tile.isCorrectObjectEquipped(this)) {
                 tile.maxHearts -= 1;
                 tile.isInvincible = true;
                 this.generateParticle(tile, tile);
@@ -354,6 +352,15 @@ public class Player extends Entity {
             }
         }
     }
+    private void playerAttacksProjectile(int projectileIndex) {
+        if (projectileIndex != Integer.MAX_VALUE) {
+            if (!(this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.get(projectileIndex) instanceof Projectile projectile)) {
+                return;
+            }
+            projectile.isAlive = false;
+            this.generateParticle(projectile, projectile);
+        }
+    }
 
     public void checkPlayerLevelUp() {
         if (this.currentExperience >= this.nextLevelExperience) {
@@ -369,32 +376,26 @@ public class Player extends Entity {
             this.gamePanel.gui.currentDialogueMessage = "You are level " + this.currentLevel + " now!";
         }
     }
-
     public void equipCurrentSelectedInventoryItem() {
-        int itemIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(
-                this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected
-        );
-        if (itemIndex < this.inventory.size()) {
-            Entity selectedItem = this.inventory.get(itemIndex);
-            if (selectedItem.entityType == EntityType.OBJECT) {
-                switch (selectedItem.objectCategory) {
-                    case ObjectCategory.WEAPON:
-                        this.currentWeapon = (Weapon) selectedItem;
-                        this.attackDamage = this.getAttackDamage();
-                        this.getAttackImages();
-                        break;
-                    case ObjectCategory.SHIELD:
-                        this.currentShield = (Shield) selectedItem;
-                        this.defenseArmor = this.getDefenseArmor();
-                        break;
-                    case ObjectCategory.ARMOR:
-                        this.currentArmor = (Armor) selectedItem;
-                        break;
-                    case ObjectCategory.CONSUMABLE:
-                        selectedItem.use(this);
-                        this.inventory.remove(itemIndex);
-                        break;
-                }
+        int itemIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected);
+        if (itemIndex < this.inventory.size() && this.inventory.get(itemIndex) instanceof GameObject selectedItem) {
+            switch (selectedItem.objectCategory) {
+                case ObjectCategory.WEAPON:
+                    this.currentWeapon = (Weapon) selectedItem;
+                    this.attackDamage = this.getAttackDamage();
+                    this.getAttackImages();
+                    break;
+                case ObjectCategory.SHIELD:
+                    this.currentShield = (Shield) selectedItem;
+                    this.defenseArmor = this.getDefenseArmor();
+                    break;
+                case ObjectCategory.ARMOR:
+                    this.currentArmor = (Armor) selectedItem;
+                    break;
+                case ObjectCategory.CONSUMABLE:
+                    selectedItem.use(this);
+                    this.inventory.remove(itemIndex);
+                    break;
             }
         }
     }
@@ -412,7 +413,6 @@ public class Player extends Entity {
         g2.drawImage(playerImage, tempScreenX, tempScreenY, null);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
-
     private BufferedImage getPlayersAnimationFrameImage() {
         switch (this.direction) {
             case Direction.UP -> {

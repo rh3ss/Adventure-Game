@@ -35,7 +35,7 @@ public class AssetSetter {
         this.setNPCs();
         this.setMonsters();
         this.setInteractiveTiles();
-        this.setTileFix();
+        this.setFixTiles();
     }
 
     public void setPlayer() {
@@ -48,11 +48,12 @@ public class AssetSetter {
                 new KeySilver(this.gamePanel, 27, 25),
                 new KeyGold(this.gamePanel, 28, 25),
 
-                new PickUpCoin(this.gamePanel, 22, 23),
-                new PickUpCoin(this.gamePanel, 23, 23),
+                new Coin(this.gamePanel, 25, 23),
+                new CoinPile(this.gamePanel, 26, 23),
+                new CoinBag(this.gamePanel, 27, 23),
 
-                new PickUpHeart(this.gamePanel, 25, 23),
-                new PickUpManaCrystal(this.gamePanel, 26, 23),
+                new Heart(this.gamePanel, 25, 25),
+                new ManaCrystal(this.gamePanel, 26, 25),
 
                 new Door(this.gamePanel, 22, 42),
 
@@ -78,7 +79,7 @@ public class AssetSetter {
 
     public void setNPCs() {
         ArrayList<Entity> npcs = new ArrayList<>(List.of(
-                new OldMan(this.gamePanel, 21, 21),
+                new OldMan(this.gamePanel, 18, 23),
                 new Trader(this.gamePanel, 21, 18),
                 new Blacksmith(this.gamePanel, 23, 18),
                 new Farmer(this.gamePanel, 13, 14)
@@ -105,53 +106,53 @@ public class AssetSetter {
 
     public void setInteractiveTiles() {
         ArrayList<Entity> interactiveTiles = new ArrayList<>(List.of(
-                new InteractiveTileDryTree(this.gamePanel, 27, 15),
-                new InteractiveTileDryTree(this.gamePanel, 28, 15),
-                new InteractiveTileDryTree(this.gamePanel, 29, 15),
-                new InteractiveTileDryTree(this.gamePanel, 30, 15),
-                new InteractiveTileDryTree(this.gamePanel, 31, 15),
-                new InteractiveTileDryTree(this.gamePanel, 32, 15),
+                new DryTree(this.gamePanel, 27, 15),
+                new DryTree(this.gamePanel, 28, 15),
+                new DryTree(this.gamePanel, 29, 15),
+                new DryTree(this.gamePanel, 30, 15),
+                new DryTree(this.gamePanel, 31, 15),
+                new DryTree(this.gamePanel, 32, 15),
 
-                new InteractiveTileBush(this.gamePanel, "bush_2", 19, 23),
-                new InteractiveTileBush(this.gamePanel, "bush_1", 19, 24),
-                new InteractiveTileBush(this.gamePanel, "bush_2", 19, 25),
+                new Bush(this.gamePanel, "bush_2", 19, 23),
+                new Bush(this.gamePanel, "bush_1", 19, 24),
+                new Bush(this.gamePanel, "bush_2", 19, 25),
 
-                new InteractiveTileWheat(this.gamePanel, 14, 12),
-                new InteractiveTileWheat(this.gamePanel, 15, 12),
-                new InteractiveTileWheat(this.gamePanel, 16, 12),
-                new InteractiveTileWheat(this.gamePanel, 17, 12),
-                new InteractiveTileWheat(this.gamePanel, 18, 12),
+                new Wheat(this.gamePanel, 14, 12),
+                new Wheat(this.gamePanel, 15, 12),
+                new Wheat(this.gamePanel, 16, 12),
+                new Wheat(this.gamePanel, 17, 12),
+                new Wheat(this.gamePanel, 18, 12),
 
-                new InteractiveTileWheat(this.gamePanel, 14, 13),
-                new InteractiveTileWheat(this.gamePanel, 15, 13),
-                new InteractiveTileWheat(this.gamePanel, 16, 13),
-                new InteractiveTileWheat(this.gamePanel, 17, 13),
-                new InteractiveTileWheat(this.gamePanel, 18, 13),
+                new Wheat(this.gamePanel, 14, 13),
+                new Wheat(this.gamePanel, 15, 13),
+                new Wheat(this.gamePanel, 16, 13),
+                new Wheat(this.gamePanel, 17, 13),
+                new Wheat(this.gamePanel, 18, 13),
 
-                new InteractiveTileWheat(this.gamePanel, 14, 14),
-                new InteractiveTileWheat(this.gamePanel, 15, 14),
-                new InteractiveTileWheat(this.gamePanel, 16, 14),
-                new InteractiveTileWheat(this.gamePanel, 17, 14),
-                new InteractiveTileWheat(this.gamePanel, 18, 14),
+                new Wheat(this.gamePanel, 14, 14),
+                new Wheat(this.gamePanel, 15, 14),
+                new Wheat(this.gamePanel, 16, 14),
+                new Wheat(this.gamePanel, 17, 14),
+                new Wheat(this.gamePanel, 18, 14),
 
-                new InteractiveTileWheat(this.gamePanel, 14, 15),
-                new InteractiveTileWheat(this.gamePanel, 15, 15),
-                new InteractiveTileWheat(this.gamePanel, 16, 15),
-                new InteractiveTileWheat(this.gamePanel, 17, 15),
-                new InteractiveTileWheat(this.gamePanel, 18, 15),
-
-                new InteractiveTileBigTree(this.gamePanel, 17, 21),
-                new InteractiveTileBigTree(this.gamePanel, 18, 21),
-                new InteractiveTileBigTree(this.gamePanel, 19, 21),
-                new InteractiveTileBigTree(this.gamePanel, 20, 21)
+                new Wheat(this.gamePanel, 14, 15),
+                new Wheat(this.gamePanel, 15, 15),
+                new Wheat(this.gamePanel, 16, 15),
+                new Wheat(this.gamePanel, 17, 15),
+                new Wheat(this.gamePanel, 18, 15)
         ));
 
         this.gamePanel.maps.get(0).entities.addAll(interactiveTiles);
     }
 
-    public void setTileFix() {
+    public void setFixTiles() {
         ArrayList<Entity> fixTiles = new ArrayList<>(List.of(
-                new FarmBarn(this.gamePanel, 8, 11)
+                new FarmBarn(this.gamePanel, 8, 11),
+
+                new BigTree(this.gamePanel, 17, 21),
+                new BigTree(this.gamePanel, 18, 21),
+                new BigTree(this.gamePanel, 19, 21),
+                new BigTree(this.gamePanel, 20, 21)
         ));
         this.gamePanel.maps.get(0).entities.addAll(fixTiles);
     }

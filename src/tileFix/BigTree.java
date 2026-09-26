@@ -1,18 +1,16 @@
-package tileInteractive;
+package tileFix;
 
-import enums.InteractiveTileType;
 import main.GamePanel;
 
 import java.awt.Rectangle;
 
-public class InteractiveTileBigTree extends InteractiveTile {
+public class BigTree extends TileFix {
 
-    public InteractiveTileBigTree(GamePanel gamePanel, int worldColumn, int worldRow) {
+    public BigTree(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
-        this.interactiveTileType = InteractiveTileType.BIG_TREE;
-        this.isSolid = true;
         this.down1 = this.setupEntityImage("/res/tilesInteractive/big_tree.png", gamePanel.tileSize, gamePanel.tileSize * 2);
+        this.isSolid = true;
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = (worldRow * gamePanel.tileSize) - gamePanel.tileSize;
 

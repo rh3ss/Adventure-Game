@@ -3,8 +3,10 @@ package algorithm;
 import entity.Entity;
 import main.GamePanel;
 import npc.NPC;
+import tileFix.TileFix;
 import tileInteractive.InteractiveTile;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class PathFinder {
@@ -67,20 +69,41 @@ public class PathFinder {
                 }
                 // check interactive tiles
                 for (Entity entity : this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities) {
-                    if (entity instanceof InteractiveTile && ((InteractiveTile) entity).isDestructible) {
-                        int interactiveColumn = entity.worldX / this.gamePanel.tileSize;
-                        int interactiveRow = entity.worldY / this.gamePanel.tileSize;
+                    if (entity instanceof InteractiveTile interactiveTile && interactiveTile.isDestructible) {
+                        int interactiveColumn = interactiveTile.worldX / this.gamePanel.tileSize;
+                        int interactiveRow = interactiveTile.worldY / this.gamePanel.tileSize;
                         this.nodes[interactiveColumn][interactiveRow].isSolid = true;
+                    }
+                }
+                // check fix tiles
+                for (Entity entity : this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities) {
+                    if (entity instanceof TileFix tileFix && tileFix.isSolid) {
+                        // tile fix might bigger so set all affected tiles solid
+                        Rectangle solidArea = tileFix.solidArea;
+                        int leftCol = (tileFix.worldX + solidArea.x) / this.gamePanel.tileSize;
+                        int rightCol = (tileFix.worldX + solidArea.x + solidArea.width) / this.gamePanel.tileSize;
+                        int topRow = (tileFix.worldY + solidArea.y) / this.gamePanel.tileSize;
+                        int bottomRow = (tileFix.worldY + solidArea.y + solidArea.height) / this.gamePanel.tileSize;
+                        for (int idxColumn = leftCol; idxColumn <= rightCol; ++idxColumn) {
+                            for (int idxRow = topRow; idxRow <= bottomRow; ++idxRow) {
+                                this.nodes[idxColumn][idxRow].isSolid = true;
+                            }
+                        }
                     }
                 }
                 // check fix placed NPC
                 for (Entity entity : this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities) {
-                    if (entity instanceof NPC && ((NPC) entity).isFixPlaced) {
-                        int interactiveColumn = entity.worldX / this.gamePanel.tileSize;
-                        int interactiveRow = entity.worldY / this.gamePanel.tileSize;
+                    if (entity instanceof NPC npc && npc.isFixPlaced) {
+                        int interactiveColumn = npc.worldX / this.gamePanel.tileSize;
+                        int interactiveRow = npc.worldY / this.gamePanel.tileSize;
                         this.nodes[interactiveColumn][interactiveRow].isSolid = true;
                     }
                 }
+                // set players current position also solid
+                int playerColumn = this.gamePanel.player.worldX / this.gamePanel.tileSize;
+                int playerRow= this.gamePanel.player.worldY / this.gamePanel.tileSize;
+                this.nodes[playerColumn][playerRow].isSolid = true;
+
                 // set costs
                 this.getNodeCost(this.nodes[col][row]);
             }

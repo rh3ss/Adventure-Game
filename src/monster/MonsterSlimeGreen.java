@@ -3,9 +3,9 @@ package monster;
 import entity.Entity;
 import enums.MonsterType;
 import main.GamePanel;
-import object.pickup.PickUpCoin;
-import object.pickup.PickUpHeart;
-import object.pickup.PickUpManaCrystal;
+import object.pickup.Coin;
+import object.pickup.Heart;
+import object.pickup.ManaCrystal;
 
 import java.awt.Rectangle;
 
@@ -17,12 +17,11 @@ public class MonsterSlimeGreen extends Monster {
         this.monsterType = MonsterType.SLIME_GREEN;
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
-        this.velocity = 1;
-        this.maxHearts = 6;
-        this.currentHearts = this.maxHearts;
+
+        this.defaultVelocity = 1; this.velocity = this.defaultVelocity;
+        this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.currentExperience = 3;
-        this.attackDamage = 3;
-        this.defenseArmor = 0;
+        this.attackDamage = 2; this.defenseArmor = 0;
 
         this.solidArea = new Rectangle(3, 18, 42, 30);
         this.solidAreaDefaultX = this.solidArea.x;
@@ -46,13 +45,13 @@ public class MonsterSlimeGreen extends Monster {
         int number = this.random.nextInt(101);
         Entity objectToDrop;
         if (number < 50) {
-            objectToDrop = new PickUpCoin(this.gamePanel, -1, -1);
+            objectToDrop = new Coin(this.gamePanel, -1, -1);
         }
         else if (number < 75) {
-            objectToDrop = new PickUpHeart(this.gamePanel, -1, -1);
+            objectToDrop = new Heart(this.gamePanel, -1, -1);
         }
         else {
-            objectToDrop = new PickUpManaCrystal(this.gamePanel, -1, -1);
+            objectToDrop = new ManaCrystal(this.gamePanel, -1, -1);
         }
         this.dropObject(objectToDrop);
     }

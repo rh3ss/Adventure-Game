@@ -5,7 +5,7 @@ import enums.Direction;
 import enums.MonsterType;
 import main.GamePanel;
 import projectile.Bullet;
-import object.pickup.PickUpManaCrystal;
+import object.pickup.ManaCrystal;
 import object.potion.PotionExperience;
 import object.potion.PotionHeal;
 
@@ -20,12 +20,11 @@ public class MonsterSlimeRed extends Monster {
         this.monsterType = MonsterType.SLIME_RED;
         this.worldX = this.gamePanel.tileSize * worldColumn;
         this.worldY = this.gamePanel.tileSize * worldRow;
-        this.velocity = 2;
-        this.maxHearts = 10;
-        this.currentHearts = this.maxHearts;
+
+        this.defaultVelocity = 2; this.velocity = this.defaultVelocity;
+        this.maxHearts = 8; this.currentHearts = this.maxHearts;
         this.currentExperience = 6;
-        this.attackDamage = 4;
-        this.defenseArmor = 0;
+        this.attackDamage = 3; this.defenseArmor = 0;
 
         this.solidArea = new Rectangle(3, 18, 42, 30);
         this.solidAreaDefaultX = this.solidArea.x;
@@ -53,10 +52,10 @@ public class MonsterSlimeRed extends Monster {
             this.searchDestinationPath(destinationColumn, destinationRow);
             // shooting
             int randomNumber = this.random.nextInt(101);
-            if (randomNumber > 99 && !this.currentProjectile.isAlive && this.shootingAvailableCounter == (this.gamePanel.FPS / 2)) {
+            if (randomNumber > 99 && !this.currentProjectile.isAlive && this.shootingAvailableCounterFrames == (this.gamePanel.FPS / 2)) {
                 this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
                 this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentProjectile);
-                this.shootingAvailableCounter = 0;
+                this.shootingAvailableCounterFrames = 0;
             }
         }
         else {
@@ -84,7 +83,7 @@ public class MonsterSlimeRed extends Monster {
             objectToDrop = new PotionHeal(this.gamePanel, -1, -1);
         }
         else {
-            objectToDrop = new PickUpManaCrystal(this.gamePanel, -1, -1);
+            objectToDrop = new ManaCrystal(this.gamePanel, -1, -1);
         }
         this.dropObject(objectToDrop);
     }

@@ -4,7 +4,6 @@ import entity.Entity;
 import enums.Direction;
 import enums.EntityType;
 import main.GamePanel;
-import object.potion.PotionHeal;
 
 import java.util.ArrayList;
 

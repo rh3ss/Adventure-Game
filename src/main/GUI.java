@@ -6,9 +6,9 @@ import entity.Player;
 import enums.*;
 import enums.Menu;
 import object.GameObject;
-import object.pickup.PickUpCoin;
-import object.pickup.PickUpHeart;
-import object.pickup.PickUpManaCrystal;
+import object.pickup.Coin;
+import object.pickup.Heart;
+import object.pickup.ManaCrystal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -60,12 +60,12 @@ public class GUI {
         this.tradingSelection = TradingSelection.BUY;
 
 
-        Entity heart = new PickUpHeart(this.gamePanel, -1, -1);
+        Entity heart = new Heart(this.gamePanel, -1, -1);
         this.heartFull = heart.image1;
         this.heartBlank = heart.image2;
-        Entity coin = new PickUpCoin(this.gamePanel, -1, -1);
+        Entity coin = new Coin(this.gamePanel, -1, -1);
         this.coin = coin.down1;
-        Entity manaCrystal = new PickUpManaCrystal(this.gamePanel, -1, -1);
+        Entity manaCrystal = new ManaCrystal(this.gamePanel, -1, -1);
         this.manaCrystalFull = manaCrystal.image1;
         this.manaCrystalBlank = manaCrystal.image2;
 
