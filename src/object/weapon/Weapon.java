@@ -6,6 +6,8 @@ import object.GameObject;
 
 
 public abstract class Weapon extends GameObject {
+    public double attackStartAngle;
+    public double attackEndAngle;
 
     public Weapon(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);

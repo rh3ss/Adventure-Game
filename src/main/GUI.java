@@ -10,17 +10,19 @@ import object.pickup.Coin;
 import object.pickup.Heart;
 import object.pickup.ManaCrystal;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GUI {
     private final GamePanel gamePanel;
     private final Font maruMonica;
-    private final BufferedImage heartFull, heartBlank, coin, manaCrystalFull, manaCrystalBlank;
+    private final BufferedImage titleScreen, heartFull, heartBlank, coin, manaCrystalFull, manaCrystalBlank;
     private Graphics2D graphics2D;
     public Menu menuSelection;
     public OptionsState optionsState;
@@ -32,7 +34,7 @@ public class GUI {
     public Entity interactedNPC;
     public TradingState tradingState;
     public TradingSelection tradingSelection;
-    public boolean messageOn, gameFinished;
+    public boolean messageOn, gameFinished, inventoryFull;
     public String currentDialogueMessage;
     public int playerInventorySlotColumnSelected, playerInventorySlotRowSelected;
     public int npcInventorySlotColumnSelected, npcInventorySlotRowSelected;
@@ -50,7 +52,7 @@ public class GUI {
         this.messages = new ArrayList<>();
         this.messagesColor = new ArrayList<>();
         this.messagesCounter = new ArrayList<>();
-        this.messageOn = this.gameFinished = false;
+        this.messageOn = this.gameFinished = this.inventoryFull = false;
 
         this.menuSelection = Menu.NEW_GAME;
         this.optionsState = OptionsState.STATE_1;
@@ -59,6 +61,9 @@ public class GUI {
         this.tradingState = TradingState.SELECT;
         this.tradingSelection = TradingSelection.BUY;
 
+        BufferedImage titleImage = null;
+        try { titleImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/titleScreen/title.png"))); } catch (IOException _) {}
+        this.titleScreen = titleImage;
 
         Entity heart = new Heart(this.gamePanel, -1, -1);
         this.heartFull = heart.image1;
@@ -91,7 +96,7 @@ public class GUI {
                 this.graphics2D.drawString(idxMessage, messageX + 2, messageY + 2);
                 this.graphics2D.setColor(this.messagesColor.get(idx));
                 this.graphics2D.drawString(idxMessage, messageX, messageY);
-                int counter =  this.messagesCounter.get(idx) + 1;
+                int counter = !this.inventoryFull ? this.messagesCounter.get(idx) + 1 : this.messagesCounter.get(idx) + 50;
                 this.messagesCounter.set(idx, counter);
                 messageY += 30;
 
@@ -125,7 +130,8 @@ public class GUI {
     private void drawTitleScreen() {
         this.graphics2D.setColor(new Color(0x000000));
         this.graphics2D.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
-        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 96F));
+//        this.graphics2D.drawImage(this.titleScreen, 0, 0, null);
+//        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 96F));
 
         String titleText = "Adventure Game";
         int xPos = this.calcXPositionForCenteredText(titleText);

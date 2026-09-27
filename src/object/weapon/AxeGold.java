@@ -16,6 +16,8 @@ public class AxeGold extends Weapon {
         this.attackArea = new Rectangle(0, 0, 30, 30);
         this.objectAttackDamageMultiplier = 0.4;
         this.knockBackPower = 10;
+        this.attackStartAngle = 45;
+        this.attackEndAngle = -45;
         this.objectCoinValue = 30;
         this.objectName = "Golden Axe";
         this.objectDescription = "[" + this.objectName + "]\nAn golden lumberjack axe.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";

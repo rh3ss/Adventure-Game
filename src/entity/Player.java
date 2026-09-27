@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -101,28 +102,38 @@ public class Player extends Entity {
         this.right2 = this.setupEntityImage("/res/player/moving/player_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
     }
     private void getAttackImages() {
-        if (this.currentWeapon.objectType == ObjectType.SWORD) {
-            // SWORD
-            this.attackUp1 = this.setupEntityImage("/res/player/attack/boy_attack_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackUp2 = this.setupEntityImage("/res/player/attack/boy_attack_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown1 = this.setupEntityImage("/res/player/attack/boy_attack_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown2 = this.setupEntityImage("/res/player/attack/boy_attack_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackLeft1 = this.setupEntityImage("/res/player/attack/boy_attack_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackLeft2 = this.setupEntityImage("/res/player/attack/boy_attack_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight1 = this.setupEntityImage("/res/player/attack/boy_attack_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight2 = this.setupEntityImage("/res/player/attack/boy_attack_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
+        this.attackUp1 = this.setupEntityImage("/res/player/moving/player_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.attackUp2 = this.setupEntityImage("/res/player/moving/player_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.attackDown1 = this.setupEntityImage("/res/player/moving/player_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.attackDown2 = this.setupEntityImage("/res/player/moving/player_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.attackLeft1 = this.setupEntityImage("/res/player/moving/player_left_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.attackLeft2 = this.setupEntityImage("/res/player/moving/player_left_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.attackRight1 = this.setupEntityImage("/res/player/moving/player_right_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.attackRight2 = this.setupEntityImage("/res/player/moving/player_right_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+    }
+    private double getAttackProgress() {
+        double chargeFrames = this.gamePanel.FPS / 10.0;
+        double attackFrames = this.gamePanel.FPS / 2.0;
+        double progress = (this.animationCounterFrames - chargeFrames) / (attackFrames - chargeFrames);
+        return Math.pow(progress, 0.5);
+    }
+    private double getWeaponSwingAngle() {
+        double directionAngle = 0;
+        switch (this.direction) {
+            case Direction.UP -> { directionAngle = -45; }
+            case Direction.RIGHT -> { directionAngle = 45; }
+            case Direction.DOWN -> { directionAngle = 135; }
+            case Direction.LEFT -> { directionAngle = -135; }
+        };
+
+        double attackProgress = this.getAttackProgress();
+        double attackAngle = this.currentWeapon.attackStartAngle + (this.currentWeapon.attackEndAngle - this.currentWeapon.attackStartAngle) * attackProgress;
+        if (this.direction == Direction.RIGHT || this.direction == Direction.DOWN) {
+            attackAngle *= -1;
         }
-        else if (this.currentWeapon.objectType == ObjectType.AXE) {
-            // AXE
-            this.attackUp1 = this.setupEntityImage("/res/player/attack/boy_axe_up_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackUp2 = this.setupEntityImage("/res/player/attack/boy_axe_up_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown1 = this.setupEntityImage("/res/player/attack/boy_axe_down_1.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackDown2 = this.setupEntityImage("/res/player/attack/boy_axe_down_2.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
-            this.attackLeft1 = this.setupEntityImage("/res/player/attack/boy_axe_left_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackLeft2 = this.setupEntityImage("/res/player/attack/boy_axe_left_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight1 = this.setupEntityImage("/res/player/attack/boy_axe_right_1.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-            this.attackRight2 = this.setupEntityImage("/res/player/attack/boy_axe_right_2.png", this.gamePanel.tileSize * 2, this.gamePanel.tileSize);
-        }
+        return directionAngle;
+        // later
+        // return directionAngle + attackAngle;
     }
 
     public void update() {
@@ -294,6 +305,7 @@ public class Player extends Entity {
             } else {
                 collisionMessage = "Inventory full!";
             }
+            this.gamePanel.gui.inventoryFull = (this.inventory.size() == this.maxInventorySize);
             this.gamePanel.gui.addMessage(collisionMessage, Color.WHITE);
         }
     }
@@ -401,16 +413,14 @@ public class Player extends Entity {
     }
 
     public void draw(Graphics2D g2) {
-        // change screen pos for wider attack images
-        int tempScreenX = this.screenX, tempScreenY = this.screenY;
-        if (this.isAttacking && this.direction == Direction.UP) { tempScreenY -= this.gamePanel.tileSize; }
-        else if (this.isAttacking && this.direction == Direction.LEFT) { tempScreenX -= this.gamePanel.tileSize; }
-
         if (this.isInvincible) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
+        if (this.isAttacking && this.animationFrame == 2) {
+            this.drawCurrentWeapon(g2);
+        }
         BufferedImage playerImage = this.getPlayersAnimationFrameImage();
-        g2.drawImage(playerImage, tempScreenX, tempScreenY, null);
+        g2.drawImage(playerImage, this.screenX, this.screenY, null);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
     private BufferedImage getPlayersAnimationFrameImage() {
@@ -429,5 +439,29 @@ public class Player extends Entity {
             }
         }
         return null;
+    }
+    private void drawCurrentWeapon(Graphics2D g2) {
+        BufferedImage weaponImage = this.currentWeapon.down1;
+        double weaponSwingAngle = this.getWeaponSwingAngle();
+        double playersHandX = this.screenX + this.gamePanel.tileSize / 2.0;
+        double playersHandY = this.screenY + this.gamePanel.tileSize / 2.0;
+        if (this.direction == Direction.UP || this.direction == Direction.LEFT || this.direction == Direction.RIGHT) {
+            playersHandY += 15;
+        }
+        // transformation of Graphics2D for rotation
+        AffineTransform oldTransform = g2.getTransform();
+        AffineTransform weaponTransform = new AffineTransform();
+        weaponTransform.translate(playersHandX, playersHandY);
+        if (this.direction == Direction.RIGHT) {
+            // rotate image 90° then mirror it and rotate back
+            weaponTransform.rotate(Math.toRadians(90));
+            weaponTransform.scale(-1, 1);
+            weaponTransform.rotate(Math.toRadians(-90));
+        }
+        weaponTransform.rotate(Math.toRadians(weaponSwingAngle));
+        weaponTransform.translate(-0, -weaponImage.getHeight());
+        // draw rotated image and reset transformation
+        g2.drawImage(weaponImage, weaponTransform, null);
+        g2.setTransform(oldTransform);
     }
 }

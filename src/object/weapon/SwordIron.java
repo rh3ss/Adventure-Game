@@ -16,6 +16,8 @@ public class SwordIron extends Weapon {
         this.attackArea = new Rectangle(0, 0, 36, 36);
         this.objectAttackDamageMultiplier = 0.15;
         this.knockBackPower = 5;
+        this.attackStartAngle = 35;
+        this.attackEndAngle = -35;
         this.objectCoinValue = 8;
         this.objectName = "Iron Sword";
         this.objectDescription = "[" + this.objectName + "]\nAn good robust iron sword.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
