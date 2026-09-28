@@ -26,7 +26,7 @@ public class Keyboard implements KeyListener{
             case GameState.PLAYING -> { this.playingKeyEvent(keyboardCode); }
             case GameState.PAUSED -> { this.pausedKeyEvent(keyboardCode); }
             case GameState.DIALOGUE -> { this.dialogueKeyEvent(keyboardCode); }
-            case GameState.CHARACTER -> { this.characterKeyEvent(keyboardCode); }
+            case GameState.INVENTORY -> { this.inventoryKeyEvent(keyboardCode); }
             case GameState.OPTIONS -> { this.optionsKeyEvent(keyboardCode); }
             case GameState.TRADING -> { this.tradingKeyEvent(keyboardCode); }
             case GameState.GAME_OVER -> { this.gameOverKeyEvent(keyboardCode); }
@@ -67,7 +67,7 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
         if (keyboardCode == KeyEvent.VK_F) { this.isShootingPressed = true; }
         if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
-        if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.CHARACTER; }
+        if (keyboardCode == KeyEvent.VK_E) { this.gamePanel.gameState = GameState.INVENTORY; }
         if (keyboardCode == KeyEvent.VK_ESCAPE) { this.gamePanel.gameState = GameState.OPTIONS; }
     }
 
@@ -79,15 +79,16 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_ENTER) { this.gamePanel.gameState = GameState.PLAYING; }
     }
 
-    private void characterKeyEvent(int keyboardCode) {
-        if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.PLAYING; }
+    private void inventoryKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_E || keyboardCode == KeyEvent.VK_ESCAPE) {
+            this.gamePanel.gameState = GameState.PLAYING;
+        }
 
         if (keyboardCode == KeyEvent.VK_ENTER) {
             this.gamePanel.player.equipCurrentSelectedInventoryObject();
         }
         this.playerInventoryKeyEvent(keyboardCode);
     }
-
     private void playerInventoryKeyEvent(int keyboardCode) {
         if (keyboardCode == KeyEvent.VK_UP) {
             this.gamePanel.gui.playerInventorySlotRowSelected--;
@@ -114,7 +115,6 @@ public class Keyboard implements KeyListener{
             }
         }
     }
-
     private void npcInventoryKeyEvent(int keyboardCode) {
         if (keyboardCode == KeyEvent.VK_UP) {
             this.gamePanel.gui.npcInventorySlotRowSelected--;

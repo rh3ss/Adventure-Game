@@ -62,7 +62,7 @@ public class GUI {
         this.tradingSelection = TradingSelection.BUY;
 
         BufferedImage titleImage = null;
-        try { titleImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/titleScreen/title.png"))); } catch (IOException _) {}
+        try { titleImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/titleScreen/title_screen.png"))); } catch (IOException _) {}
         this.titleScreen = titleImage;
 
         Entity heart = new Heart(this.gamePanel, -1, -1);
@@ -119,7 +119,7 @@ public class GUI {
             case GameState.PLAYING -> { this.drawPlayingScreen(); }
             case GameState.PAUSED -> { this.drawPausedScreen(); }
             case GameState.DIALOGUE -> { this.drawDialogueScreen(); }
-            case GameState.CHARACTER -> { this.drawInventoryScreen(); }
+            case GameState.INVENTORY -> { this.drawInventoryScreen(); }
             case GameState.OPTIONS -> { this.drawOptionsScreen(); }
             case GameState.TRANSITION -> { this.drawTransitionScreen(); }
             case GameState.TRADING ->  { this.drawTradingScreen(); }
@@ -128,45 +128,36 @@ public class GUI {
     }
 
     private void drawTitleScreen() {
-        this.graphics2D.setColor(new Color(0x000000));
-        this.graphics2D.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
-//        this.graphics2D.drawImage(this.titleScreen, 0, 0, null);
-//        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 96F));
+        this.graphics2D.drawImage(this.titleScreen, 0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight, null);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 96F));
 
-        String titleText = "Adventure Game";
-        int xPos = this.calcXPositionForCenteredText(titleText);
+        String titleText = "Legends of";
+        int xPos = this.gamePanel.tileSize;
         int yPos = this.gamePanel.tileSize * 3;
-        // title with shadow
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 80F));
         this.graphics2D.setColor(Color.DARK_GRAY);
         this.graphics2D.drawString(titleText, xPos + 5, yPos + 5);
-        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.setColor(new Color(0xffffff));
         this.graphics2D.drawString(titleText, xPos, yPos);
-        // image
-        xPos = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize);
-        yPos += this.gamePanel.tileSize * 2;
-        this.graphics2D.drawImage(this.gamePanel.player.down1, xPos, yPos, this.gamePanel.tileSize * 2, this.gamePanel.tileSize * 2, null);
-        // menu
+        titleText = "Aether";
+        yPos += (int) (this.gamePanel.tileSize * 1.5);
+        this.graphics2D.setColor(Color.DARK_GRAY);
+        this.graphics2D.drawString(titleText, xPos + 5, yPos + 5);
+        this.graphics2D.setColor(new Color(0xffffff));
+        this.graphics2D.drawString(titleText, xPos, yPos);
+        // menu values
+        String[] menuTexts = {"New Game", "Load Game", "Quit"};
+        Menu[] menuValues = {Menu.NEW_GAME, Menu.LOAD_GAME, Menu.QUIT};
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 48F));
-        String optionText = "New Game";
-        xPos = this.calcXPositionForCenteredText(optionText);
-        yPos += this.gamePanel.tileSize * 3;
-        this.graphics2D.drawString(optionText, xPos, yPos);
-        if (this.menuSelection == Menu.NEW_GAME) {
-            this.graphics2D.drawString(">", xPos - this.gamePanel.tileSize, yPos);
-        }
-        optionText = "Load Game";
-        xPos = this.calcXPositionForCenteredText(optionText);
-        yPos += this.gamePanel.tileSize;
-        this.graphics2D.drawString(optionText, xPos, yPos);
-        if (this.menuSelection == Menu.LOAD_GAME) {
-            this.graphics2D.drawString(">", xPos - this.gamePanel.tileSize, yPos);
-        }
-        optionText = "Quit";
-        xPos = this.calcXPositionForCenteredText(optionText);
-        yPos += this.gamePanel.tileSize;
-        this.graphics2D.drawString(optionText, xPos, yPos);
-        if (this.menuSelection == Menu.QUIT) {
-            this.graphics2D.drawString(">", xPos - this.gamePanel.tileSize, yPos);
+        yPos += this.gamePanel.tileSize * 7;
+        for (int i = 0; i < menuTexts.length; i++) {
+            if (this.menuSelection == menuValues[i]) {
+                this.graphics2D.setColor(new Color(0xe0aa3e)); // Gold
+            } else {
+                this.graphics2D.setColor(Color.WHITE);
+            }
+            this.graphics2D.drawString(menuTexts[i], xPos, yPos);
+            yPos += this.gamePanel.tileSize;
         }
     }
 
@@ -367,7 +358,7 @@ public class GUI {
         int inventorySlotColumnSelected, inventorySlotRowSelected;
         
         if (entity instanceof Player) {
-            inventoryWindowFrameX = this.gamePanel.tileSize * 12;
+            inventoryWindowFrameX = (this.gamePanel.screenWidth / 2) + this.gamePanel.tileSize * 2;
             inventoryWindowFrameY = this.gamePanel.tileSize;
             inventoryWindowFrameWidth = this.gamePanel.tileSize * (this.gamePanel.player.inventoryColumnSize + 1);
             inventoryWindowFrameHeight = this.gamePanel.tileSize * (this.gamePanel.player.inventoryRowSize + 1);

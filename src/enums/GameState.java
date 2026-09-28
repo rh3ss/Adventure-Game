@@ -2,12 +2,11 @@ package enums;
 
 public enum GameState {
     TITLE,
-    PREPARING,
     PLAYING,
     PAUSED,
     OPTIONS,
     DIALOGUE,
-    CHARACTER,
+    INVENTORY,
     TRANSITION,
     TRADING,
     GAME_OVER

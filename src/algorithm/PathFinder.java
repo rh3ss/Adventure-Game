@@ -1,8 +1,10 @@
 package algorithm;
 
 import entity.Entity;
+import enums.ObjectCategory;
 import main.GamePanel;
 import npc.NPC;
+import object.GameObject;
 import tileFix.TileFix;
 import tileInteractive.InteractiveTile;
 
@@ -96,6 +98,14 @@ public class PathFinder {
                     if (entity instanceof NPC npc && npc.isFixPlaced) {
                         int interactiveColumn = npc.worldX / this.gamePanel.tileSize;
                         int interactiveRow = npc.worldY / this.gamePanel.tileSize;
+                        this.nodes[interactiveColumn][interactiveRow].isSolid = true;
+                    }
+                }
+                // check obstacle objects
+                for (Entity entity : this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities) {
+                    if (entity instanceof GameObject gameObject && gameObject.objectCategory == ObjectCategory.OBSTACLE) {
+                        int interactiveColumn = gameObject.worldX / this.gamePanel.tileSize;
+                        int interactiveRow = gameObject.worldY / this.gamePanel.tileSize;
                         this.nodes[interactiveColumn][interactiveRow].isSolid = true;
                     }
                 }

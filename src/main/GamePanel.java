@@ -64,7 +64,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(this.keyboard);
         this.setFocusable(true);
-        this.gameState = GameState.PREPARING;
         this.fullScreenOn = false;
     }
 
