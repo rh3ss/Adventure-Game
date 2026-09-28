@@ -1,6 +1,7 @@
 package object.potion;
 
 import entity.Entity;
+import enums.ObjectType;
 import main.GamePanel;
 
 import java.awt.Color;
@@ -10,6 +11,7 @@ public class PotionStrength extends Potion {
     public PotionStrength(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
+        this.objectType = ObjectType.POTION_STRENGTH;
         this.down1 = this.setupEntityImage("/res/objects/potion_blue.png", gamePanel.tileSize, gamePanel.tileSize);
         this.objectColor = new Color(0x040273);
         this.objectBenefitValue = 1;

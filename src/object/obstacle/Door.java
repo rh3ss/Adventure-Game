@@ -1,10 +1,12 @@
-package object.interactable;
+package object.obstacle;
 
+import enums.GameState;
 import enums.ObjectType;
 import main.GamePanel;
+
 import java.awt.Rectangle;
 
-public class Door extends Interactable {
+public class Door extends Obstacle {
 
     public Door(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
@@ -17,5 +19,10 @@ public class Door extends Interactable {
         this.solidArea = new Rectangle(0, 16, 48, 32);
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
+    }
+
+    public void interact() {
+        this.gamePanel.gameState = GameState.DIALOGUE;
+        this.gamePanel.gui.currentDialogueMessage = "You need a key to open this";
     }
 }

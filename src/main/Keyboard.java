@@ -83,7 +83,7 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_C) { this.gamePanel.gameState = GameState.PLAYING; }
 
         if (keyboardCode == KeyEvent.VK_ENTER) {
-            this.gamePanel.player.equipCurrentSelectedInventoryItem();
+            this.gamePanel.player.equipCurrentSelectedInventoryObject();
         }
         this.playerInventoryKeyEvent(keyboardCode);
     }

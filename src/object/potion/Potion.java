@@ -14,6 +14,8 @@ public abstract class Potion extends GameObject {
         this.gamePanel = gamePanel;
 
         this.objectCategory = ObjectCategory.CONSUMABLE;
-        this.objectType = ObjectType.POTION;
+
+        this.isStackable = true;
+        this.objectMaxStackableAmount = 10;
     }
 }

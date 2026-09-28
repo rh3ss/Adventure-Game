@@ -3,8 +3,11 @@ package main;
 import entity.Entity;
 import npc.*;
 import monster.*;
+import object.GameObject;
 import object.armor.*;
 import object.interactable.*;
+import object.obstacle.Chest;
+import object.obstacle.Door;
 import object.pickup.*;
 import object.potion.*;
 import object.shield.*;
@@ -55,7 +58,19 @@ public class AssetSetter {
                 new Heart(this.gamePanel, 25, 25),
                 new ManaCrystal(this.gamePanel, 26, 25),
 
-                new Door(this.gamePanel, 22, 42),
+                new Door(this.gamePanel, 19, 14),
+                new Door(this.gamePanel, 25, 14),
+
+                new Chest(this.gamePanel, 16, 17, new ArrayList<>(List.of(
+                    new PotionExperience(this.gamePanel, 21, 25),
+                    new PotionHeal(this.gamePanel, 21, 26),
+                    new PotionSpeed(this.gamePanel, 21, 27),
+                    new PotionStrength(this.gamePanel, 21, 28),
+                    new AxeIron(this.gamePanel, 22, 25),
+                    new SwordIron(this.gamePanel, 22, 26),
+                    new AxeGold(this.gamePanel, 22, 27),
+                    new SwordGold(this.gamePanel, 22, 28)
+                ))),
 
                 new PotionExperience(this.gamePanel, 21, 25),
                 new PotionHeal(this.gamePanel, 21, 26),

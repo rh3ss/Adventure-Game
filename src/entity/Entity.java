@@ -2,7 +2,9 @@ package entity;
 
 import enums.*;
 import main.GamePanel;
+import main.MapData;
 import main.UtilityTool;
+import object.GameObject;
 import object.armor.Armor;
 import object.shield.Shield;
 import object.weapon.Weapon;
@@ -73,7 +75,7 @@ public class Entity {
     public double attackDamage, receivedDamage, defenseArmor;
 
     // OBJECT ATTRIBUTES
-    public ArrayList<Entity> inventory;
+    public ArrayList<GameObject> inventory;
     public int inventoryColumnSize, inventoryRowSize, maxInventorySize;
     public Weapon currentWeapon;
     public Shield currentShield;
@@ -102,6 +104,13 @@ public class Entity {
     public void setAction() {}
     public void damageReaction() {}
 
+    public int getEntityLeftX() { return this.worldX + this.solidArea.x; }
+    public int getEntityRightX() { return this.worldX + this.solidArea.x + this.solidArea.width; }
+    public int getEntityTopY() { return this.worldY + this.solidArea.y; }
+    public int getEntityDownY() { return this.worldY + this.solidArea.y + this.solidArea.height; }
+    public int getEntityColumn() { return (this.worldX + this.solidArea.x) / this.gamePanel.tileSize; }
+    public int getEntityRow() { return (this.worldY + this.solidArea.y) / this.gamePanel.tileSize; }
+
     public Color getParticleColor() { return null; }
     public int getParticlePxSize() { return 0; }
     public int getParticleVelocity() { return 0; }
@@ -127,6 +136,31 @@ public class Entity {
         objectToDrop.worldX = this.worldX;
         objectToDrop.worldY = this.worldY;
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(objectToDrop);
+    }
+    public int getDetectedObjectNearby(Entity user, MapData mapData, ObjectType objectType) {
+        int objectIndex = Integer.MAX_VALUE;
+        // check surrounding object
+        int nextWorldX = user.getEntityLeftX();
+        int nextWorldY = user.getEntityTopY();
+        switch (user.direction) {
+            case Direction.UP -> { nextWorldY = user.getEntityTopY() - 1; }
+            case Direction.DOWN -> { nextWorldY = user.getEntityDownY() + 1; }
+            case Direction.LEFT -> { nextWorldX = user.getEntityLeftX() - 1; }
+            case Direction.RIGHT -> { nextWorldX = user.getEntityRightX() + 1; }
+        }
+        int column = nextWorldX / this.gamePanel.tileSize;
+        int row = nextWorldY / this.gamePanel.tileSize;
+
+        for (int i = 0; i < mapData.entities.size(); ++i) {
+            Entity entity = mapData.entities.get(i);
+            if (entity instanceof GameObject gameObject) {
+                if (gameObject.getEntityColumn() == column && gameObject.getEntityRow() == row && gameObject.objectType == objectType) {
+                    objectIndex = i;
+                    break;
+                }
+            }
+        }
+        return objectIndex;
     }
 
     public boolean isPlayerInActivationRadius() {

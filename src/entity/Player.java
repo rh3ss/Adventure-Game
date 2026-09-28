@@ -275,6 +275,7 @@ public class Player extends Entity {
     private void playerCollisionWithNPC(NPC npc) {
         if (this.gamePanel.keyboard.isEnterPressed) {
             this.gamePanel.gameState = GameState.DIALOGUE;
+            this.isAttacking = false;
             npc.speak();
         }
     }
@@ -295,12 +296,19 @@ public class Player extends Entity {
             object.use(this);
             this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.remove(object);
         }
+        // OBSTACLE
+        else if (object.objectCategory == ObjectCategory.OBSTACLE) {
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.isAttacking = false;
+                object.interact();
+            }
+        }
         // INVENTORY
         else {
             String collisionMessage;
-            if (this.inventory.size() < this.maxInventorySize) {
+            if (this.playerCanObtainObjectInInventory(object)) {
                 collisionMessage = "You found a " + object.objectType.toString();
-                this.inventory.add(object);
+                // this.inventory.add(object);
                 this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.remove(object);
             } else {
                 collisionMessage = "Inventory full!";
@@ -388,28 +396,72 @@ public class Player extends Entity {
             this.gamePanel.gui.currentDialogueMessage = "You are level " + this.currentLevel + " now!";
         }
     }
-    public void equipCurrentSelectedInventoryItem() {
+    public void equipCurrentSelectedInventoryObject() {
         int itemIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected);
-        if (itemIndex < this.inventory.size() && this.inventory.get(itemIndex) instanceof GameObject selectedItem) {
-            switch (selectedItem.objectCategory) {
+        if (itemIndex < this.inventory.size() && this.inventory.get(itemIndex) instanceof GameObject selectedObject) {
+            switch (selectedObject.objectCategory) {
                 case ObjectCategory.WEAPON:
-                    this.currentWeapon = (Weapon) selectedItem;
+                    this.currentWeapon = (Weapon) selectedObject;
                     this.attackDamage = this.getAttackDamage();
                     this.getAttackImages();
                     break;
                 case ObjectCategory.SHIELD:
-                    this.currentShield = (Shield) selectedItem;
+                    this.currentShield = (Shield) selectedObject;
                     this.defenseArmor = this.getDefenseArmor();
                     break;
                 case ObjectCategory.ARMOR:
-                    this.currentArmor = (Armor) selectedItem;
+                    this.currentArmor = (Armor) selectedObject;
                     break;
                 case ObjectCategory.CONSUMABLE:
-                    selectedItem.use(this);
-                    this.inventory.remove(itemIndex);
+                    selectedObject.use(this);
+                    if (selectedObject.objectCurrentStackableAmount > 1) {
+                        selectedObject.objectCurrentStackableAmount--;
+                    }
+                    else {
+                        this.inventory.remove(itemIndex);
+                    }
+                    break;
+                case ObjectCategory.INTERACTABLE:
+                    selectedObject.use(this);
                     break;
             }
         }
+    }
+    public int searchObjectInInventory(ObjectType objectType) {
+        int objectIndex = Integer.MAX_VALUE;
+        for (int idx = 0; idx < this.inventory.size(); ++idx) {
+            if (this.inventory.get(idx).objectType == objectType) {
+                objectIndex = idx;
+                break;
+            }
+        }
+        return objectIndex;
+    }
+    public boolean playerCanObtainObjectInInventory(GameObject object) {
+        boolean canObtain = false;
+        if (object.isStackable) {
+            int objectIndex = this.searchObjectInInventory(object.objectType);
+            // add stackable
+            if (objectIndex != Integer.MAX_VALUE) {
+                this.inventory.get(objectIndex).objectCurrentStackableAmount++;
+                canObtain = true;
+            }
+            // new object
+            else {
+                if (this.inventory.size() != this.maxInventorySize) {
+                    this.inventory.add(object);
+                    canObtain = true;
+                }
+            }
+        }
+        // not stackable
+        else {
+            if (this.inventory.size() != this.maxInventorySize) {
+                this.inventory.add(object);
+                canObtain = true;
+            }
+        }
+        return canObtain;
     }
 
     public void draw(Graphics2D g2) {
