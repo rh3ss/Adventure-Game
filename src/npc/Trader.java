@@ -6,8 +6,6 @@ import object.potion.PotionExperience;
 import object.potion.PotionHeal;
 import object.potion.PotionStrength;
 
-import java.util.ArrayList;
-
 public class Trader extends NPC {
 
     public Trader(GamePanel gamePanel, int worldColumn, int worldRow) {

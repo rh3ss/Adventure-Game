@@ -12,6 +12,7 @@ import monster.Monster;
 import npc.NPC;
 import object.GameObject;
 import object.armor.Armor;
+import object.lighting.Light;
 import object.shield.Shield;
 import object.weapon.Weapon;
 import projectile.Fireball;
@@ -26,6 +27,7 @@ public class Player extends Entity {
     private final Keyboard keyboard;
     public int screenX;
     public int screenY;
+    public boolean lightUpdated;
 
     public Player(GamePanel p, Keyboard k) {
         super(p);
@@ -50,6 +52,7 @@ public class Player extends Entity {
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
         this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;
+        this.lightUpdated = false;
         this.currentWeapon = new SwordIron(this.gamePanel, -1, -1);
         this.currentShield = new ShieldWood(this.gamePanel, -1, -1);
         this.currentArmor = new ArmorIron(this.gamePanel, -1, -1);
@@ -397,8 +400,8 @@ public class Player extends Entity {
         }
     }
     public void equipCurrentSelectedInventoryObject() {
-        int itemIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected);
-        if (itemIndex < this.inventory.size() && this.inventory.get(itemIndex) instanceof GameObject selectedObject) {
+        int objectIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected);
+        if (objectIndex < this.inventory.size() && this.inventory.get(objectIndex) instanceof GameObject selectedObject) {
             switch (selectedObject.objectCategory) {
                 case ObjectCategory.WEAPON:
                     this.currentWeapon = (Weapon) selectedObject;
@@ -418,11 +421,18 @@ public class Player extends Entity {
                         selectedObject.objectCurrentStackableAmount--;
                     }
                     else {
-                        this.inventory.remove(itemIndex);
+                        this.inventory.remove(objectIndex);
                     }
                     break;
                 case ObjectCategory.INTERACTABLE:
-                    selectedObject.use(this);
+                    boolean successful = selectedObject.useSuccessful(this);
+                    if (successful) {
+                        this.inventory.remove(objectIndex);
+                    }
+                    break;
+                case ObjectCategory.LIGHT:
+                    this.currentLight = (this.currentLight != selectedObject) ? (Light) selectedObject : null;
+                    this.lightUpdated = true;
                     break;
             }
         }

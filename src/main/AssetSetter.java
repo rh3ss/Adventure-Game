@@ -3,9 +3,9 @@ package main;
 import entity.Entity;
 import npc.*;
 import monster.*;
-import object.GameObject;
 import object.armor.*;
 import object.interactable.*;
+import object.lighting.Torch;
 import object.obstacle.Chest;
 import object.obstacle.Door;
 import object.pickup.*;
@@ -60,6 +60,8 @@ public class AssetSetter {
 
                 new Door(this.gamePanel, 19, 14),
                 new Door(this.gamePanel, 25, 14),
+
+                new Torch(this.gamePanel, 24, 23),
 
                 new Chest(this.gamePanel, 16, 17, new ArrayList<>(List.of(
                     new PotionExperience(this.gamePanel, 21, 25),

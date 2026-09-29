@@ -12,7 +12,9 @@ public class Door extends Obstacle {
         super(gamePanel, worldColumn, worldRow);
 
         this.objectType = ObjectType.DOOR;
-        this.down1 = this.setupEntityImage("/res/objects/door.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.image1 = this.setupEntityImage("/res/objects/door.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.image2 = this.setupEntityImage("/res/objects/door_opened.png", this.gamePanel.tileSize, this.gamePanel.tileSize * 2);
+        this.down1 = this.image1;
         this.objectName = "Door";
 
         this.isSolid = true;

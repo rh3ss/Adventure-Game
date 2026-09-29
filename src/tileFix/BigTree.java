@@ -9,7 +9,7 @@ public class BigTree extends TileFix {
     public BigTree(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
-        this.down1 = this.setupEntityImage("/res/tilesInteractive/big_tree.png", gamePanel.tileSize, gamePanel.tileSize * 2);
+        this.down1 = this.setupEntityImage("/res/tilesFix/big_tree.png", gamePanel.tileSize, gamePanel.tileSize * 2);
         this.isSolid = true;
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = (worldRow * gamePanel.tileSize) - gamePanel.tileSize;

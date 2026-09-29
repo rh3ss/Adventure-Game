@@ -28,5 +28,6 @@ public abstract class GameObject extends Entity {
     }
 
     public void use(Entity entity) {}
+    public boolean useSuccessful(Entity entity) { return false; }
     public void interact() {}
 }

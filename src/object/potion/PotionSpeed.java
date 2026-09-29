@@ -23,6 +23,6 @@ public class PotionSpeed extends Potion {
     public void use(Entity entity) {
         String message = "+" + this.objectBenefitValue * 10 + "% Velocity";
         this.gamePanel.gui.addMessage(message, this.objectColor);
-        entity.velocity += this.objectBenefitValue / 10;
+        entity.velocity += this.objectBenefitValue;
     }
 }

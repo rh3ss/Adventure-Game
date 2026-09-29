@@ -6,6 +6,7 @@ import main.MapData;
 import main.UtilityTool;
 import object.GameObject;
 import object.armor.Armor;
+import object.lighting.Light;
 import object.shield.Shield;
 import object.weapon.Weapon;
 import projectile.Projectile;
@@ -80,6 +81,7 @@ public class Entity {
     public Weapon currentWeapon;
     public Shield currentShield;
     public Armor currentArmor;
+    public Light currentLight;
     public Projectile currentProjectile;
 
     public Entity(GamePanel p) {

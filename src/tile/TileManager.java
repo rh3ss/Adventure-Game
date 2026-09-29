@@ -45,20 +45,20 @@ public class TileManager {
         setupTiles(10, "001", false);
         setupTiles(11, "002", false);
         // water
-        setupTiles(12, "018", true);
-        setupTiles(13, "019", true);
-        setupTiles(14, "020", true);
-        setupTiles(15, "021", true);
-        setupTiles(16, "022", true);
-        setupTiles(17, "023", true);
-        setupTiles(18, "024", true);
-        setupTiles(19, "025", true);
-        setupTiles(20, "026", true);
-        setupTiles(21, "027", true);
-        setupTiles(22, "028", true);
-        setupTiles(23, "029", true);
-        setupTiles(24, "030", true);
-        setupTiles(25, "031", true);
+        setupTiles(12, "water_clear", true);
+        setupTiles(13, "water_waves", true);
+        setupTiles(14, "water_north_west", true);
+        setupTiles(15, "water_north", true);
+        setupTiles(16, "water_north_east", true);
+        setupTiles(17, "water_west", true);
+        setupTiles(18, "water_east", true);
+        setupTiles(19, "water_south_west", true);
+        setupTiles(20, "water_south", true);
+        setupTiles(21, "water_south_east", true);
+        setupTiles(22, "water_top_left", true);
+        setupTiles(23, "water_top_right", true);
+        setupTiles(24, "water_bottom_left", true);
+        setupTiles(25, "water_bottom_left", true);
         // path
         setupTiles(26, "003", false);
         setupTiles(27, "004", false);

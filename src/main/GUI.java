@@ -62,7 +62,7 @@ public class GUI {
         this.tradingSelection = TradingSelection.BUY;
 
         BufferedImage titleImage = null;
-        try { titleImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/titleScreen/title_screen.png"))); } catch (IOException _) {}
+        try { titleImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/res/titleScreen/title_screen_2.png"))); } catch (IOException _) {}
         this.titleScreen = titleImage;
 
         Entity heart = new Heart(this.gamePanel, -1, -1);
@@ -139,7 +139,7 @@ public class GUI {
         this.graphics2D.drawString(titleText, xPos + 5, yPos + 5);
         this.graphics2D.setColor(new Color(0xffffff));
         this.graphics2D.drawString(titleText, xPos, yPos);
-        titleText = "Aether";
+        titleText = "Arcadia";
         yPos += (int) (this.gamePanel.tileSize * 1.5);
         this.graphics2D.setColor(Color.DARK_GRAY);
         this.graphics2D.drawString(titleText, xPos + 5, yPos + 5);
@@ -384,7 +384,11 @@ public class GUI {
         for (int idx = 1; idx < entity.inventory.size() + 1; idx++) {
             GameObject object = entity.inventory.get(idx - 1);
             // highlight players equipped items
-            if (object == entity.currentWeapon || object == entity.currentShield || object == entity.currentArmor) {
+            if (object == entity.currentWeapon ||
+                    object == entity.currentShield ||
+                    object == entity.currentArmor ||
+                    object == entity.currentLight
+            ) {
                 this.graphics2D.setColor(new Color(240, 190, 90));
                 this.graphics2D.fillRoundRect(inventorySlotX, inventorySlotY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
             }

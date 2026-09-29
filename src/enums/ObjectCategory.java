@@ -9,4 +9,5 @@ public enum ObjectCategory {
     PICKUP,
     ENVIRONMENT,
     OBSTACLE,
+    LIGHT,
 }

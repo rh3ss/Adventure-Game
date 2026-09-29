@@ -8,7 +8,7 @@ import object.GameObject;
 import tileFix.TileFix;
 import tileInteractive.InteractiveTile;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class PathFinder {

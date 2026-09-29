@@ -9,6 +9,8 @@ public enum ObjectType {
     DOOR,
     CHEST,
 
+    TORCH,
+
     HEART,
     KEY,
     BOOTS,

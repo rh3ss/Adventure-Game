@@ -9,7 +9,7 @@ public class FarmBarn extends TileFix {
     public FarmBarn(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
-        this.down1 = this.setupEntityImage("/res/tilesInteractive/farm_barn.png", gamePanel.tileSize * 5, gamePanel.tileSize * 5);
+        this.down1 = this.setupEntityImage("/res/tilesFix/farm_barn.png", gamePanel.tileSize * 5, gamePanel.tileSize * 5);
         this.isSolid = true;
         int entityCollisionOffset = 16;
         this.solidArea = new Rectangle(
