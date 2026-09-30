@@ -48,13 +48,21 @@ public class EventHandler {
             if (playerHitSomething(0, 22, 18, Direction.UP)) { eventDamagePit(GameState.DIALOGUE); }
             else if (playerHitSomething(0, 22, 17, Direction.UP)) { eventHealingPool(GameState.DIALOGUE); }
             // Access hut
-            else if (playerHitSomething(0, 24, 21, Direction.ANY)) { eventTeleportPlayerIsTriggered(1, 12, 13); }
+            else if (playerHitSomething(0, 24, 21, Direction.UP)) {
+                eventTeleportPlayerIsTriggered(1, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1);
+            }
             // Leave hut
-            else if (playerHitSomething(1, 12, 13, Direction.ANY)) { eventTeleportPlayerIsTriggered(0, 24, 21); }
+            else if (playerHitSomething(1, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1, Direction.DOWN)) {
+                eventTeleportPlayerIsTriggered(0, 24, 21);
+            }
             // Access farm barn
-            else if (playerHitSomething(0, 10, 15, Direction.UP)) { eventTeleportPlayerIsTriggered(2, 12, 13); }
+            else if (playerHitSomething(0, 10, 15, Direction.UP)) {
+                eventTeleportPlayerIsTriggered(2, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1);
+            }
             // Leave farm barn
-            else if (playerHitSomething(2, 12, 13, Direction.DOWN)) { eventTeleportPlayerIsTriggered(0, 10, 16); }
+            else if (playerHitSomething(2, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1, Direction.DOWN)) {
+                eventTeleportPlayerIsTriggered(0, 10, 16);
+            }
         }
     }
 

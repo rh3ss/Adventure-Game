@@ -4,12 +4,11 @@ import entity.Entity;
 import npc.*;
 import monster.*;
 import object.armor.*;
+import object.consumable.*;
 import object.interactable.*;
-import object.lighting.Torch;
-import object.obstacle.Chest;
-import object.obstacle.Door;
+import object.light.*;
+import object.obstacle.*;
 import object.pickup.*;
-import object.potion.*;
 import object.shield.*;
 import object.weapon.*;
 import tileFix.*;
@@ -48,22 +47,21 @@ public class AssetSetter {
 
     public void setObjects() {
         ArrayList<Entity> objects = new ArrayList<>(List.of(
-                new KeySilver(this.gamePanel, 27, 25),
-                new KeyGold(this.gamePanel, 28, 25),
+                new KeySilver(this.gamePanel, 24, 15),
+                new KeyGold(this.gamePanel, 24, 16),
 
-                new Coin(this.gamePanel, 25, 23),
-                new CoinPile(this.gamePanel, 26, 23),
-                new CoinBag(this.gamePanel, 27, 23),
+                new Coin(this.gamePanel, 24, 17),
+                new CoinPile(this.gamePanel, 24, 18),
+                new CoinBag(this.gamePanel, 24, 19),
 
-                new Heart(this.gamePanel, 25, 25),
-                new ManaCrystal(this.gamePanel, 26, 25),
+                new Heart(this.gamePanel, 21, 20),
+                new ManaCrystal(this.gamePanel, 22, 20),
+                new Torch(this.gamePanel, 23, 20),
 
-                new Door(this.gamePanel, 19, 14),
-                new Door(this.gamePanel, 25, 14),
+//                new Door(this.gamePanel, 19, 20),
+//                new Door(this.gamePanel, 25, 20),
 
-                new Torch(this.gamePanel, 24, 23),
-
-                new Chest(this.gamePanel, 16, 17, new ArrayList<>(List.of(
+                new Chest(this.gamePanel, 15, 17, new ArrayList<>(List.of(
                     new PotionExperience(this.gamePanel, 21, 25),
                     new PotionHeal(this.gamePanel, 21, 26),
                     new PotionSpeed(this.gamePanel, 21, 27),
@@ -74,21 +72,21 @@ public class AssetSetter {
                     new SwordGold(this.gamePanel, 22, 28)
                 ))),
 
-                new PotionExperience(this.gamePanel, 21, 25),
-                new PotionHeal(this.gamePanel, 21, 26),
-                new PotionSpeed(this.gamePanel, 21, 27),
-                new PotionStrength(this.gamePanel, 21, 28),
+                new AxeIron(this.gamePanel, 21, 15),
+                new SwordIron(this.gamePanel, 21, 16),
+                new AxeGold(this.gamePanel, 21, 17),
+                new SwordGold(this.gamePanel, 21, 18),
 
-                new AxeIron(this.gamePanel, 22, 25),
-                new SwordIron(this.gamePanel, 22, 26),
-                new AxeGold(this.gamePanel, 22, 27),
-                new SwordGold(this.gamePanel, 22, 28),
+                new ShieldWood(this.gamePanel, 22, 15),
+                new ShieldBlue(this.gamePanel, 22, 16),
 
-                new ShieldWood(this.gamePanel, 23, 25),
-                new ShieldBlue(this.gamePanel, 23, 26),
+                new ArmorIron(this.gamePanel, 22, 17),
+                new ArmorGold(this.gamePanel, 22, 18),
 
-                new ArmorIron(this.gamePanel, 23, 27),
-                new ArmorGold(this.gamePanel, 23, 28)
+                new PotionExperience(this.gamePanel, 23, 15),
+                new PotionHeal(this.gamePanel, 23, 16),
+                new PotionSpeed(this.gamePanel, 23, 17),
+                new PotionStrength(this.gamePanel, 23, 18)
         ));
 
         this.gamePanel.maps.get(0).entities.addAll(objects);
@@ -96,9 +94,9 @@ public class AssetSetter {
 
     public void setNPCs() {
         ArrayList<Entity> npcs = new ArrayList<>(List.of(
-                new OldMan(this.gamePanel, 18, 23),
-                new Trader(this.gamePanel, 21, 18),
-                new Blacksmith(this.gamePanel, 23, 18),
+                new OldMan(this.gamePanel, 10, 18),
+                new Trader(this.gamePanel, 11, 18),
+                new Blacksmith(this.gamePanel, 12, 18),
                 new Farmer(this.gamePanel, 13, 14)
         ));
 
@@ -123,16 +121,14 @@ public class AssetSetter {
 
     public void setInteractiveTiles() {
         ArrayList<Entity> interactiveTiles = new ArrayList<>(List.of(
-                new DryTree(this.gamePanel, 27, 15),
-                new DryTree(this.gamePanel, 28, 15),
-                new DryTree(this.gamePanel, 29, 15),
-                new DryTree(this.gamePanel, 30, 15),
-                new DryTree(this.gamePanel, 31, 15),
-                new DryTree(this.gamePanel, 32, 15),
+                new SmallTree(this.gamePanel, 17, 16),
+                new SmallTree(this.gamePanel, 18, 16),
+                new SmallTree(this.gamePanel, 19, 16),
+                new SmallTree(this.gamePanel, 20, 16),
 
-                new Bush(this.gamePanel, "bush_2", 19, 23),
-                new Bush(this.gamePanel, "bush_1", 19, 24),
-                new Bush(this.gamePanel, "bush_2", 19, 25),
+                new Bush(this.gamePanel, "bush_2", 15, 20),
+                new Bush(this.gamePanel, "bush_1", 15, 21),
+                new Bush(this.gamePanel, "bush_2", 15, 22),
 
                 new Wheat(this.gamePanel, 14, 12),
                 new Wheat(this.gamePanel, 15, 12),
@@ -163,13 +159,27 @@ public class AssetSetter {
     }
 
     public void setFixTiles() {
-        ArrayList<Entity> fixTiles = new ArrayList<>(List.of(
+        ArrayList<TileFix> fixTiles = new ArrayList<>(List.of(
                 new FarmBarn(this.gamePanel, 8, 11),
 
-                new BigTree(this.gamePanel, 17, 21),
-                new BigTree(this.gamePanel, 18, 21),
-                new BigTree(this.gamePanel, 19, 21),
-                new BigTree(this.gamePanel, 20, 21)
+                new TreeMiddle(this.gamePanel, 17, 18),
+                new TreeMiddle(this.gamePanel, 18, 18),
+                new TreeMiddle(this.gamePanel, 19, 18),
+                new TreeMiddle(this.gamePanel, 20, 18),
+
+                new TreeSquares(this.gamePanel, 17, 20),
+                new TreeSquares(this.gamePanel, 18, 20),
+                new TreeSquares(this.gamePanel, 19, 20),
+                new TreeSquares(this.gamePanel, 20, 20),
+
+                new TreePine(this.gamePanel, 17, 23),
+                new TreePine(this.gamePanel, 18, 23),
+                new TreePine(this.gamePanel, 19, 23),
+                new TreePine(this.gamePanel, 20, 23),
+
+
+                new TreeBig(this.gamePanel, 13, 20),
+                new TreeBig(this.gamePanel, 13, 23)
         ));
         this.gamePanel.maps.get(0).entities.addAll(fixTiles);
     }

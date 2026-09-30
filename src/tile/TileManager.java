@@ -31,56 +31,57 @@ public class TileManager {
 
     private void getTileImages() {
         // placeholders
-        setupTiles(00, "000", false);
-        setupTiles(1, "000", false);
-        setupTiles(2, "000", false);
-        setupTiles(3, "000", false);
-        setupTiles(4, "000", false);
-        setupTiles(5, "000", false);
-        setupTiles(6, "000", false);
-        setupTiles(7, "000", false);
-        setupTiles(8, "000", false);
-        setupTiles(9, "000", false);
+        setupTiles(0, "black", true);
+        setupTiles(1, "black", true);
+        setupTiles(2, "black", true);
+        setupTiles(3, "black", true);
+        setupTiles(4, "black", true);
+        setupTiles(5, "black", true);
+        setupTiles(6, "black", true);
+        setupTiles(7, "black", true);
+        setupTiles(8, "black", true);
+        setupTiles(9, "black", true);
         // grass
-        setupTiles(10, "001", false);
-        setupTiles(11, "002", false);
+        setupTiles(10, "grass_clear", false);
+        setupTiles(11, "grass_flowers", false);
+        setupTiles(15, "dirt", false);
+        setupTiles(20, "stone_small", true);
         // water
-        setupTiles(12, "water_clear", true);
-        setupTiles(13, "water_waves", true);
-        setupTiles(14, "water_north_west", true);
-        setupTiles(15, "water_north", true);
-        setupTiles(16, "water_north_east", true);
-        setupTiles(17, "water_west", true);
-        setupTiles(18, "water_east", true);
-        setupTiles(19, "water_south_west", true);
-        setupTiles(20, "water_south", true);
-        setupTiles(21, "water_south_east", true);
-        setupTiles(22, "water_top_left", true);
-        setupTiles(23, "water_top_right", true);
-        setupTiles(24, "water_bottom_left", true);
-        setupTiles(25, "water_bottom_left", true);
-        // path
-        setupTiles(26, "003", false);
-        setupTiles(27, "004", false);
-        setupTiles(28, "005", false);
-        setupTiles(29, "006", false);
-        setupTiles(30, "007", false);
-        setupTiles(31, "008", false);
-        setupTiles(32, "009", false);
-        setupTiles(33, "010", false);
-        setupTiles(34, "011", false);
-        setupTiles(35, "012", false);
-        setupTiles(36, "013", false);
-        setupTiles(37, "014", false);
-        setupTiles(38, "015", false);
-        // environment
-        setupTiles(39, "017", false);
-        setupTiles(40, "032", true);
-        setupTiles(41, "016_1", true);
+        setupTiles(30, "water_clear", true);
+        setupTiles(31, "water_waves", true);
+        setupTiles(32, "water_north_west", true);
+        setupTiles(33, "water_north", true);
+        setupTiles(34, "water_north_east", true);
+        setupTiles(35, "water_west", true);
+        setupTiles(36, "water_east", true);
+        setupTiles(37, "water_south_west", true);
+        setupTiles(38, "water_south", true);
+        setupTiles(39, "water_south_east", true);
+        setupTiles(40, "water_top_left", true);
+        setupTiles(41, "water_top_right", true);
+        setupTiles(42, "water_bottom_left", true);
+        setupTiles(43, "water_bottom_right", true);
+//        // path
+//        setupTiles(26, "003", false);
+//        setupTiles(27, "004", false);
+//        setupTiles(28, "005", false);
+//        setupTiles(29, "006", false);
+//        setupTiles(30, "007", false);
+//        setupTiles(31, "008", false);
+//        setupTiles(32, "009", false);
+//        setupTiles(33, "010", false);
+//        setupTiles(34, "011", false);
+//        setupTiles(35, "012", false);
+//        setupTiles(36, "013", false);
+//        setupTiles(37, "014", false);
+//        setupTiles(38, "015", false);
+        // walls
+        setupTiles(70, "wall_stone", true);
+        // floor
+        setupTiles(80, "wood_planks", false);
         // indoor
-        setupTiles(42, "033", false);
-        setupTiles(43, "034", false);
-        setupTiles(44, "035", true);
+        setupTiles(90, "hut", false);
+        setupTiles(95, "table", true);
     }
 
     private void setupTiles(int keyIndex, String imageName, boolean collision) {

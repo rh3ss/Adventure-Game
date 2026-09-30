@@ -6,7 +6,7 @@ import main.MapData;
 import main.UtilityTool;
 import object.GameObject;
 import object.armor.Armor;
-import object.lighting.Light;
+import object.light.Light;
 import object.shield.Shield;
 import object.weapon.Weapon;
 import projectile.Projectile;

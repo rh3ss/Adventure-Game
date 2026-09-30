@@ -7,7 +7,7 @@ class Main{
     public static JFrame window;
 
     public static void main(String[] args){
-        window = new JFrame("My Game");
+        window = new JFrame("Legends of Arcadia");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
 

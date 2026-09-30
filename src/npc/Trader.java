@@ -2,9 +2,9 @@ package npc;
 
 import enums.GameState;
 import main.GamePanel;
-import object.potion.PotionExperience;
-import object.potion.PotionHeal;
-import object.potion.PotionStrength;
+import object.consumable.PotionExperience;
+import object.consumable.PotionHeal;
+import object.consumable.PotionStrength;
 
 public class Trader extends NPC {
 

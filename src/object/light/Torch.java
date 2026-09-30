@@ -1,4 +1,4 @@
-package object.lighting;
+package object.light;
 
 import enums.ObjectType;
 import main.GamePanel;

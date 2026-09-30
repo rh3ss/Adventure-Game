@@ -2,7 +2,7 @@ package npc;
 
 import enums.GameState;
 import main.GamePanel;
-import object.potion.PotionHeal;
+import object.consumable.PotionHeal;
 
 public class Farmer extends NPC {
 

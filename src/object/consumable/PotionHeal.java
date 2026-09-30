@@ -1,4 +1,4 @@
-package object.potion;
+package object.consumable;
 
 import entity.Entity;
 import enums.ObjectType;
@@ -6,7 +6,7 @@ import main.GamePanel;
 
 import java.awt.Color;
 
-public class PotionHeal extends Potion {
+public class PotionHeal extends Consumable {
 
     public PotionHeal(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);

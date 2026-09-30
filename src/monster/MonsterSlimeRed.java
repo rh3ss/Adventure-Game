@@ -6,8 +6,8 @@ import enums.MonsterType;
 import main.GamePanel;
 import projectile.Bullet;
 import object.pickup.ManaCrystal;
-import object.potion.PotionExperience;
-import object.potion.PotionHeal;
+import object.consumable.PotionExperience;
+import object.consumable.PotionHeal;
 
 import java.awt.Rectangle;
 import java.util.Random;

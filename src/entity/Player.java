@@ -12,7 +12,7 @@ import monster.Monster;
 import npc.NPC;
 import object.GameObject;
 import object.armor.Armor;
-import object.lighting.Light;
+import object.light.Light;
 import object.shield.Shield;
 import object.weapon.Weapon;
 import projectile.Fireball;
@@ -44,8 +44,8 @@ public class Player extends Entity {
         // centering player
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
-        this.worldX = (this.gamePanel.tileSize * 22);
-        this.worldY = (this.gamePanel.tileSize * 24);
+        this.worldX = (this.gamePanel.tileSize * 16);
+        this.worldY = (this.gamePanel.tileSize * 17);
         // player status
         this.defaultVelocity = 4; this.velocity = this.defaultVelocity;
         this.strength = 1; this.dexterity = 1; this.coins = 100;
@@ -363,12 +363,8 @@ public class Player extends Entity {
                 this.generateParticle(tile, tile);
                 if (tile.maxHearts < 0) {
                     this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.set(tileIndex, tile.getFollowingTileAfterDestruction());
-                    if (tile.interactiveTileType == InteractiveTileType.DRY_TREE) {
+                    if (tile.interactiveTileType == InteractiveTileType.SMALL_TREE) {
                         Wood droppedWood = new Wood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, tile.worldY / this.gamePanel.tileSize);
-                        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(droppedWood);
-                    }
-                    else if (tile.interactiveTileType == InteractiveTileType.BIG_TREE) {
-                        Wood droppedWood = new Wood(this.gamePanel, tile.worldX / this.gamePanel.tileSize, (tile.worldY / this.gamePanel.tileSize) + 1);
                         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(droppedWood);
                     }
                 }

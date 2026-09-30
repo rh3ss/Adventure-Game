@@ -1,4 +1,4 @@
-package object.lighting;
+package object.light;
 
 import enums.EntityType;
 import enums.ObjectCategory;

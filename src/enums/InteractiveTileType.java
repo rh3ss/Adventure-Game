@@ -1,9 +1,7 @@
 package enums;
 
 public enum InteractiveTileType {
-    EMPTY,
-    DRY_TREE,
-    BIG_TREE,
+    SMALL_TREE,
     BUSH,
     TRUNK,
     WHEAT,

@@ -10,7 +10,7 @@ public abstract class GameObject extends Entity {
     public String objectName, objectDescription;
     public Color objectColor;
     public int objectBenefitValue, objectCoinValue;
-    public int objectCurrentStackableAmount, objectMaxStackableAmount;
+    public int objectCurrentStackableAmount;
     public double objectAttackDamageMultiplier, objectDamageReductionMultiplier;
     public boolean isTradable, isStackable;
 

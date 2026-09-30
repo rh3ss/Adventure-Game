@@ -7,16 +7,16 @@ import main.GamePanel;
 
 import java.awt.Color;
 
-public class DryTree extends InteractiveTile {
+public class SmallTree extends InteractiveTile {
 
-    public DryTree(GamePanel gamePanel, int worldColumn, int worldRow) {
+    public SmallTree(GamePanel gamePanel, int worldColumn, int worldRow) {
         super(gamePanel, worldColumn, worldRow);
 
-        this.interactiveTileType = InteractiveTileType.DRY_TREE;
+        this.interactiveTileType = InteractiveTileType.SMALL_TREE;
         this.isDestructible = true;
         this.isSolid = true;
         this.maxHearts = 3;
-        this.down1 = this.setupEntityImage("/res/tilesInteractive/drytree.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
+        this.down1 = this.setupEntityImage("/res/tilesInteractive/tree_small.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.worldX = worldColumn * gamePanel.tileSize;
         this.worldY = worldRow * gamePanel.tileSize;
     }
