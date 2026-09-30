@@ -1,4 +1,4 @@
-# Adventure-Game
+# Java2D - Legends of Arcadia
 
 Still working on this game. Big shoutouts to RyiSnow https://www.youtube.com/@RyiSnow for his Java2D game tutorial.
 
