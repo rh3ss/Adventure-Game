@@ -614,7 +614,7 @@ public class GUI {
 
     private void drawTransitionScreen() {
         this.transitionCounter++;
-        this.graphics2D.setColor(new Color(0, 0, 0, this.transitionCounter * 5));
+        this.graphics2D.setColor(new Color(0, 0, 139, this.transitionCounter * 5));
         this.graphics2D.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
         // transition is full black, now teleport player
         if (this.transitionCounter >= 50) {

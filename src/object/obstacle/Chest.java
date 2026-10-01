@@ -30,8 +30,8 @@ public class Chest extends Obstacle {
     }
 
     public void interact() {
-        this.gamePanel.gameState = GameState.DIALOGUE;
         if (!this.opened) {
+            this.gamePanel.gameState = GameState.DIALOGUE;
             this.gamePanel.gui.currentDialogueMessage = "You open the chest and find great loot!";
             int numLoot = this.loot.size();
             int chestX = this.worldX;

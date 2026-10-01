@@ -25,8 +25,8 @@ import tileInteractive.InteractiveTile;
 
 public class Player extends Entity {
     private final Keyboard keyboard;
-    public int screenX;
-    public int screenY;
+    public int spawnColumn, spawnRow;
+    public int screenX, screenY;
     public boolean lightUpdated;
 
     public Player(GamePanel p, Keyboard k) {
@@ -44,10 +44,12 @@ public class Player extends Entity {
         // centering player
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
-        this.worldX = (this.gamePanel.tileSize * 16);
-        this.worldY = (this.gamePanel.tileSize * 17);
+        this.spawnColumn = 9;
+        this.spawnRow = 8;
+        this.worldX = (this.gamePanel.tileSize * this.spawnColumn);
+        this.worldY = (this.gamePanel.tileSize * this.spawnRow);
         // player status
-        this.defaultVelocity = 4; this.velocity = this.defaultVelocity;
+        this.defaultVelocity = 5; this.velocity = this.defaultVelocity;
         this.strength = 1; this.dexterity = 1; this.coins = 100;
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
@@ -61,8 +63,8 @@ public class Player extends Entity {
         this.defenseArmor = this.getDefenseArmor();
     }
     public void setDefaultValuesAfterRespawn() {
-        this.worldX = (this.gamePanel.tileSize * 22);
-        this.worldY = (this.gamePanel.tileSize * 24);
+        this.worldX = (this.gamePanel.tileSize * this.spawnColumn);
+        this.worldY = (this.gamePanel.tileSize * this.spawnRow);
         this.maxHearts = 5; this.currentHearts = this.maxHearts;
         this.maxMana = 3; this.currentMana = this.maxMana;
         this.isInvincible = false;

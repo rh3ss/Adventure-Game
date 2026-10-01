@@ -43,7 +43,7 @@ public class TileManager {
         setupTiles(9, "black", true);
         // grass
         setupTiles(10, "grass_clear", false);
-        setupTiles(11, "grass_flowers", false);
+        setupTiles(11, "grass_big_flower", false);
         setupTiles(15, "dirt", false);
         setupTiles(20, "stone_small", true);
         // water

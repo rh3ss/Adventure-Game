@@ -2,6 +2,7 @@ package main;
 
 import enums.Direction;
 import enums.GameState;
+import portal.Portal;
 
 public class EventHandler {
     private final GamePanel gamePanel;
@@ -45,28 +46,42 @@ public class EventHandler {
             this.playerCanAccessEventAgain = true;
         }
         if (this.playerCanAccessEventAgain) {
-            if (playerHitSomething(0, 22, 18, Direction.UP)) { eventDamagePit(GameState.DIALOGUE); }
-            else if (playerHitSomething(0, 22, 17, Direction.UP)) { eventHealingPool(GameState.DIALOGUE); }
-            // Access hut
-            else if (playerHitSomething(0, 24, 21, Direction.UP)) {
-                eventTeleportPlayerIsTriggered(1, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1);
-            }
-            // Leave hut
-            else if (playerHitSomething(1, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1, Direction.DOWN)) {
-                eventTeleportPlayerIsTriggered(0, 24, 21);
-            }
-            // Access farm barn
-            else if (playerHitSomething(0, 10, 15, Direction.UP)) {
-                eventTeleportPlayerIsTriggered(2, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1);
-            }
-            // Leave farm barn
-            else if (playerHitSomething(2, (this.gamePanel.maxWorldColumns / 2) - 1, (this.gamePanel.maxWorldRows / 2) - 1, Direction.DOWN)) {
-                eventTeleportPlayerIsTriggered(0, 10, 16);
-            }
+            this.checkRandomEvents();
+            this.checkTeleport();
         }
     }
 
-    public boolean playerHitSomething(int mapNumber, int eventColumn, int eventRow, Direction direction) {
+    public void checkRandomEvents() {
+        if (playerHitSomething(0, 22, 17, Direction.UP)) {
+            eventHealingPool(GameState.DIALOGUE);
+        }
+    }
+
+    public void checkTeleport() {
+        Portal p1 = this.gamePanel.assetSetter.portalLeaveSpawnIsland;
+        Portal p2 = this.gamePanel.assetSetter.portalAccessSpawnIsland;
+        Portal p3 = this.gamePanel.assetSetter.portalAccessSouthIsland;
+        Portal p4 = this.gamePanel.assetSetter.portalLeaveSouthIsland;
+
+        // Leave spawn island
+        if (playerHitSomething(0, p1.worldX / this.gamePanel.tileSize, p1.worldY / this.gamePanel.tileSize, Direction.ANY)) {
+            eventTeleportPlayerIsTriggered(0, p2.worldX / this.gamePanel.tileSize, p2.worldY / this.gamePanel.tileSize);
+        }
+        // Access spawn island
+        else if (playerHitSomething(0, p2.worldX / this.gamePanel.tileSize, p2.worldY / this.gamePanel.tileSize, Direction.ANY)) {
+            eventTeleportPlayerIsTriggered(0, p1.worldX / this.gamePanel.tileSize, p1.worldY / this.gamePanel.tileSize);
+        }
+        // Access south island
+        else if (playerHitSomething(0, p3.worldX / this.gamePanel.tileSize, p3.worldY / this.gamePanel.tileSize, Direction.ANY)) {
+            eventTeleportPlayerIsTriggered(0, p4.worldX / this.gamePanel.tileSize, p4.worldY / this.gamePanel.tileSize);
+        }
+        // Leave south island
+        else if (playerHitSomething(0, p4.worldX / this.gamePanel.tileSize, p4.worldY / this.gamePanel.tileSize, Direction.ANY)) {
+            eventTeleportPlayerIsTriggered(0, p3.worldX / this.gamePanel.tileSize, p3.worldY / this.gamePanel.tileSize);
+        }
+    }
+
+    private boolean playerHitSomething(int mapNumber, int eventColumn, int eventRow, Direction direction) {
         boolean hit = false;
         if (mapNumber == this.gamePanel.currentMapNumber) {
             this.gamePanel.player.solidArea.x = this.gamePanel.player.worldX + this.gamePanel.player.solidAreaDefaultX;
@@ -89,23 +104,12 @@ public class EventHandler {
         return hit;
     }
 
-    private void eventDamagePit(GameState gameState) {
-        this.gamePanel.gameState = gameState;
-        this.gamePanel.gui.currentDialogueMessage = "You fall into a pit!";
-        if (this.gamePanel.player.currentHearts > 0) {
-            this.gamePanel.player.currentHearts--;
-        }
-        // this.eventRectangle[eventRow][eventColumn].eventDone = true;
-        this.playerCanAccessEventAgain = false;
-    }
-
     private void eventHealingPool(GameState gameState) {
         if (this.gamePanel.keyboard.isEnterPressed) {
             this.gamePanel.gameState = gameState;
             this.gamePanel.gui.currentDialogueMessage = "You drink the water and mana!";
             this.gamePanel.player.currentHearts = this.gamePanel.player.maxHearts;
             this.gamePanel.player.currentMana = this.gamePanel.player.maxMana;
-            //this.eventRectangle[eventRow][eventColumn].eventDone = true;
         }
     }
 
