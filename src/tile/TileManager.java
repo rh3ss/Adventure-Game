@@ -25,8 +25,8 @@ public class TileManager {
 
         this.getTileImages();
         this.loadMap("/res/maps/world.txt", 0);
-        this.loadMap("/res/maps/hut.txt", 1);
-        this.loadMap("/res/maps/farm_barn.txt", 2);
+        this.loadMap("/res/maps/farm_barn.txt", 1);
+        this.loadMap("/res/maps/hut.txt", 2);
     }
 
     private void getTileImages() {

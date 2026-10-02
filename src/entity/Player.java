@@ -44,8 +44,8 @@ public class Player extends Entity {
         // centering player
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
-        this.spawnColumn = 9;
-        this.spawnRow = 8;
+        this.spawnColumn = 34;
+        this.spawnRow = 33;
         this.worldX = (this.gamePanel.tileSize * this.spawnColumn);
         this.worldY = (this.gamePanel.tileSize * this.spawnRow);
         // player status

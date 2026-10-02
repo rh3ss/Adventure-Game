@@ -33,8 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean fullScreenOn;
 
     // WORLD
-    public final int maxWorldColumns = 50;
-    public final int maxWorldRows = 50;
+    public final int maxWorldColumns = 100;
+    public final int maxWorldRows = 100;
     public final int worldWidth = this.tileSize * this.maxWorldColumns;
     public final int worldHeight = this.tileSize * this.maxWorldRows;
 

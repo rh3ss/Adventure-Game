@@ -47,6 +47,7 @@ public class EventHandler {
         }
         if (this.playerCanAccessEventAgain) {
             this.checkRandomEvents();
+            this.checkBuildingAccess();
             this.checkTeleport();
         }
     }
@@ -54,6 +55,17 @@ public class EventHandler {
     public void checkRandomEvents() {
         if (playerHitSomething(0, 22, 17, Direction.UP)) {
             eventHealingPool(GameState.DIALOGUE);
+        }
+    }
+
+    public void checkBuildingAccess() {
+        // Access farm barn
+        if (playerHitSomething(0, 58, 39, Direction.ANY)) {
+            eventTeleportPlayerIsTriggered(1, 50, 53);
+        }
+        // Leave farm barn
+        else if (playerHitSomething(1, 50, 53, Direction.ANY)) {
+            eventTeleportPlayerIsTriggered(0, 58, 39);
         }
     }
 

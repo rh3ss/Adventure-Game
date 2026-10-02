@@ -167,6 +167,10 @@ public class GUI {
         this.drawPlayerCoins();
         this.drawPlayerEquipment();
         this.drawMessages();
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(30F));
+        this.graphics2D.drawString("Column: " + (this.gamePanel.player.worldX / this.gamePanel.tileSize), this.gamePanel.tileSize, this.gamePanel.tileSize * 8);
+        this.graphics2D.drawString("Row: " + ((this.gamePanel.player.worldY / this.gamePanel.tileSize) + 1), this.gamePanel.tileSize, this.gamePanel.tileSize * 8 + 30);
     }
     private void drawPlayerHearts() {
         int xPos = this.gamePanel.tileSize / 2;
@@ -614,7 +618,7 @@ public class GUI {
 
     private void drawTransitionScreen() {
         this.transitionCounter++;
-        this.graphics2D.setColor(new Color(0, 0, 139, this.transitionCounter * 5));
+        this.graphics2D.setColor(new Color(0, 0, 0, this.transitionCounter * 5));
         this.graphics2D.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
         // transition is full black, now teleport player
         if (this.transitionCounter >= 50) {

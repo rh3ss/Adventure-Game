@@ -2,7 +2,7 @@ package main;
 
 import entity.Entity;
 import npc.*;
-import monster.*;
+import object.GameObject;
 import object.armor.*;
 import object.consumable.*;
 import object.interactable.*;
@@ -50,16 +50,23 @@ public class AssetSetter {
     }
 
     public void setObjects() {
-        ArrayList<Entity> objects = new ArrayList<>(List.of(
+        ArrayList<GameObject> objects = new ArrayList<>(List.of(
                 // spawn island
-                new Chest(this.gamePanel, 9, 6, new ArrayList<>(List.of(
-                        new Coin(this.gamePanel, 24, 17),
-                        new Coin(this.gamePanel, 24, 17),
-                        new CoinPile(this.gamePanel, 24, 18),
-                        new CoinPile(this.gamePanel, 24, 18),
-                        new CoinBag(this.gamePanel, 24, 19),
-                        new CoinBag(this.gamePanel, 24, 19)
+                new ChestIron(this.gamePanel, 34, 31, new ArrayList<>(List.of(
+                        new Coin(this.gamePanel, -1, -1),
+                        new Coin(this.gamePanel, -1, -1),
+                        new CoinPile(this.gamePanel, -1, -1),
+                        new CoinPile(this.gamePanel, -1, -1),
+                        new CoinBag(this.gamePanel, -1, -1),
+                        new CoinBag(this.gamePanel, -1, -1)
                 ))),
+                new AxeIron(this.gamePanel, 31, 34),
+
+                // main island
+                new PotionStrength(this.gamePanel, 57, 49),
+                new Torch(this.gamePanel, 59, 46),
+                new PotionHeal(this.gamePanel, 54, 29),
+
 
                 new KeySilver(this.gamePanel, 24, 15),
                 new KeyGold(this.gamePanel, 24, 16),
@@ -75,17 +82,6 @@ public class AssetSetter {
 //                new Door(this.gamePanel, 19, 20),
 //                new Door(this.gamePanel, 25, 20),
 
-                new Chest(this.gamePanel, 15, 17, new ArrayList<>(List.of(
-                    new PotionExperience(this.gamePanel, 21, 25),
-                    new PotionHeal(this.gamePanel, 21, 26),
-                    new PotionSpeed(this.gamePanel, 21, 27),
-                    new PotionStrength(this.gamePanel, 21, 28),
-                    new AxeIron(this.gamePanel, 22, 25),
-                    new SwordIron(this.gamePanel, 22, 26),
-                    new AxeGold(this.gamePanel, 22, 27),
-                    new SwordGold(this.gamePanel, 22, 28)
-                ))),
-
                 new AxeIron(this.gamePanel, 21, 15),
                 new SwordIron(this.gamePanel, 21, 16),
                 new AxeGold(this.gamePanel, 21, 17),
@@ -100,7 +96,23 @@ public class AssetSetter {
                 new PotionExperience(this.gamePanel, 23, 15),
                 new PotionHeal(this.gamePanel, 23, 16),
                 new PotionSpeed(this.gamePanel, 23, 17),
-                new PotionStrength(this.gamePanel, 23, 18)
+
+
+                // south island
+                new ChestGold(this.gamePanel, 62, 61, new ArrayList<>(List.of(
+                        new AxeGold(this.gamePanel, -1, -1),
+                        new Coin(this.gamePanel, -1, -1),
+                        new CoinPile(this.gamePanel, -1, -1),
+                        new CoinBag(this.gamePanel, -1, -1),
+                        new SwordGold(this.gamePanel, -1, -1),
+                        new Coin(this.gamePanel, -1, -1),
+                        new CoinPile(this.gamePanel, -1, -1),
+                        new CoinBag(this.gamePanel, -1, -1),
+                        new ArmorGold(this.gamePanel, -1, -1),
+                        new Coin(this.gamePanel, -1, -1),
+                        new CoinPile(this.gamePanel, -1, -1),
+                        new CoinBag(this.gamePanel, -1, -1)
+                )))
         ));
 
         this.gamePanel.maps.get(0).entities.addAll(objects);
@@ -111,7 +123,7 @@ public class AssetSetter {
                 new OldMan(this.gamePanel, 10, 18),
                 new Trader(this.gamePanel, 11, 18),
                 new Blacksmith(this.gamePanel, 12, 18),
-                new Farmer(this.gamePanel, 13, 14)
+                new Farmer(this.gamePanel, 56, 40)
         ));
 
         this.gamePanel.maps.get(0).entities.addAll(npcs);
@@ -119,25 +131,21 @@ public class AssetSetter {
 
     public void setMonsters() {
         ArrayList<Entity> monsters = new ArrayList<>(List.of(
-                new MonsterSlimeGreen(this.gamePanel, 23, 38),
-                new MonsterSlimeGreen(this.gamePanel, 23, 40),
-                new MonsterSlimeGreen(this.gamePanel, 23, 43),
-                new MonsterSlimeGreen(this.gamePanel, 23, 42),
-
-                new MonsterSlimeRed(this.gamePanel, 21, 38),
-                new MonsterSlimeRed(this.gamePanel, 21, 40),
-                new MonsterSlimeRed(this.gamePanel, 21, 43),
-                new MonsterSlimeRed(this.gamePanel, 21, 42)
+//                new MonsterSlimeGreen(this.gamePanel, 46, 66),
+//                new MonsterSlimeGreen(this.gamePanel, 47, 66),
+//
+//                new MonsterSlimeRed(this.gamePanel, 48, 66),
+//                new MonsterSlimeRed(this.gamePanel, 49, 66)
         ));
 
         this.gamePanel.maps.get(0).entities.addAll(monsters);
     }
 
     public void setPortals() {
-        this.portalLeaveSpawnIsland = new Portal(this.gamePanel, 8, 11);
-        this.portalAccessSpawnIsland = new Portal(this.gamePanel, 16, 12);
-        this.portalLeaveSouthIsland = new Portal(this.gamePanel, 40, 31);
-        this.portalAccessSouthIsland = new Portal(this.gamePanel, 38, 24);
+        this.portalLeaveSpawnIsland = new Portal(this.gamePanel, 33, 36);
+        this.portalAccessSpawnIsland = new Portal(this.gamePanel, 41, 36);
+        this.portalLeaveSouthIsland = new Portal(this.gamePanel, 66, 57);
+        this.portalAccessSouthIsland = new Portal(this.gamePanel, 63, 49);
 
         ArrayList<Portal> portals = new ArrayList<>(List.of(
                 this.portalLeaveSpawnIsland,
@@ -152,125 +160,215 @@ public class AssetSetter {
     public void setInteractiveTiles() {
         ArrayList<Entity> interactiveTiles = new ArrayList<>(List.of(
                 // spawn island
-                new SmallTree(this.gamePanel, 7, 6),
-                new SmallTree(this.gamePanel, 9, 11),
+                new Bush(this.gamePanel, "bush_2", 34, 30),
+                new SmallTree(this.gamePanel, 32, 31),
+                new Bush(this.gamePanel, "bush_2", 30, 32),
+                new Bush(this.gamePanel, "bush_1", 36, 34),
+                new SmallTree(this.gamePanel, 34, 36),
 
                 // main island
-                new Bush(this.gamePanel, "bush_2", 5, 7),
-                new Bush(this.gamePanel, "bush_1", 11, 9),
-                new Bush(this.gamePanel, "bush_2", 9, 5),
-                new SmallTree(this.gamePanel, 21, 7),
-                new SmallTree(this.gamePanel, 27, 6),
-                new SmallTree(this.gamePanel, 31, 8),
-                new SmallTree(this.gamePanel, 36, 10),
-                new Bush(this.gamePanel, "bush_1", 20, 9),
-                new Bush(this.gamePanel, "bush_2", 24, 7),
-                new Bush(this.gamePanel, "bush_1", 29, 9),
-                new Bush(this.gamePanel, "bush_2", 33, 7),
-                new Bush(this.gamePanel, "bush_1", 36, 12),
-                new SmallTree(this.gamePanel, 17, 13),
-                new SmallTree(this.gamePanel, 15, 17),
-                new SmallTree(this.gamePanel, 13, 21),
-                new SmallTree(this.gamePanel, 10, 25),
-                new SmallTree(this.gamePanel, 9, 30),
-                new SmallTree(this.gamePanel, 10, 34),
-                new Bush(this.gamePanel, "bush_2", 17, 15),
-                new Bush(this.gamePanel, "bush_1", 14, 19),
-                new Bush(this.gamePanel, "bush_2", 11, 23),
-                new Bush(this.gamePanel, "bush_1", 9, 28),
-                new Bush(this.gamePanel, "bush_2", 11, 32),
-                new Bush(this.gamePanel, "bush_1", 14, 35),
-                new SmallTree(this.gamePanel, 36, 15),
-                new SmallTree(this.gamePanel, 34, 19),
-                new SmallTree(this.gamePanel, 34, 24),
-                new SmallTree(this.gamePanel, 37, 28),
-                new SmallTree(this.gamePanel, 38, 32),
-                new SmallTree(this.gamePanel, 37, 36),
-                new Bush(this.gamePanel, "bush_1", 36, 17),
-                new Bush(this.gamePanel, "bush_2", 33, 21),
-                new Bush(this.gamePanel, "bush_1", 35, 26),
-                new Bush(this.gamePanel, "bush_2", 38, 30),
-                new Bush(this.gamePanel, "bush_1", 36, 34),
-                new Bush(this.gamePanel, "bush_2", 34, 38),
-                new SmallTree(this.gamePanel, 16, 39),
-                new SmallTree(this.gamePanel, 21, 41),
-                new SmallTree(this.gamePanel, 26, 40),
-                new SmallTree(this.gamePanel, 30, 39),
-                new Bush(this.gamePanel, "bush_1", 18, 40),
-                new Bush(this.gamePanel, "bush_2", 23, 41),
-                new Bush(this.gamePanel, "bush_1", 28, 39),
-                new Bush(this.gamePanel, "bush_2", 32, 38),
-                new SmallTree(this.gamePanel, 22, 18),
-                new SmallTree(this.gamePanel, 29, 16),
-                new SmallTree(this.gamePanel, 18, 28),
-                new SmallTree(this.gamePanel, 29, 29),
-                new SmallTree(this.gamePanel, 24, 34),
-                new Bush(this.gamePanel, "bush_2", 21, 20),
-                new Bush(this.gamePanel, "bush_1", 27, 18),
-                new Bush(this.gamePanel, "bush_2", 19, 27),
-                new Bush(this.gamePanel, "bush_1", 31, 27),
-                new Bush(this.gamePanel, "bush_2", 26, 33)
+                new Wheat(this.gamePanel, 48, 35),
+                new Wheat(this.gamePanel, 49, 35),
+                new Wheat(this.gamePanel, 50, 35),
+                new Wheat(this.gamePanel, 51, 35),
+                new Wheat(this.gamePanel, 52, 35),
+                new Wheat(this.gamePanel, 53, 35),
+                new Wheat(this.gamePanel, 54, 35),
+                new Wheat(this.gamePanel, 55, 35),
+                new Wheat(this.gamePanel, 48, 36),
+                new Wheat(this.gamePanel, 49, 36),
+                new Wheat(this.gamePanel, 50, 36),
+                new Wheat(this.gamePanel, 51, 36),
+                new Wheat(this.gamePanel, 52, 36),
+                new Wheat(this.gamePanel, 53, 36),
+                new Wheat(this.gamePanel, 54, 36),
+                new Wheat(this.gamePanel, 55, 36),
+                new Wheat(this.gamePanel, 48, 37),
+                new Wheat(this.gamePanel, 49, 37),
+                new Wheat(this.gamePanel, 50, 37),
+                new Wheat(this.gamePanel, 51, 37),
+                new Wheat(this.gamePanel, 52, 37),
+                new Wheat(this.gamePanel, 53, 37),
+                new Wheat(this.gamePanel, 54, 37),
+                new Wheat(this.gamePanel, 55, 37),
+                new Wheat(this.gamePanel, 48, 38),
+                new Wheat(this.gamePanel, 49, 38),
+                new Wheat(this.gamePanel, 50, 38),
+                new Wheat(this.gamePanel, 51, 38),
+                new Wheat(this.gamePanel, 52, 38),
+                new Wheat(this.gamePanel, 53, 38),
+                new Wheat(this.gamePanel, 54, 38),
+                new Wheat(this.gamePanel, 55, 38),
+                new Wheat(this.gamePanel, 48, 39),
+                new Wheat(this.gamePanel, 49, 39),
+                new Wheat(this.gamePanel, 50, 39),
+                new Wheat(this.gamePanel, 51, 39),
+                new Wheat(this.gamePanel, 52, 39),
+                new Wheat(this.gamePanel, 53, 39),
+                new Wheat(this.gamePanel, 54, 39),
+                new Wheat(this.gamePanel, 55, 39),
+                new TreeBig(this.gamePanel, 45, 32),
+                new SmallTree(this.gamePanel, 51, 32),
+                new Bush(this.gamePanel, "bush_2", 50, 28),
+                new Bush(this.gamePanel, "bush_2", 49, 33),
+                new Bush(this.gamePanel, "bush_2", 52, 34),
+                new Bush(this.gamePanel, "bush_1", 53, 34),
+                new Bush(this.gamePanel, "bush_2", 43, 35),
+                new SmallTree(this.gamePanel, 43, 41),
+                new SmallTree(this.gamePanel, 45, 42),
+                new Bush(this.gamePanel, "bush_1", 38, 43),
+                new Bush(this.gamePanel, "bush_1", 44, 44),
+                new Bush(this.gamePanel, "bush_2", 45, 44),
+                new Bush(this.gamePanel, "bush_2", 45, 46),
+                new SmallTree(this.gamePanel, 56, 45),
+                new Bush(this.gamePanel, "bush_2", 57, 45),
+                new Bush(this.gamePanel, "bush_2", 52, 46),
+                new Bush(this.gamePanel, "bush_2", 53, 46),
+                new Bush(this.gamePanel, "bush_1", 55, 47),
+                new Bush(this.gamePanel, "bush_2", 49, 47),
+                new SmallTree(this.gamePanel, 47, 50),
+                new Bush(this.gamePanel, "bush_2", 48, 50),
+                new Bush(this.gamePanel, "bush_2", 53, 51),
+                new Bush(this.gamePanel, "bush_2", 46, 53),
+                new SmallTree(this.gamePanel, 49, 53),
+                new Bush(this.gamePanel, "bush_2", 43, 47),
+                new Bush(this.gamePanel, "bush_2", 40, 49),
+                new Bush(this.gamePanel, "bush_1", 37, 51),
+                new SmallTree(this.gamePanel, 39, 51),
+                new Bush(this.gamePanel, "bush_1", 36, 53),
+                new SmallTree(this.gamePanel, 39, 53),
+                new Bush(this.gamePanel, "bush_1", 39, 54),
+                new Bush(this.gamePanel, "bush_1", 41, 55),
+                new Bush(this.gamePanel, "bush_2", 58, 54),
+                new SmallTree(this.gamePanel, 59, 54),
+                new SmallTree(this.gamePanel, 57, 57),
+                new Bush(this.gamePanel, "bush_1", 55, 59),
+                new Bush(this.gamePanel, "bush_2", 48, 57),
+                new Bush(this.gamePanel, "bush_2", 48, 58),
+                new SmallTree(this.gamePanel, 50, 59),
+                new Bush(this.gamePanel, "bush_2", 51, 59),
+                new Bush(this.gamePanel, "bush_1", 33, 54),
+                new SmallTree(this.gamePanel, 38, 57),
+                new Bush(this.gamePanel, "bush_1", 40, 58),
+                new SmallTree(this.gamePanel, 34, 59),
+                new Bush(this.gamePanel, "bush_2", 39, 61),
+                new Bush(this.gamePanel, "bush_2", 42, 59),
+                new Bush(this.gamePanel, "bush_2", 45, 61),
+                new Bush(this.gamePanel, "bush_2", 44, 62),
+                new SmallTree(this.gamePanel, 45, 62),
+                new Bush(this.gamePanel, "bush_2", 45, 64),
+                new Bush(this.gamePanel, "bush_1", 41, 65),
+                new SmallTree(this.gamePanel, 45, 65),
+                new Bush(this.gamePanel, "bush_2", 47, 66),
+                new Bush(this.gamePanel, "bush_1", 50, 66),
 
                 // south island
+                new Bush(this.gamePanel, "bush_1", 67, 57),
+                new Bush(this.gamePanel, "bush_1", 65, 58),
+                new SmallTree(this.gamePanel, 64, 61),
+                new Bush(this.gamePanel, "bush_2", 63, 64),
+                new Bush(this.gamePanel, "bush_2", 61, 65)
         ));
+
         this.gamePanel.maps.get(0).entities.addAll(interactiveTiles);
     }
 
     public void setFixTiles() {
         ArrayList<TileFix> fixTiles = new ArrayList<>(List.of(
                 // spawn island
-                new TreeSquares(this.gamePanel, 12, 6),
-                new TreeSquares(this.gamePanel, 10, 10),
-                new TreeSquares(this.gamePanel, 6, 11),
-                new TreeMiddle(this.gamePanel, 8, 5),
-                new TreeMiddle(this.gamePanel, 11, 8),
-                new TreePine(this.gamePanel, 6, 7),
+                new TreeMiddle(this.gamePanel, 33, 30),
+                new TreeSquares(this.gamePanel, 37, 31),
+                new TreePine(this.gamePanel, 31, 32),
+                new TreeMiddle(this.gamePanel, 36, 33),
+                new TreeSquares(this.gamePanel, 35, 35),
+                new TreeSquares(this.gamePanel, 31, 36),
 
                 // main island
-                new TreePine(this.gamePanel, 20, 8),
-                new TreeMiddle(this.gamePanel, 23, 7),
-                new TreeSquares(this.gamePanel, 26, 7),
-                new TreePine(this.gamePanel, 30, 8),
-                new TreeMiddle(this.gamePanel, 33, 9),
-                new TreeSquares(this.gamePanel, 36, 11),
-                new TreeBig(this.gamePanel, 24, 11),
-                new TreeBig(this.gamePanel, 31, 12),
-                new TreePine(this.gamePanel, 17, 15),
-                new TreeSquares(this.gamePanel, 15, 18),
-                new TreeMiddle(this.gamePanel, 13, 21),
-                new TreeBig(this.gamePanel, 18, 20),
-                new TreePine(this.gamePanel, 11, 24),
-                new TreeMiddle(this.gamePanel, 9, 27),
-                new TreeSquares(this.gamePanel, 9, 31),
-                new TreePine(this.gamePanel, 11, 35),
-                new TreeMiddle(this.gamePanel, 14, 38),
-                new TreeBig(this.gamePanel, 14, 29),
-                new TreeBig(this.gamePanel, 16, 35),
-                new TreeMiddle(this.gamePanel, 36, 15),
-                new TreePine(this.gamePanel, 34, 18),
-                new TreeSquares(this.gamePanel, 35, 21),
-                new TreeBig(this.gamePanel, 31, 20),
-                new TreePine(this.gamePanel, 35, 25),
-                new TreeMiddle(this.gamePanel, 38, 29),
-                new TreeSquares(this.gamePanel, 37, 33),
-                new TreePine(this.gamePanel, 35, 37),
-                new TreeBig(this.gamePanel, 31, 29),
-                new TreeBig(this.gamePanel, 32, 35),
-                new TreeSquares(this.gamePanel, 17, 40),
-                new TreePine(this.gamePanel, 21, 41),
-                new TreeMiddle(this.gamePanel, 25, 40),
-                new TreeSquares(this.gamePanel, 29, 39),
-                new TreeBig(this.gamePanel, 23, 39),
-                new TreeMiddle(this.gamePanel, 20, 17),
-                new TreeSquares(this.gamePanel, 23, 19),
-                new TreePine(this.gamePanel, 28, 17),
-                new TreeSquares(this.gamePanel, 19, 25),
-                new TreeMiddle(this.gamePanel, 23, 27),
-                new TreePine(this.gamePanel, 29, 25),
-                new TreeMiddle(this.gamePanel, 20, 33),
-                new TreeSquares(this.gamePanel, 27, 33)
+                new FarmBarn(this.gamePanel, 56, 35),
+                new TreePine(this.gamePanel, 51, 31),
+                new TreeBig(this.gamePanel, 53, 31),
+                new TreePine(this.gamePanel, 49, 32),
+                new TreeSquares(this.gamePanel, 52, 32),
+                new TreeMiddle(this.gamePanel, 54, 33),
+                new TreePine(this.gamePanel, 55, 33),
+                new TreePine(this.gamePanel, 57, 34),
+                new TreeSquares(this.gamePanel, 46, 34),
+                new TreeMiddle(this.gamePanel, 51, 34),
+                new TreeSquares(this.gamePanel, 44, 34),
+                new TreeMiddle(this.gamePanel, 44, 38),
+                new TreeMiddle(this.gamePanel, 51, 28),
+                new TreeMiddle(this.gamePanel, 43, 40),
+                new TreeSquares(this.gamePanel, 44, 40),
+                new TreeSquares(this.gamePanel, 42, 41),
+                new TreeBig(this.gamePanel, 45, 41),
+                new TreeMiddle(this.gamePanel, 37, 43),
+                new TreeMiddle(this.gamePanel, 43, 43),
+                new TreeSquares(this.gamePanel, 40, 45),
+                new TreeMiddle(this.gamePanel, 53, 45),
+                new TreeBig(this.gamePanel, 54, 45),
+                new TreeMiddle(this.gamePanel, 57, 47),
+                new TreeSquares(this.gamePanel, 58, 48),
+                new TreeBig(this.gamePanel, 59, 49),
+                new TreeSquares(this.gamePanel, 53, 49),
+                new TreeMiddle(this.gamePanel, 51, 48),
+                new TreeBig(this.gamePanel, 47, 49),
+                new TreeSquares(this.gamePanel, 46, 50),
+                new TreePine(this.gamePanel, 49, 50),
+                new TreeSquares(this.gamePanel, 51, 50),
+                new TreePine(this.gamePanel, 45, 51),
+                new TreePine(this.gamePanel, 50, 52),
+                new TreeSquares(this.gamePanel, 52, 52),
+                new TreeSquares(this.gamePanel, 47, 53),
+                new TreePine(this.gamePanel, 48, 53),
+                new TreePine(this.gamePanel, 42, 47),
+                new TreeMiddle(this.gamePanel, 38, 50),
+                new TreePine(this.gamePanel, 39, 50),
+                new TreePine(this.gamePanel, 34, 53),
+                new TreeSquares(this.gamePanel, 40, 53),
+                new TreeBig(this.gamePanel, 41, 53),
+                new TreeSquares(this.gamePanel, 43, 53),
+                new TreeSquares(this.gamePanel, 38, 54),
+                new TreeMiddle(this.gamePanel, 42, 55),
+                new TreePine(this.gamePanel, 58, 51), //
+                new TreeMiddle(this.gamePanel, 54, 55),
+                new TreeBig(this.gamePanel, 55, 55),
+                new TreePine(this.gamePanel, 57, 55),
+                new TreePine(this.gamePanel, 53, 56),
+                new TreeBig(this.gamePanel, 55, 58),
+                new TreePine(this.gamePanel, 54, 59),
+                new TreeMiddle(this.gamePanel, 48, 56),
+                new TreePine(this.gamePanel, 47, 57),
+                new TreeBig(this.gamePanel, 49, 57),
+                new TreeMiddle(this.gamePanel, 51, 57),
+                new TreeMiddle(this.gamePanel, 47, 59),
+                new TreeMiddle(this.gamePanel, 52, 59),
+                new TreeSquares(this.gamePanel, 49, 60),
+                new TreeSquares(this.gamePanel, 38, 56),
+                new TreeMiddle(this.gamePanel, 35, 57),
+                new TreeSquares(this.gamePanel, 36, 57),
+                new TreePine(this.gamePanel, 37, 57),
+                new TreeMiddle(this.gamePanel, 39, 57),
+                new TreeBig(this.gamePanel, 35, 60),
+                new TreeSquares(this.gamePanel, 37, 60),
+                new TreePine(this.gamePanel, 39, 60),
+                new TreeSquares(this.gamePanel, 40, 60),
+                new TreeMiddle(this.gamePanel, 44, 61),
+                new TreeSquares(this.gamePanel, 46, 61),
+                new TreeSquares(this.gamePanel, 42, 62),
+                new TreePine(this.gamePanel, 47, 63),
+                new TreePine(this.gamePanel, 41, 64),
+                new TreeBig(this.gamePanel, 42, 65),
+                new TreeSquares(this.gamePanel, 44, 65),
+                new TreeMiddle(this.gamePanel, 49, 66),
+                new TreeSquares(this.gamePanel, 52, 66),
 
                 // south island
+                new TreeSquares(this.gamePanel, 66, 56),
+                new TreeMiddle(this.gamePanel, 63, 59),
+                new TreeSquares(this.gamePanel, 66, 59),
+                new TreePine(this.gamePanel, 62, 60),
+                new TreeMiddle(this.gamePanel, 60, 64),
+                new TreeMiddle(this.gamePanel, 64, 63)
         ));
         this.gamePanel.maps.get(0).entities.addAll(fixTiles);
     }
