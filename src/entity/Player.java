@@ -73,8 +73,8 @@ public class Player extends Entity {
     private void setInventory() {
         // inventory
         this.inventory = new ArrayList<>();
-        this.inventoryColumnSize = 5;
-        this.inventoryRowSize = 4;
+        this.inventoryColumnSize = 9;
+        this.inventoryRowSize = 3;
         this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
 
         this.inventory.add(this.currentWeapon);

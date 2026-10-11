@@ -19,7 +19,7 @@ public class PathFinder {
     private Node startNode, currentNode, destinationNode;
     private boolean destinationReached;
     private int step;
-    private final int MAX_STEP_ALLOWED = 500;
+    private final int MAX_STEP_ALLOWED = 100;
 
     public PathFinder(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
