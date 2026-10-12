@@ -7,6 +7,7 @@ import enums.*;
 import enums.Menu;
 import object.GameObject;
 import object.pickup.Coin;
+import object.pickup.CoinPile;
 import object.pickup.Heart;
 import object.pickup.ManaCrystal;
 
@@ -77,7 +78,7 @@ public class GUI {
         Entity heart = new Heart(this.gamePanel, -1, -1);
         this.heartFull = heart.image1;
         this.heartBlank = heart.image2;
-        Entity coin = new Coin(this.gamePanel, -1, -1);
+        Entity coin = new CoinPile(this.gamePanel, -1, -1);
         this.coin = coin.down1;
         Entity manaCrystal = new ManaCrystal(this.gamePanel, -1, -1);
         this.manaCrystalFull = manaCrystal.image1;
@@ -248,14 +249,14 @@ public class GUI {
     }
 
     private void drawPausedScreen() {
-        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 80F));
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.PLAIN, 100F));
 
         String pausedText = "PAUSED";
         int xPos = this.calcXPositionForCenteredText(pausedText);
         int yPos = this.calcYPositionForCenteredText(pausedText);
         this.graphics2D.setColor(this.colorBlack);
-        this.graphics2D.drawString(pausedText, xPos + 3, yPos + 3);
-        this.graphics2D.setColor(this.colorTitleGold);
+        this.graphics2D.drawString(pausedText, xPos + 5, yPos + 5);
+        this.graphics2D.setColor(this.colorWhite);
         this.graphics2D.drawString(pausedText, xPos, yPos);
     }
 
@@ -296,6 +297,11 @@ public class GUI {
         this.drawPlayerInventory(inventoryAreaX, inventoryAreaY);
     }
     private void drawPlayerInventory(int startX, int startY) {
+        String inventoryText = "Inventory";
+        int inventoryTextX = this.calcXPositionForCenteredText(inventoryText);
+        this.graphics2D.setColor(this.colorWhite);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(46F));
+        this.graphics2D.drawString(inventoryText, inventoryTextX, startY + this.gamePanel.tileSize);
         // player image
         int playerPosX = startX + (this.gamePanel.tileSize * 3) + (this.gamePanel.tileSize / 2);
         int playerPosY = startY + this.gamePanel.tileSize;
@@ -377,7 +383,7 @@ public class GUI {
         String[] names = {"Level", "Hearts", "Mana", "Strength", "Dexterity", "Attack", "Defense"};
         String[] values = {
                 String.valueOf(this.gamePanel.player.currentLevel),
-                Math.round(this.gamePanel.player.currentHearts) + "/" + this.gamePanel.player.maxHearts,
+                this.gamePanel.player.currentHearts + "/" + this.gamePanel.player.maxHearts,
                 this.gamePanel.player.currentMana + "/" + this.gamePanel.player.maxMana,
                 String.valueOf(Math.round(this.gamePanel.player.strength * 100.0) / 100.0),
                 String.valueOf(Math.round(this.gamePanel.player.dexterity * 100.0) / 100.0),

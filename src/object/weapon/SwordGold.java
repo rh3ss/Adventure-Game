@@ -20,6 +20,6 @@ public class SwordGold extends Weapon {
         this.attackEndAngle = -35;
         this.objectCoinValue = 20;
         this.objectName = "Golden Sword";
-        this.objectDescription = "[" + this.objectName + "]\nAn old golden sword.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
+        this.objectDescription = "An epic " + this.objectName + ".\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
     }
 }

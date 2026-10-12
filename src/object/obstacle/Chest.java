@@ -34,10 +34,10 @@ public class Chest extends Obstacle {
             int radius = this.gamePanel.tileSize;
             // place loot in half circle below chest
             for (int i = 0; i < numLoot; i++) {
-                double angle = Math.PI * i / Math.max(1, numLoot - 1);
+                double angle = numLoot == 1 ? Math.PI / 2 : Math.PI * i / (numLoot - 1);
                 GameObject object = this.loot.get(i);
-                object.worldX = chestX + (int) (Math.cos(angle) * radius);
-                object.worldY = chestY + (int) (Math.sin(angle) * radius);
+                object.worldX = chestX + (int)(Math.cos(angle) * radius);
+                object.worldY = chestY + (int)(Math.sin(angle) * radius);
                 this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(object);
             }
             // chest can not be open again

@@ -20,6 +20,6 @@ public class AxeGold extends Weapon {
         this.attackEndAngle = -45;
         this.objectCoinValue = 30;
         this.objectName = "Golden Axe";
-        this.objectDescription = "[" + this.objectName + "]\nAn golden lumberjack axe.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
+        this.objectDescription = "An epic " + this.objectName + "].\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
     }
 }

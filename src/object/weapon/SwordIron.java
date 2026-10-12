@@ -20,6 +20,6 @@ public class SwordIron extends Weapon {
         this.attackEndAngle = -35;
         this.objectCoinValue = 8;
         this.objectName = "Iron Sword";
-        this.objectDescription = "An good robust iron sword.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
+        this.objectDescription = "A robust " + this.objectName + ".\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
     }
 }

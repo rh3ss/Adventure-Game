@@ -13,6 +13,6 @@ public class Torch extends Light {
         this.lightRadius = 200;
         this.objectCoinValue = 100;
         this.objectName = "Torch";
-        this.objectDescription = "[" + this.objectName + "]\nIlluminates your \nsurroundings";
+        this.objectDescription = "Illuminates your surroundings";
     }
 }

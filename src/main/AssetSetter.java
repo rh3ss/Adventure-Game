@@ -51,7 +51,7 @@ public class AssetSetter {
 
     public void setObjects() {
         ArrayList<GameObject> objects = new ArrayList<>(List.of(
-                // 1) spawn island (reached via portal, no axe needed): iron axe + coin chest
+                // north island
                 new ChestIron(this.gamePanel, 34, 31, new ArrayList<>(List.of(
                         new Coin(this.gamePanel, -1, -1),
                         new Coin(this.gamePanel, -1, -1),
@@ -60,32 +60,21 @@ public class AssetSetter {
                         new CoinBag(this.gamePanel, -1, -1),
                         new CoinBag(this.gamePanel, -1, -1)
                 ))),
-                new AxeIron(this.gamePanel, 31, 34),
+                new AxeIron(this.gamePanel, 32, 32),
+                new PotionStrength(this.gamePanel, 35, 34),
+                new ManaCrystal(this.gamePanel, 37, 32),
 
-                // 2) main island, start area: coin trail leads west to the portal, safety potion on the way
-                new Coin(this.gamePanel, 56, 43),
-                new CoinPile(this.gamePanel, 51, 42),
-                new PotionHeal(this.gamePanel, 44, 41),
-                new PotionSpeed(this.gamePanel, 56, 52),
-
-                // 3) main island, hidden north peak (existing heal potion behind the trees + bonus)
+                // main islandw
+                new CoinBag(this.gamePanel, 43, 42),
+                new CoinPile(this.gamePanel, 46, 42),
+                new PotionSpeed(this.gamePanel, 44, 41),
                 new PotionHeal(this.gamePanel, 54, 29),
-                new Heart(this.gamePanel, 53, 30),
-                new ManaCrystal(this.gamePanel, 55, 30),
-
-                // 4) main island, east of the start: strength potion + torch (existing)
+                new ManaCrystal(this.gamePanel, 56, 33),
                 new PotionStrength(this.gamePanel, 57, 49),
-                new Torch(this.gamePanel, 59, 46),
-
-                // 5) behind the barn (2 small trees block the way, needs the axe): consumables chest
-                new ChestIron(this.gamePanel, 62, 37, new ArrayList<>(List.of(
-                        new PotionHeal(this.gamePanel, -1, -1),
-                        new PotionHeal(this.gamePanel, -1, -1),
-                        new PotionExperience(this.gamePanel, -1, -1),
-                        new Coin(this.gamePanel, -1, -1),
-                        new CoinPile(this.gamePanel, -1, -1),
-                        new CoinBag(this.gamePanel, -1, -1)
+                new ChestIron(this.gamePanel, 62, 36, new ArrayList<>(List.of(
+                        new KeySilver(this.gamePanel, -1, -1)
                 ))),
+                new Torch(this.gamePanel, 62, 38),
 
                 // 6) blacksmith's cove in the north-west (3 small trees block the way, needs the axe): iron equipment
                 new SwordIron(this.gamePanel, 34, 45),
@@ -162,7 +151,7 @@ public class AssetSetter {
 
     public void setInteractiveTiles() {
         ArrayList<Entity> interactiveTiles = new ArrayList<>(List.of(
-                // spawn island
+                // north island
                 new Bush(this.gamePanel, "bush_2", 34, 30),
                 new SmallTree(this.gamePanel, 32, 31),
                 new Bush(this.gamePanel, "bush_2", 30, 32),
@@ -212,6 +201,7 @@ public class AssetSetter {
                 new Wheat(this.gamePanel, 55, 39),
                 new TreeBig(this.gamePanel, 45, 32),
                 new SmallTree(this.gamePanel, 51, 32),
+                new Bush(this.gamePanel, "bush_1", 44, 32),
                 new Bush(this.gamePanel, "bush_2", 50, 28),
                 new Bush(this.gamePanel, "bush_2", 49, 33),
                 new Bush(this.gamePanel, "bush_2", 52, 34),
@@ -297,8 +287,7 @@ public class AssetSetter {
                 new Bush(this.gamePanel, "bush_2", 58, 56),
                 new Bush(this.gamePanel, "bush_1", 41, 67),
                 new Bush(this.gamePanel, "bush_2", 56, 60),
-                new Bush(this.gamePanel, "bush_1", 50, 64),
-                new Bush(this.gamePanel, "bush_2", 47, 44)
+                new Bush(this.gamePanel, "bush_1", 50, 64)
         ));
 
         this.gamePanel.maps.get(0).entities.addAll(interactiveTiles);
@@ -320,9 +309,12 @@ public class AssetSetter {
                 new TreeBig(this.gamePanel, 53, 31),
                 new TreePine(this.gamePanel, 49, 32),
                 new TreeSquares(this.gamePanel, 52, 32),
+                new TreeMiddle(this.gamePanel, 61, 36),
                 new TreeMiddle(this.gamePanel, 54, 33),
+                new TreeMiddle(this.gamePanel, 35, 60),
                 new TreePine(this.gamePanel, 55, 33),
                 new TreePine(this.gamePanel, 57, 34),
+                new TreePine(this.gamePanel, 62, 35),
                 new TreeSquares(this.gamePanel, 46, 34),
                 new TreeMiddle(this.gamePanel, 51, 34),
                 new TreeSquares(this.gamePanel, 44, 34),
@@ -336,6 +328,7 @@ public class AssetSetter {
                 new TreeMiddle(this.gamePanel, 43, 43),
                 new TreeSquares(this.gamePanel, 40, 45),
                 new TreeMiddle(this.gamePanel, 53, 45),
+                new TreeSquares(this.gamePanel, 61, 50),
                 new TreeBig(this.gamePanel, 54, 45),
                 new TreeMiddle(this.gamePanel, 57, 47),
                 new TreeSquares(this.gamePanel, 58, 48),
@@ -392,6 +385,7 @@ public class AssetSetter {
                 new TreeSquares(this.gamePanel, 44, 65),
                 new TreeMiddle(this.gamePanel, 49, 66),
                 new TreeSquares(this.gamePanel, 52, 66),
+                new TreePine(this.gamePanel, 46, 44),
 
                 // south island
                 new TreeSquares(this.gamePanel, 66, 56),

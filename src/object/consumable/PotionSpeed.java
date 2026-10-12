@@ -15,9 +15,9 @@ public class PotionSpeed extends Consumable {
         this.down1 = this.setupEntityImage("/res/objects/potion_yellow.png", gamePanel.tileSize, gamePanel.tileSize);
         this.objectColor = new Color(0xffee8c);
         this.objectBenefitValue = 1;
-        this.objectCoinValue = 20;
+        this.objectCoinValue = 40;
         this.objectName = "Speed Potion";
-        this.objectDescription = "[" + this.objectName + "]\nReceive +" + this.objectBenefitValue * 10 + "% Velocity.";
+        this.objectDescription = "Receive +" + this.objectBenefitValue * 10 + "% Velocity.";
     }
 
     public void use(Entity entity) {

@@ -10,9 +10,9 @@ public class ShieldWood extends Shield {
 
         this.objectType = ObjectType.SHIELD;
         this.down1 = this.setupEntityImage("/res/objects/shield_wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
-        this.objectDamageReductionMultiplier = 0.2;
-        this.objectCoinValue = 15;
+        this.objectDamageReductionMultiplier = 0.1;
+        this.objectCoinValue = 20;
         this.objectName = "Wooden Shield";
-        this.objectDescription = "[" + this.objectName + "]\nAn old wooden shield.\n+" + (this.objectDamageReductionMultiplier * 100) + "% Defense reduction.";
+        this.objectDescription = "An old " + this.objectName + ".\n+" + (this.objectDamageReductionMultiplier * 100) + "% Defense reduction.";
     }
 }

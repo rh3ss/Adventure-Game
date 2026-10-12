@@ -12,6 +12,6 @@ public class Wood extends Environment {
         this.down1 = this.setupEntityImage("/res/objects/wood.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.objectCoinValue = 4;
         this.objectName = "Wood";
-        this.objectDescription = "[" + this.objectName + "]\nWood from a tree.";
+        this.objectDescription = this.objectName + " from a tree.";
     }
 }

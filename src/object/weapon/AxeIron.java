@@ -20,6 +20,6 @@ public class AxeIron extends Weapon {
         this.attackEndAngle = -45;
         this.objectCoinValue = 10;
         this.objectName = "Iron Axe";
-        this.objectDescription = "[" + this.objectName + "]\nAn heavy lumberjack axe.\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
+        this.objectDescription = "A heavy " + this.objectName + ".\n+" + (this.objectAttackDamageMultiplier * 100) + "% Attack damage.";
     }
 }

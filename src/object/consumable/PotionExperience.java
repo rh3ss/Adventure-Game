@@ -17,7 +17,7 @@ public class PotionExperience extends Consumable {
         this.objectBenefitValue = 5;
         this.objectCoinValue = 10;
         this.objectName = "Experience Potion";
-        this.objectDescription = "[" + this.objectName + "]\nReceive +" + this.objectBenefitValue + " Experience.";
+        this.objectDescription = "Receive +" + this.objectBenefitValue + " Experience.";
     }
 
     public void use(Entity entity) {
