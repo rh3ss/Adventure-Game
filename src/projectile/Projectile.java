@@ -5,10 +5,14 @@ import enums.Direction;
 import enums.EntityType;
 import main.GamePanel;
 
-import java.awt.Color;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 public class Projectile extends Entity {
     private Entity userOfProjectile;
+    private double rotationAngle = 0;
+    private static final double SPIN_SPEED = 10;
 
     public Projectile(GamePanel p) {
         super(p);
@@ -49,12 +53,20 @@ public class Projectile extends Entity {
             }
         }
 
+        // direction of projectile
         switch (this.direction) {
             case Direction.UP -> { this.worldY -= this.velocity; }
             case Direction.DOWN -> { this.worldY += this.velocity; }
             case Direction.LEFT -> { this.worldX -= this.velocity; }
             case Direction.RIGHT -> { this.worldX += this.velocity; }
         }
+
+        // rotation direction with angle
+        switch (direction) {
+            case Direction.RIGHT, Direction.DOWN -> this.rotationAngle += SPIN_SPEED;
+            case Direction.LEFT, Direction.UP -> this.rotationAngle -= SPIN_SPEED;
+        }
+        this.rotationAngle %= 360;
 
         // remove hearts from projectile so it does not exist forever
         this.currentHearts--;
@@ -65,6 +77,22 @@ public class Projectile extends Entity {
         this.animationCounterFrames++;
         if (this.animationCounterFrames >= 12) {
             this.animationFrame = (this.animationFrame + 1) % 3;
+        }
+    }
+
+    public void draw(Graphics2D g2) {
+        if (!(this instanceof ThrowingAxe)) {
+            super.draw(g2);
+        }
+        else {
+            int screenX = this.worldX - this.gamePanel.player.worldX + this.gamePanel.player.screenX;
+            int screenY = this.worldY - this.gamePanel.player.worldY + this.gamePanel.player.screenY;
+            BufferedImage throwingImage = this.down1;
+            AffineTransform affineTransform = new AffineTransform();
+            affineTransform.translate(screenX, screenY);
+            // rotate image while throw
+            affineTransform.rotate(Math.toRadians(this.rotationAngle), throwingImage.getWidth() / 2.0, throwingImage.getHeight() / 2.0);
+            g2.drawImage(throwingImage, affineTransform, null);
         }
     }
 

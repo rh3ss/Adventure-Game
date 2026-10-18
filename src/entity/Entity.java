@@ -83,6 +83,7 @@ public class Entity {
     public Armor currentArmor;
     public Light currentLight;
     public Projectile currentProjectile;
+    public Projectile currentThrowing;
 
     public Entity(GamePanel p) {
         this.gamePanel = p;

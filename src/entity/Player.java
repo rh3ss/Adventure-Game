@@ -14,6 +14,8 @@ import object.GameObject;
 import object.armor.Armor;
 import object.light.Light;
 import object.shield.Shield;
+import object.weapon.AxeGold;
+import object.weapon.AxeIron;
 import object.weapon.Weapon;
 import projectile.Fireball;
 import object.armor.ArmorIron;
@@ -21,6 +23,7 @@ import object.shield.ShieldWood;
 import object.weapon.SwordIron;
 import object.environment.Wood;
 import projectile.Projectile;
+import projectile.ThrowingAxe;
 import tileInteractive.InteractiveTile;
 
 public class Player extends Entity {
@@ -59,6 +62,7 @@ public class Player extends Entity {
         this.currentShield = new ShieldWood(this.gamePanel, -1, -1);
         this.currentArmor = new ArmorIron(this.gamePanel, -1, -1);
         this.currentProjectile = new Fireball(this.gamePanel);
+        this.currentThrowing = new ThrowingAxe(this.gamePanel);
         this.attackDamage = this.getAttackDamage();
         this.defenseArmor = this.getDefenseArmor();
     }
@@ -150,13 +154,22 @@ public class Player extends Entity {
         else if (this.keyboard.isUpPressed || this.keyboard.isDownPressed || this.keyboard.isLeftPressed || this.keyboard.isRightPressed || this.keyboard.isEnterPressed) {
             this.playerIsMoving();
         }
-        // SHOOTING PROJECTILES
-        else if (this.keyboard.isShootingPressed
-                && !this.currentProjectile.isAlive
-                && this.shootingAvailableCounterFrames == (this.gamePanel.FPS / 2)
-                && this.currentProjectile.userCanUseManaByUsageCost(this)) {
-            this.playerIsShooting();
+        // SHOOTING
+        else if (this.keyboard.isShootingPressed) {
+            // THROWING AXE
+            if ((this.currentWeapon instanceof AxeIron || this.currentWeapon instanceof AxeGold)
+                    && !this.currentThrowing.isAlive
+                    && this.shootingAvailableCounterFrames == (this.gamePanel.FPS / 2)) {
+                this.playerThrowsAxe();
+            }
+            // PROJECTILES
+            else if (!this.currentProjectile.isAlive
+                    && this.shootingAvailableCounterFrames == (this.gamePanel.FPS / 2)
+                    && this.currentProjectile.userCanUseManaByUsageCost(this)) {
+                this.playerIsShooting();
+            }
         }
+
 
         if (isInvincible) {
             this.invincibleCounterFrames++;
@@ -257,6 +270,12 @@ public class Player extends Entity {
         this.currentProjectile.set(this.worldX, this.worldY, this.direction, true, this);
         this.currentProjectile.subtractManaByUsageCost(this);
         this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentProjectile);
+        this.shootingAvailableCounterFrames = 0;
+    }
+    private void playerThrowsAxe() {
+        this.currentThrowing.getImages();
+        this.currentThrowing.set(this.worldX, this.worldY, this.direction, true, this);
+        this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.add(this.currentThrowing);
         this.shootingAvailableCounterFrames = 0;
     }
 

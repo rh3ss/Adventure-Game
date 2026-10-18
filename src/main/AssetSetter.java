@@ -26,12 +26,12 @@ public class AssetSetter {
     public AssetSetter(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
 
-        MapData world = new MapData();
-        MapData hutIndoor = new MapData();
-        MapData farmBarn = new MapData();
+        MapData world = new MapData(gamePanel, 100, 100);
+        MapData farmBarn = new MapData(gamePanel, 7, 7);
+        MapData hutIndoor = new MapData(gamePanel, 10, 10);
         this.gamePanel.maps.put(0, world);
-        this.gamePanel.maps.put(1, hutIndoor);
-        this.gamePanel.maps.put(2, farmBarn);
+        this.gamePanel.maps.put(1, farmBarn);
+        this.gamePanel.maps.put(2, hutIndoor);
     }
 
     public void setAllAssetSetter() {

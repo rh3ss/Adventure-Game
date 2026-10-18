@@ -20,7 +20,7 @@ public class TileManager {
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.tiles = new HashMap<>();
-        this.mapTileNumbers = new int[gamePanel.maxNumberOfMaps][gamePanel.maxWorldColumns][gamePanel.maxWorldRows];
+        this.mapTileNumbers = new int[gamePanel.maxNumberOfMaps][gamePanel.maps.get(0).maxWorldColumns][gamePanel.maps.get(0).maxWorldRows];
         this.drawTrackingPath = true;
 
         this.getTileImages();
@@ -41,7 +41,7 @@ public class TileManager {
         setupTiles(7, "black", true);
         setupTiles(8, "black", true);
         setupTiles(9, "black", true);
-        // grass
+        // grass or dirt
         setupTiles(10, "grass_clear", false);
         setupTiles(11, "grass_big_flower", false);
         setupTiles(15, "dirt", false);
@@ -99,9 +99,10 @@ public class TileManager {
             InputStream stream = getClass().getResourceAsStream(filePath);
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-            for (int row = 0; row < this.gamePanel.maxWorldRows; row++) {
+
+            for (int row = 0; row < this.gamePanel.maps.get(mapNumber).maxWorldRows; row++) {
                 String[] rowNumbers = reader.readLine().split(" ");
-                for (int col = 0; col < this.gamePanel.maxWorldColumns; col++) {
+                for (int col = 0; col < this.gamePanel.maps.get(mapNumber).maxWorldColumns; col++) {
                     this.mapTileNumbers[mapNumber][col][row] = Integer.parseInt(rowNumbers[col]);
                 }
             }
@@ -110,8 +111,8 @@ public class TileManager {
     }
 
     public void draw(Graphics2D g2) {
-        for (int row = 0; row < this.gamePanel.maxWorldRows; row++) {
-            for (int col = 0; col < this.gamePanel.maxWorldColumns; col++) {
+        for (int row = 0; row < this.gamePanel.maps.get(this.gamePanel.currentMapNumber).maxWorldRows; row++) {
+            for (int col = 0; col < this.gamePanel.maps.get(this.gamePanel.currentMapNumber).maxWorldColumns; col++) {
                 int tileNumber = this.mapTileNumbers[this.gamePanel.currentMapNumber][col][row];
                 int worldX = col * this.gamePanel.tileSize;
                 int worldY = row * this.gamePanel.tileSize;

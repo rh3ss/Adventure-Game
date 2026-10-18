@@ -19,10 +19,11 @@ public class EventHandler {
 
     private void setDefaultValues() {
         // setup world events
-        this.eventRectangle = new EventRectangle[this.gamePanel.maxNumberOfMaps][this.gamePanel.maxWorldColumns][this.gamePanel.maxWorldRows];
+        MapData mapData = this.gamePanel.maps.get(this.gamePanel.currentMapNumber);
+        this.eventRectangle = new EventRectangle[this.gamePanel.maxNumberOfMaps][mapData.maxWorldColumns][mapData.maxWorldRows];
         for (int map = 0; map < this.gamePanel.maxNumberOfMaps; map++) {
-            for (int row = 0; row < this.gamePanel.maxWorldRows; row++) {
-                for (int column = 0; column < this.gamePanel.maxWorldColumns; column++) {
+            for (int row = 0; row < mapData.maxWorldRows; row++) {
+                for (int column = 0; column < mapData.maxWorldColumns; column++) {
                     this.eventRectangle[map][row][column] = new EventRectangle();
                     this.eventRectangle[map][row][column].x = (this.gamePanel.tileSize / 2) - 1;
                     this.eventRectangle[map][row][column].y = (this.gamePanel.tileSize / 2) - 1;
@@ -61,10 +62,10 @@ public class EventHandler {
     public void checkBuildingAccess() {
         // Access farm barn
         if (playerHitSomething(0, 58, 39, Direction.ANY)) {
-            eventTeleportPlayerIsTriggered(1, 50, 53);
+            eventTeleportPlayerIsTriggered(1, 3, 6);
         }
         // Leave farm barn
-        else if (playerHitSomething(1, 50, 53, Direction.ANY)) {
+        else if (playerHitSomething(1, 3, 6, Direction.ANY)) {
             eventTeleportPlayerIsTriggered(0, 58, 39);
         }
     }

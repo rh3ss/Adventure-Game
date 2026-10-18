@@ -192,6 +192,7 @@ public class Keyboard implements KeyListener{
     }
 
     private void tradingKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_ESCAPE) { this.gamePanel.gameState = GameState.PLAYING; }
         if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
 
         if (keyboardCode == KeyEvent.VK_UP) {

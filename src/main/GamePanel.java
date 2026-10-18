@@ -32,22 +32,16 @@ public class GamePanel extends JPanel implements Runnable {
     public Graphics2D graphics2D;
     public boolean fullScreenOn;
 
-    // WORLD
-    public final int maxWorldColumns = 100;
-    public final int maxWorldRows = 100;
-    public final int worldWidth = this.tileSize * this.maxWorldColumns;
-    public final int worldHeight = this.tileSize * this.maxWorldRows;
-
     // MAP
     public final int maxNumberOfMaps = 5;
     public int currentMapNumber = 0;
 
     // CLASSES
     public Keyboard keyboard = new Keyboard(this);
-    public TileManager tileManager = new TileManager(this);
-    public CollisionDetector collisionDetector = new CollisionDetector(this);
     public Map<Integer, MapData> maps = new HashMap<>();
     public AssetSetter assetSetter = new AssetSetter(this);
+    public TileManager tileManager = new TileManager(this);
+    public CollisionDetector collisionDetector = new CollisionDetector(this);
     public GUI gui = new GUI(this);
     public EventHandler eventHandler = new EventHandler(this);
     public PathFinder pathFinder = new PathFinder(this);

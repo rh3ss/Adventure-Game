@@ -23,7 +23,7 @@ import java.util.Objects;
 public class GUI {
     private final GamePanel gamePanel;
     private final Font fontMaruMonica;
-    private final Color colorBlack, colorLightBlack, colorGunmetal, colorWhite, colorGold, colorTitleGold, colorGameOverRed;
+    private final Color colorBlack, colorLightBlack, colorGunmetal, colorWhite, colorWhiteGoldLight, colorGold, colorTitleGold, colorGameOverRed;
     private final BufferedImage titleScreen, heartFull, heartBlank, coin, manaCrystalFull, manaCrystalBlank;
     private Graphics2D graphics2D;
     public Menu menuSelection;
@@ -55,6 +55,7 @@ public class GUI {
         this.colorLightBlack = new Color(0x161616);
         this.colorGunmetal = new Color(0x2a2f35);
         this.colorWhite = new Color(0xffffff);
+        this.colorWhiteGoldLight = new Color(0xfffff4);
         this.colorGold = new Color(0xf0be5a);
         this.colorTitleGold = new Color(0xe0aa3e);
         this.colorGameOverRed = new Color(255, 16, 16, 60);
@@ -375,9 +376,12 @@ public class GUI {
         this.graphics2D.setColor(color);
         this.graphics2D.fillRect(slotX, slotY, this.gamePanel.tileSize, this.gamePanel.tileSize);
         // slot shadow
-        this.graphics2D.setColor(this.colorLightBlack);
-        this.graphics2D.drawLine(slotX, slotY, slotX + this.gamePanel.tileSize - 1, slotY);
-        this.graphics2D.drawLine(slotX, slotY, slotX, slotY + this.gamePanel.tileSize - 1);
+        this.graphics2D.setColor(this.colorGold);
+        this.graphics2D.setStroke(new BasicStroke(2));
+        this.graphics2D.drawLine(slotX, slotY, slotX + this.gamePanel.tileSize, slotY);
+        this.graphics2D.drawLine(slotX, slotY + this.gamePanel.tileSize, slotX + this.gamePanel.tileSize, slotY + this.gamePanel.tileSize);
+        this.graphics2D.drawLine(slotX, slotY, slotX, slotY + this.gamePanel.tileSize);
+        this.graphics2D.drawLine(slotX + this.gamePanel.tileSize, slotY, slotX + this.gamePanel.tileSize, slotY + this.gamePanel.tileSize);
     }
     private void drawPlayerAttributes(int frameX, int frameY, int frameWidth, int frameHeight) {
         String[] names = {"Level", "Hearts", "Mana", "Strength", "Dexterity", "Attack", "Defense"};

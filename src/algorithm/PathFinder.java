@@ -3,6 +3,7 @@ package algorithm;
 import entity.Entity;
 import enums.ObjectCategory;
 import main.GamePanel;
+import main.MapData;
 import npc.NPC;
 import object.GameObject;
 import tileFix.TileFix;
@@ -33,17 +34,19 @@ public class PathFinder {
     }
 
     private void initNodes() {
-        this.nodes = new Node[this.gamePanel.maxWorldColumns][this.gamePanel.maxWorldRows];
-        for (int col = 0; col < this.gamePanel.maxWorldColumns; ++col) {
-            for (int row = 0; row < this.gamePanel.maxWorldRows; ++row) {
+        MapData mapData = this.gamePanel.maps.get(this.gamePanel.currentMapNumber);
+        this.nodes = new Node[mapData.maxWorldColumns][mapData.maxWorldRows];
+        for (int col = 0; col < mapData.maxWorldColumns; ++col) {
+            for (int row = 0; row < mapData.maxWorldRows; ++row) {
                 this.nodes[col][row] = new Node(col, row);
             }
         }
     }
 
     private void resetNode() {
-        for (int col = 0; col < this.gamePanel.maxWorldColumns; ++col) {
-            for (int row = 0; row < this.gamePanel.maxWorldRows; ++row) {
+        MapData mapData = this.gamePanel.maps.get(this.gamePanel.currentMapNumber);
+        for (int col = 0; col < mapData.maxWorldColumns; ++col) {
+            for (int row = 0; row < mapData.maxWorldRows; ++row) {
                 this.nodes[col][row].isOpen = false;
                 this.nodes[col][row].isChecked = false;
                 this.nodes[col][row].isSolid = false;
@@ -56,14 +59,15 @@ public class PathFinder {
     }
 
     public void setNodes(int startColumn, int startRow, int destinationColumn, int destinationRow) {
+        MapData mapData = this.gamePanel.maps.get(this.gamePanel.currentMapNumber);
         this.resetNode();
         this.startNode = this.nodes[startColumn][startRow];
         this.currentNode = this.startNode;
         this.destinationNode = this.nodes[destinationColumn][destinationRow];
         this.openList.add(this.currentNode);
 
-        for (int col = 0; col < this.gamePanel.maxWorldColumns; ++col) {
-            for (int row = 0; row < this.gamePanel.maxWorldRows; ++row) {
+        for (int col = 0; col < mapData.maxWorldColumns; ++col) {
+            for (int row = 0; row < mapData.maxWorldRows; ++row) {
                 // check normal tiles
                 int tileNumber = this.gamePanel.tileManager.mapTileNumbers[this.gamePanel.currentMapNumber][col][row];
                 if (this.gamePanel.tileManager.tiles.get(tileNumber).isSolid) {
@@ -134,6 +138,7 @@ public class PathFinder {
     }
 
     public boolean searchDestination() {
+        MapData mapData = this.gamePanel.maps.get(this.gamePanel.currentMapNumber);
         while (!this.destinationReached && step < this.MAX_STEP_ALLOWED) {
             int column = this.currentNode.column;
             int row = this.currentNode.row;
@@ -142,8 +147,8 @@ public class PathFinder {
             this.openList.remove(this.currentNode);
             // open north, east, south, west nodes
             if (row - 1 >= 0) { this.openNode(this.nodes[column][row - 1]); }
-            if (column + 1 < this.gamePanel.maxWorldColumns) { this.openNode(this.nodes[column + 1][row]); }
-            if (row + 1 < this.gamePanel.maxWorldRows) { this.openNode(this.nodes[column][row + 1]); }
+            if (column + 1 < mapData.maxWorldColumns) { this.openNode(this.nodes[column + 1][row]); }
+            if (row + 1 < mapData.maxWorldRows) { this.openNode(this.nodes[column][row + 1]); }
             if (column - 1 >= 0) { this.openNode(this.nodes[column - 1][row]); }
 
             // find best node
