@@ -6,7 +6,6 @@ import entity.Player;
 import enums.*;
 import enums.Menu;
 import object.GameObject;
-import object.pickup.Coin;
 import object.pickup.CoinPile;
 import object.pickup.Heart;
 import object.pickup.ManaCrystal;
@@ -22,8 +21,8 @@ import java.util.Objects;
 
 public class GUI {
     private final GamePanel gamePanel;
-    private final Font fontMaruMonica;
-    private final Color colorBlack, colorLightBlack, colorGunmetal, colorWhite, colorWhiteGoldLight, colorGold, colorTitleGold, colorGameOverRed;
+    public final Font fontMaruMonica;
+    public final Color colorBlack, colorLightBlack, colorGunmetal, colorWhite, colorWhiteGoldLight, colorGold, colorTitleGold, colorGameOverRed;
     private final BufferedImage titleScreen, heartFull, heartBlank, coin, manaCrystalFull, manaCrystalBlank;
     private Graphics2D graphics2D;
     public Menu menuSelection;
@@ -36,7 +35,7 @@ public class GUI {
     public Entity interactedNPC;
     public TradingState tradingState;
     public TradingSelection tradingSelection;
-    public boolean messageOn, gameFinished, inventoryFull;
+    public boolean debugModeOn, messageOn, gameFinished, inventoryFull;
     public String currentDialogueMessage;
     public int playerInventorySlotColumnSelected, playerInventorySlotRowSelected;
     public int npcInventorySlotColumnSelected, npcInventorySlotRowSelected;
@@ -63,7 +62,7 @@ public class GUI {
         this.messages = new ArrayList<>();
         this.messagesColor = new ArrayList<>();
         this.messagesCounter = new ArrayList<>();
-        this.messageOn = this.gameFinished = this.inventoryFull = false;
+        this.debugModeOn = this.messageOn = this.gameFinished = this.inventoryFull = false;
 
         this.menuSelection = Menu.NEW_GAME;
         this.optionsState = OptionsState.STATE_1;
@@ -134,7 +133,8 @@ public class GUI {
             case GameState.OPTIONS -> { this.drawOptionsScreen(); }
             case GameState.TRANSITION -> { this.drawTransitionScreen(); }
             case GameState.TRADING ->  { this.drawTradingScreen(); }
-            case GameState.GAME_OVER -> { this.drawGameOverScreen(); }
+            case GameState.MINIMAP -> { this.drawFullWorldMiniMap(); }
+            case GameState.GAMEOVER -> { this.drawGameOverScreen(); }
         }
     }
 
@@ -177,11 +177,9 @@ public class GUI {
         this.drawPlayerMana();
         this.drawPlayerCoins();
         this.drawPlayerEquipment();
+        this.drawMiniMapToTopRightCorner();
         this.drawMessages();
-        this.graphics2D.setColor(Color.WHITE);
-        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(30F));
-        this.graphics2D.drawString("Column: " + (this.gamePanel.player.worldX / this.gamePanel.tileSize), this.gamePanel.tileSize, this.gamePanel.tileSize * 8);
-        this.graphics2D.drawString("Row: " + ((this.gamePanel.player.worldY / this.gamePanel.tileSize) + 1), this.gamePanel.tileSize, this.gamePanel.tileSize * 8 + 30);
+        this.drawDebugMode();
     }
     private void drawPlayerHearts() {
         int xPos = this.gamePanel.tileSize / 2;
@@ -212,8 +210,8 @@ public class GUI {
         }
     }
     private void drawPlayerCoins() {
-        int xPos = (int) (this.gamePanel.screenWidth - (this.gamePanel.tileSize * 1.25));
-        int yPos = this.gamePanel.tileSize / 2;
+        int xPos = (int) (this.gamePanel.screenWidth - (this.gamePanel.tileSize * 1.5));
+        int yPos = (int) (this.gamePanel.screenHeight - (this.gamePanel.tileSize * 1.5));
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 40F));
         FontMetrics fontMetrics = this.graphics2D.getFontMetrics();
         // current coins value
@@ -246,6 +244,40 @@ public class GUI {
             this.graphics2D.fillRoundRect(equipmentPosX, equipmentPosY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
             this.graphics2D.drawImage(image, equipmentPosX, equipmentPosY, null);
             equipmentPosX += (this.gamePanel.tileSize + (blackShadowWidth * 2));
+        }
+    }
+    private void drawMiniMapToTopRightCorner() {
+        if (this.gamePanel.miniMap.showMiniMap) {
+            int width = 200;
+            int height = 200;
+            int x = this.gamePanel.screenWidth - width - 25;
+            int y = 25;
+            int offSet = 7;
+            // draw mini map
+            this.graphics2D.drawImage(this.gamePanel.miniMap.worldMaps.get(this.gamePanel.currentMapNumber), x, y, width, height, null);
+            // draw player on mini map
+            double scale = (double) (this.gamePanel.tileSize * this.gamePanel.maps.get(this.gamePanel.currentMapNumber).maxWorldColumns / width);
+            int playerX = (int) (x + this.gamePanel.player.worldX / scale);
+            int playerY = (int) (y + this.gamePanel.player.worldY / scale);
+            int playerSize = (int) (this.gamePanel.tileSize / 3);
+            this.graphics2D.drawImage(this.gamePanel.player.getPlayersAnimationFrameImage(), playerX - 6, playerY - 6, playerSize, playerSize, null);
+            // draw subwindow border black
+            this.drawSubWindowScreenBorder(x - offSet, y - offSet, width + (2 * offSet), height + (2 * offSet), this.colorBlack);
+            // draw subwindow border gold
+            this.drawSubWindowScreenBorder(x - offSet + 2, y - offSet + 2, width + (2 * offSet) - 4, height + (2 * offSet) - 4, this.colorGold);
+        }
+    }
+    private void drawDebugMode() {
+        if (this.debugModeOn) {
+            this.graphics2D.setColor(Color.WHITE);
+            this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(30F));
+            int textX = (this.gamePanel.maxScreenColumns * this.gamePanel.tileSize) - (4 * this.gamePanel.tileSize);
+            int textY = this.gamePanel.tileSize * 6;
+            this.graphics2D.drawString("Debug Mode: ", textX, textY);
+            textY += 30;
+            this.graphics2D.drawString("Column: " + (this.gamePanel.player.worldX / this.gamePanel.tileSize), textX, textY);
+            textY += 30;
+            this.graphics2D.drawString("Row: " + ((this.gamePanel.player.worldY / this.gamePanel.tileSize) + 1), textX, textY);
         }
     }
 
@@ -546,10 +578,19 @@ public class GUI {
                 this.optionsSelection = OptionsSelection.SELECTED_1;
             }
         }
+        // show full map
+        textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Game World", textX, textY);
+        if (this.optionsSelection == OptionsSelection.SELECTED_3) {
+            this.graphics2D.drawString(">", textX - 25, textY);
+            if (this.gamePanel.keyboard.isEnterPressed) {
+                this.gamePanel.gameState = GameState.MINIMAP;
+            }
+        }
         // end game
         textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("End Game", textX, textY);
-        if (this.optionsSelection == OptionsSelection.SELECTED_3) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_4) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_4;
@@ -557,9 +598,9 @@ public class GUI {
             }
         }
         // back
-        textY += this.gamePanel.tileSize * 4;
+        textY += this.gamePanel.tileSize * 3;
         this.graphics2D.drawString("Back", textX, textY);
-        if (this.optionsSelection == OptionsSelection.SELECTED_4) {
+        if (this.optionsSelection == OptionsSelection.SELECTED_5) {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.gamePanel.gameState = GameState.PLAYING;
@@ -611,6 +652,7 @@ public class GUI {
         this.graphics2D.drawString("Shooting", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Inventory", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Pause", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Show MiniMap", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Options", textX, textY);
 
         textX = optionsWindowFrameX + (this.gamePanel.tileSize * 6);
@@ -620,6 +662,7 @@ public class GUI {
         this.graphics2D.drawString("F", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("E", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("P", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("M", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("ESC", textX, textY);
 
         // back
@@ -837,6 +880,31 @@ public class GUI {
         }
     }
 
+    private void drawFullWorldMiniMap() {
+        int width = this.gamePanel.tileSize * 10;
+        int height = this.gamePanel.tileSize * 11;
+        int x = (this.gamePanel.screenWidth / 2) - (width / 2);
+        int y = (this.gamePanel.screenHeight / 2) - (height / 2);
+        // draw background
+        int offSet = 20;
+        this.drawSubWindowScreen(x - offSet, y - offSet, width + (2 * offSet), height + (2 * offSet), this.colorBlack, this.colorGold);
+        // draw full map
+        this.graphics2D.drawImage(this.gamePanel.miniMap.worldMaps.get(this.gamePanel.currentMapNumber), x, y, width, height - this.gamePanel.tileSize, null);
+        // draw player on full map
+        double scale = (double) (this.gamePanel.tileSize * this.gamePanel.maps.get(this.gamePanel.currentMapNumber).maxWorldColumns / width);
+        int playerX = (int) (x + this.gamePanel.player.worldX / scale);
+        int playerY = (int) (y + this.gamePanel.player.worldY / scale);
+        int playerSize = (int) (this.gamePanel.tileSize / scale);
+        this.graphics2D.drawImage(this.gamePanel.player.getPlayersAnimationFrameImage(), playerX, playerY, playerSize, playerSize, null);
+        // user hint
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+        this.graphics2D.setColor(this.colorWhite);
+        int textX = x + 30;
+        int textY = y + height - 5;
+        this.graphics2D.drawString("Back", textX, textY);
+        this.graphics2D.drawString(">", textX - 25, textY);
+    }
+
     private void drawGameOverScreen() {
         this.graphics2D.setColor(this.colorGameOverRed);
         this.graphics2D.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
@@ -884,6 +952,12 @@ public class GUI {
         int arcSize = 35;
         this.graphics2D.setColor(background);
         this.graphics2D.fillRoundRect(x, y, width, height, arcSize, arcSize);
+        this.graphics2D.setColor(border);
+        this.graphics2D.setStroke(new BasicStroke(5));
+        this.graphics2D.drawRoundRect(x + 5, y + 5, width - 10 , height - 10, arcSize - 10, arcSize - 10);
+    }
+    private void drawSubWindowScreenBorder(int x, int y, int width, int height, Color border) {
+        int arcSize = 35;
         this.graphics2D.setColor(border);
         this.graphics2D.setStroke(new BasicStroke(5));
         this.graphics2D.drawRoundRect(x + 5, y + 5, width - 10 , height - 10, arcSize - 10, arcSize - 10);

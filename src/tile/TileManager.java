@@ -111,6 +111,8 @@ public class TileManager {
     }
 
     public void draw(Graphics2D g2) {
+        g2.setColor(new Color(0x2e5bc2));
+        g2.fillRect(0, 0, this.gamePanel.screenWidth, this.gamePanel.screenHeight);
         for (int row = 0; row < this.gamePanel.maps.get(this.gamePanel.currentMapNumber).maxWorldRows; row++) {
             for (int col = 0; col < this.gamePanel.maps.get(this.gamePanel.currentMapNumber).maxWorldColumns; col++) {
                 int tileNumber = this.mapTileNumbers[this.gamePanel.currentMapNumber][col][row];

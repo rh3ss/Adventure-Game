@@ -47,8 +47,8 @@ public class Player extends Entity {
         // centering player
         this.screenX = (this.gamePanel.screenWidth / 2) - (this.gamePanel.tileSize / 2);
         this.screenY = (this.gamePanel.screenHeight / 2) - (this.gamePanel.tileSize / 2);
-        this.spawnColumn = 45;
-        this.spawnRow = 35;
+        this.spawnColumn = 20;
+        this.spawnRow = 10;
         this.worldX = (this.gamePanel.tileSize * this.spawnColumn);
         this.worldY = (this.gamePanel.tileSize * this.spawnRow);
         // player status
@@ -190,7 +190,7 @@ public class Player extends Entity {
         }
 
         if (this.currentHearts <= 0) {
-            this.gamePanel.gameState = GameState.GAME_OVER;
+            this.gamePanel.gameState = GameState.GAMEOVER;
             this.gamePanel.gui.gameOverSelection = GameOverSelection.NEGATIVE;
         }
     }
@@ -502,7 +502,7 @@ public class Player extends Entity {
         g2.drawImage(playerImage, this.screenX, this.screenY, null);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
-    private BufferedImage getPlayersAnimationFrameImage() {
+    public BufferedImage getPlayersAnimationFrameImage() {
         switch (this.direction) {
             case Direction.UP -> {
                 return (!this.isAttacking) ? (this.animationFrame == 1) ? this.up1 : this.up2 : (this.animationFrame == 1) ? this.attackUp1 : this.attackUp2;

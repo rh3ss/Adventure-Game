@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import enums.GameState;
 import environment.EnvironmentManager;
+import tile.MiniMap;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -43,6 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
     public TileManager tileManager = new TileManager(this);
     public CollisionDetector collisionDetector = new CollisionDetector(this);
     public GUI gui = new GUI(this);
+    public MiniMap miniMap = new MiniMap(this);
     public EventHandler eventHandler = new EventHandler(this);
     public PathFinder pathFinder = new PathFinder(this);
     public EnvironmentManager environmentManager = new EnvironmentManager(this);
@@ -66,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         this.assetSetter.setAllAssetSetter();
         this.environmentManager.setup();
+        this.miniMap.createMiniMapImages();
         this.gameState = GameState.TITLE;
         // set drawing to the new bufferedImage graphic
         this.fullScreen = new BufferedImage(this.screenWidth, this.screenHeight, BufferedImage.TYPE_INT_ARGB);

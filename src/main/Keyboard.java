@@ -2,6 +2,7 @@ package main;
 
 
 import enums.*;
+import enums.Menu;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -29,7 +30,8 @@ public class Keyboard implements KeyListener{
             case GameState.INVENTORY -> { this.inventoryKeyEvent(keyboardCode); }
             case GameState.OPTIONS -> { this.optionsKeyEvent(keyboardCode); }
             case GameState.TRADING -> { this.tradingKeyEvent(keyboardCode); }
-            case GameState.GAME_OVER -> { this.gameOverKeyEvent(keyboardCode); }
+            case GameState.MINIMAP -> { this.miniMapKeyEvent(keyboardCode); }
+            case GameState.GAMEOVER -> { this.gameOverKeyEvent(keyboardCode); }
         }
     }
 
@@ -65,10 +67,12 @@ public class Keyboard implements KeyListener{
         if (keyboardCode == KeyEvent.VK_A) { this.isLeftPressed = true; }
         if (keyboardCode == KeyEvent.VK_D) { this.isRightPressed = true; }
         if (keyboardCode == KeyEvent.VK_ENTER) { this.isEnterPressed = true; }
+        if (keyboardCode == KeyEvent.VK_X) { this.gamePanel.gui.debugModeOn = !this.gamePanel.gui.debugModeOn; }
         if (keyboardCode == KeyEvent.VK_F) { this.isShootingPressed = true; }
         if (keyboardCode == KeyEvent.VK_P) { this.gamePanel.gameState = GameState.PAUSED; }
         if (keyboardCode == KeyEvent.VK_E) { this.gamePanel.gameState = GameState.INVENTORY; }
         if (keyboardCode == KeyEvent.VK_ESCAPE) { this.gamePanel.gameState = GameState.OPTIONS; }
+        if (keyboardCode == KeyEvent.VK_M) { this.gamePanel.miniMap.showMiniMap = !this.gamePanel.miniMap.showMiniMap; }
     }
 
     private void pausedKeyEvent(int keyboardCode) {
@@ -150,10 +154,11 @@ public class Keyboard implements KeyListener{
             switch (this.gamePanel.gui.optionsState) {
                 case OptionsState.STATE_1 -> {
                     switch (this.gamePanel.gui.optionsSelection) {
-                        case OptionsSelection.SELECTED_1 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_4; }
+                        case OptionsSelection.SELECTED_1 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_5; }
                         case OptionsSelection.SELECTED_2 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_1; }
                         case OptionsSelection.SELECTED_3 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_2; }
                         case OptionsSelection.SELECTED_4 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_3; }
+                        case OptionsSelection.SELECTED_5 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_4; }
                     }
                 }
                 case OptionsState.STATE_2, OptionsState.STATE_3 -> {
@@ -175,7 +180,8 @@ public class Keyboard implements KeyListener{
                         case OptionsSelection.SELECTED_1 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_2; }
                         case OptionsSelection.SELECTED_2 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_3; }
                         case OptionsSelection.SELECTED_3 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_4; }
-                        case OptionsSelection.SELECTED_4 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_1; }
+                        case OptionsSelection.SELECTED_4 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_5; }
+                        case OptionsSelection.SELECTED_5 -> { this.gamePanel.gui.optionsSelection = OptionsSelection.SELECTED_1; }
                     }
                 }
                 case OptionsState.STATE_2, OptionsState.STATE_3 -> {
@@ -221,6 +227,12 @@ public class Keyboard implements KeyListener{
             if (keyboardCode == KeyEvent.VK_ESCAPE) {
                 this.gamePanel.gui.tradingState = TradingState.SELECT;
             }
+        }
+    }
+
+    private void miniMapKeyEvent(int keyboardCode) {
+        if (keyboardCode == KeyEvent.VK_ESCAPE || keyboardCode == KeyEvent.VK_ENTER) {
+            this.gamePanel.gameState = GameState.OPTIONS;
         }
     }
 

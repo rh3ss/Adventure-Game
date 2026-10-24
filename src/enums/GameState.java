@@ -9,5 +9,6 @@ public enum GameState {
     INVENTORY,
     TRANSITION,
     TRADING,
-    GAME_OVER
+    MINIMAP,
+    GAMEOVER
 }

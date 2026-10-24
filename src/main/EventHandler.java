@@ -61,12 +61,12 @@ public class EventHandler {
 
     public void checkBuildingAccess() {
         // Access farm barn
-        if (playerHitSomething(0, 58, 39, Direction.ANY)) {
+        if (playerHitSomething(0, 33, 14, Direction.ANY)) {
             eventTeleportPlayerIsTriggered(1, 3, 6);
         }
         // Leave farm barn
         else if (playerHitSomething(1, 3, 6, Direction.ANY)) {
-            eventTeleportPlayerIsTriggered(0, 58, 39);
+            eventTeleportPlayerIsTriggered(0, 33, 14);
         }
     }
 
