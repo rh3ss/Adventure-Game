@@ -40,13 +40,15 @@ public class Keyboard implements KeyListener{
             switch (this.gamePanel.gui.menuSelection) {
                 case Menu.NEW_GAME -> { this.gamePanel.gui.menuSelection = Menu.QUIT; }
                 case Menu.LOAD_GAME -> { this.gamePanel.gui.menuSelection = Menu.NEW_GAME; }
-                case Menu.QUIT -> { this.gamePanel.gui.menuSelection = Menu.LOAD_GAME; }
+                case Menu.CONTROLS -> { this.gamePanel.gui.menuSelection = Menu.LOAD_GAME; }
+                case Menu.QUIT -> { this.gamePanel.gui.menuSelection = Menu.CONTROLS; }
             }
         }
         if (keyboardCode == KeyEvent.VK_DOWN) {
             switch (this.gamePanel.gui.menuSelection) {
                 case Menu.NEW_GAME -> { this.gamePanel.gui.menuSelection = Menu.LOAD_GAME; }
-                case Menu.LOAD_GAME -> { this.gamePanel.gui.menuSelection = Menu.QUIT; }
+                case Menu.LOAD_GAME -> { this.gamePanel.gui.menuSelection = Menu.CONTROLS; }
+                case Menu.CONTROLS -> { this.gamePanel.gui.menuSelection = Menu.QUIT; }
                 case Menu.QUIT -> { this.gamePanel.gui.menuSelection = Menu.NEW_GAME; }
             }
         }
@@ -56,6 +58,7 @@ public class Keyboard implements KeyListener{
                 case Menu.LOAD_GAME -> {
                     // later
                 }
+                case Menu.CONTROLS -> { this.gamePanel.gui.drawTitleControlsScreen(); }
                 case Menu.QUIT -> { this.gamePanel.quitGame(); }
             }
         }
@@ -132,18 +135,18 @@ public class Keyboard implements KeyListener{
                 this.gamePanel.gui.npcInventorySlotRowSelected = 0;
             }
         }
-        if (keyboardCode == KeyEvent.VK_LEFT) {
-            this.gamePanel.gui.npcInventorySlotColumnSelected--;
-            if (this.gamePanel.gui.npcInventorySlotColumnSelected < 0) {
-                this.gamePanel.gui.npcInventorySlotColumnSelected = this.gamePanel.gui.interactedNPC.inventoryColumnSize - 1;
-            }
-        }
-        if (keyboardCode == KeyEvent.VK_RIGHT) {
-            this.gamePanel.gui.npcInventorySlotColumnSelected++;
-            if (this.gamePanel.gui.npcInventorySlotColumnSelected > this.gamePanel.gui.interactedNPC.inventoryColumnSize - 1) {
-                this.gamePanel.gui.npcInventorySlotColumnSelected = 0;
-            }
-        }
+//        if (keyboardCode == KeyEvent.VK_LEFT) {
+//            this.gamePanel.gui.npcInventorySlotColumnSelected--;
+//            if (this.gamePanel.gui.npcInventorySlotColumnSelected < 0) {
+//                this.gamePanel.gui.npcInventorySlotColumnSelected = this.gamePanel.gui.interactedNPC.inventoryColumnSize - 1;
+//            }
+//        }
+//        if (keyboardCode == KeyEvent.VK_RIGHT) {
+//            this.gamePanel.gui.npcInventorySlotColumnSelected++;
+//            if (this.gamePanel.gui.npcInventorySlotColumnSelected > this.gamePanel.gui.interactedNPC.inventoryColumnSize - 1) {
+//                this.gamePanel.gui.npcInventorySlotColumnSelected = 0;
+//            }
+//        }
     }
 
     private void optionsKeyEvent(int keyboardCode) {

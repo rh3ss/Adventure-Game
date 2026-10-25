@@ -27,8 +27,8 @@ public abstract class NPC extends Entity {
     public void setInventory() {
         // inventory
         this.inventory = new ArrayList<>();
-        this.inventoryColumnSize = 5;
-        this.inventoryRowSize = 4;
+        this.inventoryColumnSize = 1;
+        this.inventoryRowSize = 6;
         this.maxInventorySize = this.inventoryColumnSize * this.inventoryRowSize;
     }
 

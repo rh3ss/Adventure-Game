@@ -58,7 +58,7 @@ public class Player extends Entity {
         this.maxMana = 3; this.currentMana = this.maxMana;
         this.currentLevel = 1; this.currentExperience = 0; this.nextLevelExperience = 10;
         this.lightUpdated = false;
-        this.currentWeapon = new SwordIron(this.gamePanel, -1, -1);
+        this.currentWeapon = new AxeGold(this.gamePanel, -1, -1);
         this.currentShield = new ShieldWood(this.gamePanel, -1, -1);
         this.currentArmor = new ArmorIron(this.gamePanel, -1, -1);
         this.currentProjectile = new Fireball(this.gamePanel);
@@ -417,7 +417,7 @@ public class Player extends Entity {
         }
     }
     public void equipCurrentSelectedInventoryObject() {
-        int objectIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected);
+        int objectIndex = this.gamePanel.gui.getSelectedInventoryItemIndexOnSlot(this.gamePanel.gui.playerInventorySlotColumnSelected, this.gamePanel.gui.playerInventorySlotRowSelected, this);
         if (objectIndex < this.inventory.size() && this.inventory.get(objectIndex) instanceof GameObject selectedObject) {
             switch (selectedObject.objectCategory) {
                 case ObjectCategory.WEAPON:

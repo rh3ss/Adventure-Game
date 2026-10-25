@@ -157,10 +157,10 @@ public class GUI {
         this.graphics2D.setColor(this.colorWhite);
         this.graphics2D.drawString(titleText, xPos, yPos);
         // menu values
-        String[] menuTexts = {"New Game", "Load Game", "Quit"};
-        Menu[] menuValues = {Menu.NEW_GAME, Menu.LOAD_GAME, Menu.QUIT};
+        String[] menuTexts = {"New Game", "Load Game", "Controls", "Quit"};
+        Menu[] menuValues = {Menu.NEW_GAME, Menu.LOAD_GAME, Menu.CONTROLS, Menu.QUIT};
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 48F));
-        yPos += this.gamePanel.tileSize * 7;
+        yPos += this.gamePanel.tileSize * 6;
         for (int i = 0; i < menuTexts.length; i++) {
             if (this.menuSelection == menuValues[i]) {
                 this.graphics2D.setColor(this.colorTitleGold);
@@ -170,6 +170,17 @@ public class GUI {
             this.graphics2D.drawString(menuTexts[i], xPos, yPos);
             yPos += this.gamePanel.tileSize;
         }
+    }
+
+    public void drawTitleControlsScreen() {
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+        int optionsWindowFrameWidth = this.gamePanel.tileSize * 8;
+        int optionsWindowFrameHeight = this.gamePanel.tileSize * 11;
+        int optionsWindowFrameX = (this.gamePanel.screenWidth - optionsWindowFrameWidth) / 2;
+        int optionsWindowFrameY = this.gamePanel.tileSize * 2;
+        this.drawSubWindowScreen(optionsWindowFrameX, optionsWindowFrameY, optionsWindowFrameWidth, optionsWindowFrameHeight, this.colorBlack, this.colorGold);
+        this.optionsControls(optionsWindowFrameX, optionsWindowFrameY);
+        this.gamePanel.keyboard.isEnterPressed = false;
     }
 
     private void drawPlayingScreen() {
@@ -212,18 +223,20 @@ public class GUI {
     private void drawPlayerCoins() {
         int xPos = (int) (this.gamePanel.screenWidth - (this.gamePanel.tileSize * 1.5));
         int yPos = (int) (this.gamePanel.screenHeight - (this.gamePanel.tileSize * 1.5));
+        this.drawCoinWithValue(xPos, yPos, this.gamePanel.player.coins);
+    }
+    private void drawCoinWithValue(int positionX, int positionY, int coinValue) {
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(Font.BOLD, 40F));
         FontMetrics fontMetrics = this.graphics2D.getFontMetrics();
-        // current coins value
-        String textValueOfCoins = String.valueOf(this.gamePanel.player.coins);
-        int textX = this.calcXPositionForAlignToRightText(textValueOfCoins, xPos);
-        int textY = yPos + (this.coin.getHeight() - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
+        // coin value
+        String textValueOfCoins = String.valueOf(coinValue);
+        int textX = this.calcXPositionForAlignToRightText(textValueOfCoins, positionX);
+        int textY = positionY + (this.coin.getHeight() - fontMetrics.getHeight()) / 2 + fontMetrics.getAscent();
         // coin image
-        this.graphics2D.drawImage(this.coin, xPos, yPos, null);
-        // text shadow
+        this.graphics2D.drawImage(this.coin, positionX, positionY, null);
+        // text shadow with text
         this.graphics2D.setColor(Color.BLACK);
         this.graphics2D.drawString(textValueOfCoins, textX + 2, textY + 2);
-        // text
         this.graphics2D.setColor(Color.WHITE);
         this.graphics2D.drawString(textValueOfCoins, textX, textY);
     }
@@ -327,9 +340,9 @@ public class GUI {
         // inventory part
         int inventoryAreaX = windowX + (this.gamePanel.tileSize / 2);
         int inventoryAreaY = windowY + (this.gamePanel.tileSize / 2);
-        this.drawPlayerInventory(inventoryAreaX, inventoryAreaY);
+        this.drawPlayersFullInventoryWithImage(inventoryAreaX, inventoryAreaY);
     }
-    private void drawPlayerInventory(int startX, int startY) {
+    private void drawPlayersFullInventoryWithImage(int startX, int startY) {
         String inventoryText = "Inventory";
         int inventoryTextX = this.calcXPositionForCenteredText(inventoryText);
         this.graphics2D.setColor(this.colorWhite);
@@ -339,41 +352,10 @@ public class GUI {
         int playerPosX = startX + (this.gamePanel.tileSize * 3) + (this.gamePanel.tileSize / 2);
         int playerPosY = startY + this.gamePanel.tileSize;
         this.graphics2D.drawImage(this.gamePanel.player.down1, playerPosX, playerPosY, this.gamePanel.tileSize * 2, this.gamePanel.tileSize * 2, null);
-        // draw all inventory slots
+        // draw raw inventory
         int inventorySlotStartX = startX;
         int inventorySlotStartY = startY + (this.gamePanel.tileSize * 4);
-        for(int row = 0; row < this.gamePanel.player.inventoryRowSize; row++) {
-            for(int col = 0; col < this.gamePanel.player.inventoryColumnSize; col++) {
-                drawInventorySlot(inventorySlotStartX + (col * this.gamePanel.tileSize), inventorySlotStartY + (row * this.gamePanel.tileSize), false);
-            }
-        }
-        // draw all game objects
-        for(int itemIndex = 0; itemIndex < this.gamePanel.player.inventory.size(); itemIndex++) {
-            GameObject object = this.gamePanel.player.inventory.get(itemIndex);
-            int col = itemIndex % this.gamePanel.player.inventoryColumnSize;
-            int row = itemIndex / this.gamePanel.player.inventoryColumnSize;
-            int slotX = inventorySlotStartX + (col * this.gamePanel.tileSize);
-            int slotY = inventorySlotStartY + (row * this.gamePanel.tileSize);
-            // highlight, player equipped objects
-            // ERROR TO DO: hier muss als highligth das genauer object sein nicht vom selben typ
-            boolean equipped = object == this.gamePanel.player.currentWeapon ||
-                    object == this.gamePanel.player.currentShield ||
-                    object == this.gamePanel.player.currentArmor ||
-                    object == this.gamePanel.player.currentLight;
-            drawInventorySlot(slotX, slotY, equipped);
-            this.graphics2D.drawImage(object.down1, slotX, slotY, null);
-            // draw stackable number
-            if(object.objectCurrentStackableAmount > 1) {
-                String amount = String.valueOf(object.objectCurrentStackableAmount);
-                this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(24F));
-                int amountX = this.calcXPositionForAlignToRightText(amount, slotX + this.gamePanel.tileSize - 4);
-                int amountY = slotY + this.gamePanel.tileSize - 4;
-                this.graphics2D.setColor(this.colorBlack);
-                this.graphics2D.drawString(amount, amountX + 2, amountY + 2);
-                this.graphics2D.setColor(this.colorWhite);
-                this.graphics2D.drawString(amount, amountX, amountY);
-            }
-        }
+        this.drawRawPlayersInventory(inventorySlotStartX, inventorySlotStartY);
         // inventory selected cursor
         int inventoryCursorX = inventorySlotStartX + (this.gamePanel.tileSize * this.playerInventorySlotColumnSelected);
         int inventoryCursorY = inventorySlotStartY + (this.gamePanel.tileSize * this.playerInventorySlotRowSelected);
@@ -381,7 +363,7 @@ public class GUI {
         this.graphics2D.setStroke(new BasicStroke(3));
         this.graphics2D.drawRoundRect(inventoryCursorX, inventoryCursorY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
         // game object description
-        int selectedIndex = this.getSelectedInventoryItemIndexOnSlot(this.playerInventorySlotColumnSelected, this.playerInventorySlotRowSelected);
+        int selectedIndex = this.getSelectedInventoryItemIndexOnSlot(this.playerInventorySlotColumnSelected, this.playerInventorySlotRowSelected, this.gamePanel.player);
         if(selectedIndex < this.gamePanel.player.inventory.size()) {
             GameObject selectedObject = this.gamePanel.player.inventory.get(selectedIndex);
             if(selectedObject.objectDescription != null && !selectedObject.objectDescription.isBlank()) {
@@ -399,6 +381,40 @@ public class GUI {
                     this.graphics2D.drawString(line, textX, textY);
                     textY += 28;
                 }
+            }
+        }
+    }
+    private void drawRawPlayersInventory(int startX, int startY) {
+        // draw all inventory slots
+        for(int row = 0; row < this.gamePanel.player.inventoryRowSize; row++) {
+            for(int col = 0; col < this.gamePanel.player.inventoryColumnSize; col++) {
+                drawInventorySlot(startX + (col * this.gamePanel.tileSize), startY + (row * this.gamePanel.tileSize), false);
+            }
+        }
+        // draw all game objects
+        for(int itemIndex = 0; itemIndex < this.gamePanel.player.inventory.size(); itemIndex++) {
+            GameObject object = this.gamePanel.player.inventory.get(itemIndex);
+            int col = itemIndex % this.gamePanel.player.inventoryColumnSize;
+            int row = itemIndex / this.gamePanel.player.inventoryColumnSize;
+            int slotX = startX + (col * this.gamePanel.tileSize);
+            int slotY = startY + (row * this.gamePanel.tileSize);
+            // highlight, player equipped objects
+            boolean equipped = object == this.gamePanel.player.currentWeapon ||
+                    object == this.gamePanel.player.currentShield ||
+                    object == this.gamePanel.player.currentArmor ||
+                    object == this.gamePanel.player.currentLight;
+            drawInventorySlot(slotX, slotY, equipped);
+            this.graphics2D.drawImage(object.down1, slotX, slotY, null);
+            // draw stackable number
+            if(object.objectCurrentStackableAmount > 1) {
+                String amount = String.valueOf(object.objectCurrentStackableAmount);
+                this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(24F));
+                int amountX = this.calcXPositionForAlignToRightText(amount, slotX + this.gamePanel.tileSize - 4);
+                int amountY = slotY + this.gamePanel.tileSize - 4;
+                this.graphics2D.setColor(this.colorBlack);
+                this.graphics2D.drawString(amount, amountX + 2, amountY + 2);
+                this.graphics2D.setColor(this.colorWhite);
+                this.graphics2D.drawString(amount, amountX, amountY);
             }
         }
     }
@@ -519,7 +535,7 @@ public class GUI {
             int descriptionTextX = descriptionFrameX + 20;
             int descriptionTextY = descriptionFrameY + this.gamePanel.tileSize;
             this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(28F));
-            int itemIndex = this.getSelectedInventoryItemIndexOnSlot(inventorySlotColumnSelected, inventorySlotRowSelected);
+            int itemIndex = this.getSelectedInventoryItemIndexOnSlot(inventorySlotColumnSelected, inventorySlotRowSelected, entity);
             if (itemIndex < entity.inventory.size()) {
                 this.drawSubWindowScreen(descriptionFrameX, descriptionFrameY, descriptionFrameWidth, descriptionFrameHeight, this.colorBlack, this.colorGold);
                 GameObject object = entity.inventory.get(itemIndex);
@@ -536,7 +552,7 @@ public class GUI {
         this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
 
         int optionsWindowFrameWidth = this.gamePanel.tileSize * 8;
-        int optionsWindowFrameHeight = this.gamePanel.tileSize * 10;
+        int optionsWindowFrameHeight = this.gamePanel.tileSize * 11;
         int optionsWindowFrameX = (this.gamePanel.screenWidth - optionsWindowFrameWidth) / 2;
         int optionsWindowFrameY = this.gamePanel.tileSize * 2;
         this.drawSubWindowScreen(optionsWindowFrameX, optionsWindowFrameY, optionsWindowFrameWidth, optionsWindowFrameHeight, this.colorBlack, this.colorGold);
@@ -598,7 +614,7 @@ public class GUI {
             }
         }
         // back
-        textY += this.gamePanel.tileSize * 3;
+        textY += this.gamePanel.tileSize * 4;
         this.graphics2D.drawString("Back", textX, textY);
         if (this.optionsSelection == OptionsSelection.SELECTED_5) {
             this.graphics2D.drawString(">", textX - 25, textY);
@@ -629,7 +645,7 @@ public class GUI {
             textY += 40;
         }
         // back
-        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 9);
+        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 10);
         this.graphics2D.drawString("Back", textX, textY);
         if (this.optionsSelection == OptionsSelection.SELECTED_1) {
             this.graphics2D.drawString(">", textX - 25, textY);
@@ -648,14 +664,14 @@ public class GUI {
         textX = optionsWindowFrameX + this.gamePanel.tileSize;
         textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Move", textX, textY); textY += this.gamePanel.tileSize;
-        this.graphics2D.drawString("Confirm/Attack", textX, textY); textY += this.gamePanel.tileSize;
+        this.graphics2D.drawString("Interact/Attack", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Shooting", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Inventory", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Pause", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Show MiniMap", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("Options", textX, textY);
 
-        textX = optionsWindowFrameX + (this.gamePanel.tileSize * 6);
+        textX = (int) (optionsWindowFrameX + (this.gamePanel.tileSize * 5.5));
         textY = optionsWindowFrameY + (this.gamePanel.tileSize * 2);
         this.graphics2D.drawString("WASD", textX, textY); textY += this.gamePanel.tileSize;
         this.graphics2D.drawString("ENTER", textX, textY); textY += this.gamePanel.tileSize;
@@ -667,7 +683,7 @@ public class GUI {
 
         // back
         textX = optionsWindowFrameX + this.gamePanel.tileSize;
-        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 9);
+        textY = optionsWindowFrameY + (this.gamePanel.tileSize * 10);
         this.graphics2D.drawString("Back", textX, textY);
         if (this.optionsSelection == OptionsSelection.SELECTED_1) {
             this.graphics2D.drawString(">", textX - 25, textY);
@@ -709,7 +725,7 @@ public class GUI {
             this.graphics2D.drawString(">", textX - 25, textY);
             if (this.gamePanel.keyboard.isEnterPressed) {
                 this.optionsState = OptionsState.STATE_1;
-                this.optionsSelection = OptionsSelection.SELECTED_3;
+                this.optionsSelection = OptionsSelection.SELECTED_4;
             }
         }
     }
@@ -767,42 +783,59 @@ public class GUI {
         }
     }
     private void drawTradingBuy() {
-        // draw player and trader inventory
-        this.drawEntityInventory(this.gamePanel.player, false);
-        this.drawEntityInventory(this.interactedNPC, true);
-        // draw trading hint
-        int x = this.gamePanel.tileSize * 2;
-        int y = this.gamePanel.tileSize * 9;
-        int width = this.gamePanel.tileSize * 6;
-        int height = this.gamePanel.tileSize * 2;
-        this.drawSubWindowScreen(x, y, width, height, this.colorBlack, this.colorGold);
-        this.graphics2D.drawString("[ESC] Back", x + 24, y + 60);
-        // draw player coins
-        x = this.gamePanel.tileSize * 12;
-        y = this.gamePanel.tileSize * 9;
-        width = this.gamePanel.tileSize * 6;
-        height = this.gamePanel.tileSize * 2;
-        this.drawSubWindowScreen(x, y, width, height, this.colorBlack, this.colorGold);
-        this.graphics2D.drawString("Coins: " + this.gamePanel.player.coins, x + 24, y + 60);
-        // draw object price
-        int itemIndex = this.getSelectedInventoryItemIndexOnSlot(this.npcInventorySlotColumnSelected, this.npcInventorySlotRowSelected);
+        // basic window
+        int tradingWindowWidth = this.gamePanel.tileSize * 15;
+        int tradingWindowHeight = this.gamePanel.tileSize * 10;
+        int tradingWindowX = (this.gamePanel.screenWidth - tradingWindowWidth) / 2;
+        int tradingWindowY = (this.gamePanel.screenHeight - tradingWindowHeight) / 2;
+        this.drawSubWindowScreen(tradingWindowX, tradingWindowY, tradingWindowWidth, tradingWindowHeight, this.colorBlack, this.colorGold);
+        // draw trader inventory
+        int traderInventoryStartX = tradingWindowX + (this.gamePanel.tileSize / 2);
+        int traderInventoryStartY = tradingWindowY + (this.gamePanel.tileSize / 2);
+        int traderSlotX = traderInventoryStartX;
+        int traderSlotY = traderInventoryStartY;
+        for (int idx = 0; idx < this.interactedNPC.inventory.size(); idx++) {
+            GameObject object = this.interactedNPC.inventory.get(idx);
+            // object image with coin value
+            this.graphics2D.drawImage(object.down1, traderSlotX, traderSlotY, null);
+            this.drawCoinWithValue(traderSlotX + (this.gamePanel.tileSize * 2), traderSlotY, object.objectCoinValue);
+            traderSlotY += this.gamePanel.tileSize;
+        }
+        // draw player inventory
+        int playerInventoryStartX = traderInventoryStartX + (this.gamePanel.tileSize * 5);
+        int playerInventoryStartY = traderInventoryStartY;
+        this.drawRawPlayersInventory(playerInventoryStartX, playerInventoryStartY);
+        // draw trading hint and players coins
+        this.graphics2D.setColor(this.colorWhite);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+        int hintY = traderInventoryStartY + (this.gamePanel.tileSize * 9);
+        this.graphics2D.drawString("[ESC] Back", traderInventoryStartX, hintY);
+        this.graphics2D.drawString("Coins: ", traderInventoryStartX + (this.gamePanel.tileSize * 10) + 15, hintY);
+        this.drawCoinWithValue(traderInventoryStartX + (this.gamePanel.tileSize * 13), hintY - 36, this.gamePanel.player.coins);
+        // trading selected cursor
+        int inventoryCursorX = traderInventoryStartX + (this.gamePanel.tileSize * this.npcInventorySlotColumnSelected);
+        int inventoryCursorY = traderInventoryStartY + (this.gamePanel.tileSize * this.npcInventorySlotRowSelected);
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.setStroke(new BasicStroke(3));
+        this.graphics2D.drawRoundRect(inventoryCursorX, inventoryCursorY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
+        // object interaction
+        int itemIndex = this.getSelectedInventoryItemIndexOnSlot(this.npcInventorySlotColumnSelected, this.npcInventorySlotRowSelected, this.interactedNPC);
         if (itemIndex < this.interactedNPC.inventory.size()) {
-            GameObject selectedItem = this.interactedNPC.inventory.get(itemIndex);
-            if (selectedItem.entityType == EntityType.OBJECT) {
-                x = (int) (this.gamePanel.tileSize * 5.5);
-                y = (int) (this.gamePanel.tileSize * 5.5);
-                width = (int) (this.gamePanel.tileSize * 2.5);
-                height = this.gamePanel.tileSize;
-                this.drawSubWindowScreen(x, y, width, height, this.colorBlack, this.colorGold);
-                this.graphics2D.drawImage(this.coin, x + 10, y + 8, 32, 32, null);
-                int price = selectedItem.objectCoinValue;
-                String priceText = String.valueOf(price);
-                x = this.calcXPositionForAlignToRightText(priceText, this.gamePanel.tileSize * 8);
-                this.graphics2D.drawString(priceText, x - 20, y + 32);
-
+            if (this.interactedNPC.inventory.get(itemIndex) instanceof GameObject selectedItem) {
+                // inventory selected item description
+                int descriptionTextX = playerInventoryStartX;
+                int descriptionTextY = playerInventoryStartY + (this.gamePanel.tileSize * 4);
+                GameObject object = this.interactedNPC.inventory.get(itemIndex);
+                String objectDescription = object.objectDescription;
+                this.graphics2D.setColor(this.colorWhite);
+                this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+                for (String line : objectDescription.split("\n")) {
+                    this.graphics2D.drawString(line, descriptionTextX, descriptionTextY);
+                    descriptionTextY += 32;
+                }
                 // buy object
                 if (this.gamePanel.keyboard.isEnterPressed) {
-                    if (price > this.gamePanel.player.coins) {
+                    if (selectedItem.objectCoinValue > this.gamePanel.player.coins) {
                         this.tradingState = TradingState.SELECT;
                         this.gamePanel.gameState = GameState.DIALOGUE;
                         this.currentDialogueMessage = "You need more coins to buy that!";
@@ -810,7 +843,7 @@ public class GUI {
                     }
                     else {
                         if (this.gamePanel.player.playerCanObtainObjectInInventory(selectedItem)) {
-                            this.gamePanel.player.coins -= price;
+                            this.gamePanel.player.coins -= selectedItem.objectCoinValue;
                         }
                         else {
                             this.tradingState = TradingState.SELECT;
@@ -824,38 +857,60 @@ public class GUI {
         }
     }
     private void drawTradingSell() {
+        // basic window
+        int tradingWindowWidth = this.gamePanel.tileSize * 15;
+        int tradingWindowHeight = this.gamePanel.tileSize * 10;
+        int tradingWindowX = (this.gamePanel.screenWidth - tradingWindowWidth) / 2;
+        int tradingWindowY = (this.gamePanel.screenHeight - tradingWindowHeight) / 2;
+        this.drawSubWindowScreen(tradingWindowX, tradingWindowY, tradingWindowWidth, tradingWindowHeight, this.colorBlack, this.colorGold);
+        // draw trader inventory
+        int traderInventoryStartX = tradingWindowX + (this.gamePanel.tileSize / 2);
+        int traderInventoryStartY = tradingWindowY + (this.gamePanel.tileSize / 2);
+        int traderSlotX = traderInventoryStartX;
+        int traderSlotY = traderInventoryStartY;
+        for (int idx = 0; idx < this.interactedNPC.inventory.size(); idx++) {
+            GameObject object = this.interactedNPC.inventory.get(idx);
+            // object image with coin value
+            this.graphics2D.drawImage(object.down1, traderSlotX, traderSlotY, null);
+            this.drawCoinWithValue(traderSlotX + (this.gamePanel.tileSize * 2), traderSlotY, object.objectCoinValue);
+            traderSlotY += this.gamePanel.tileSize;
+        }
         // draw player inventory
-        this.drawEntityInventory(this.gamePanel.player, true);
-        // draw trading hint
-        int x = this.gamePanel.tileSize * 2;
-        int y = this.gamePanel.tileSize * 9;
-        int width = this.gamePanel.tileSize * 6;
-        int height = this.gamePanel.tileSize * 2;
-        this.drawSubWindowScreen(x, y, width, height, this.colorBlack, this.colorGold);
-        this.graphics2D.drawString("[ESC] Back", x + 24, y + 60);
-        // draw player coins
-        x = this.gamePanel.tileSize * 12;
-        y = this.gamePanel.tileSize * 9;
-        width = this.gamePanel.tileSize * 6;
-        height = this.gamePanel.tileSize * 2;
-        this.drawSubWindowScreen(x, y, width, height, this.colorBlack, this.colorGold);
-        this.graphics2D.drawString("Coins: " + this.gamePanel.player.coins, x + 24, y + 60);
-        // draw object price
-        int itemIndex = this.getSelectedInventoryItemIndexOnSlot(this.playerInventorySlotColumnSelected, this.playerInventorySlotRowSelected);
+        int playerInventoryStartX = traderInventoryStartX + (this.gamePanel.tileSize * 5);
+        int playerInventoryStartY = traderInventoryStartY;
+        this.drawRawPlayersInventory(playerInventoryStartX, playerInventoryStartY);
+        // draw trading hint and players coins
+        this.graphics2D.setColor(this.colorWhite);
+        this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+        int hintY = traderInventoryStartY + (this.gamePanel.tileSize * 9);
+        this.graphics2D.drawString("[ESC] Back", traderInventoryStartX, hintY);
+        this.graphics2D.drawString("Coins: ", traderInventoryStartX + (this.gamePanel.tileSize * 10) + 15, hintY);
+        this.drawCoinWithValue(traderInventoryStartX + (this.gamePanel.tileSize * 13), hintY - 36, this.gamePanel.player.coins);
+        // player selected cursor
+        int inventoryCursorX = playerInventoryStartX + (this.gamePanel.tileSize * this.playerInventorySlotColumnSelected);
+        int inventoryCursorY = playerInventoryStartY + (this.gamePanel.tileSize * this.playerInventorySlotRowSelected);
+        this.graphics2D.setColor(Color.WHITE);
+        this.graphics2D.setStroke(new BasicStroke(3));
+        this.graphics2D.drawRoundRect(inventoryCursorX, inventoryCursorY, this.gamePanel.tileSize, this.gamePanel.tileSize, 10, 10);
+        // object interaction
+        int itemIndex = this.getSelectedInventoryItemIndexOnSlot(this.playerInventorySlotColumnSelected, this.playerInventorySlotRowSelected, this.gamePanel.player);
         if (itemIndex < this.gamePanel.player.inventory.size()) {
-            GameObject selectedItem = this.gamePanel.player.inventory.get(itemIndex);
-            if (selectedItem.entityType == EntityType.OBJECT) {
-                x = (int) (this.gamePanel.tileSize * 15.5);
-                y = (int) (this.gamePanel.tileSize * 5.5);
-                width = (int) (this.gamePanel.tileSize * 2.5);
-                height = this.gamePanel.tileSize;
-                this.drawSubWindowScreen(x, y, width, height, this.colorBlack, this.colorGold);
-                this.graphics2D.drawImage(this.coin, x + 10, y + 8, 32, 32, null);
-                int price = selectedItem.objectCoinValue;
-                String priceText = String.valueOf(price);
-                x = this.calcXPositionForAlignToRightText(priceText, this.gamePanel.tileSize * 18);
-                this.graphics2D.drawString(priceText, x - 20, y + 32);
-
+            if (this.gamePanel.player.inventory.get(itemIndex) instanceof GameObject selectedItem) {
+                // selected item description
+                int descriptionTextY = playerInventoryStartY + (this.gamePanel.tileSize * 4);
+                GameObject object = this.gamePanel.player.inventory.get(itemIndex);
+                String objectDescription = object.objectDescription;
+                this.graphics2D.setColor(this.colorWhite);
+                this.graphics2D.setFont(this.graphics2D.getFont().deriveFont(32F));
+                for (String line : objectDescription.split("\n")) {
+                    this.graphics2D.drawString(line, playerInventoryStartX, descriptionTextY);
+                    descriptionTextY += 32;
+                }
+                descriptionTextY += 10;
+                // selected item coin value
+                String priceText = String.valueOf(selectedItem.objectCoinValue);
+                this.graphics2D.drawString(priceText, playerInventoryStartX, descriptionTextY);
+                this.graphics2D.drawImage(this.coin, playerInventoryStartX + 50, descriptionTextY - 27, 32, 32, null);
                 // sell object
                 if (this.gamePanel.keyboard.isEnterPressed) {
                     if (selectedItem == this.gamePanel.player.currentWeapon ||
@@ -873,7 +928,7 @@ public class GUI {
                         else {
                             this.gamePanel.player.inventory.remove(selectedItem);
                         }
-                        this.gamePanel.player.coins += price;
+                        this.gamePanel.player.coins += selectedItem.objectCoinValue;
                     }
                 }
             }
@@ -944,8 +999,8 @@ public class GUI {
         }
     }
 
-    public int getSelectedInventoryItemIndexOnSlot(int slotColumnSelected, int slotRowSelected) {
-        return slotColumnSelected + (slotRowSelected * this.gamePanel.player.inventoryColumnSize);
+    public int getSelectedInventoryItemIndexOnSlot(int slotColumnSelected, int slotRowSelected, Entity entity) {
+        return slotColumnSelected + (slotRowSelected * entity.inventoryColumnSize);
     }
 
     private void drawSubWindowScreen(int x, int y, int width, int height, Color background, Color border) {
