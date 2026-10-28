@@ -2,7 +2,7 @@ package npc;
 
 import enums.GameState;
 import main.GamePanel;
-import object.consumable.PotionHeal;
+import object.consumable.*;
 
 public class Farmer extends NPC {
 
@@ -37,7 +37,12 @@ public class Farmer extends NPC {
     public void setInventory() {
         super.setInventory();
         // inventory
-        this.inventory.add(new PotionHeal(this.gamePanel, -1, -1));
+        this.inventory.add(new FoodApple(this.gamePanel, -1, -1));
+        this.inventory.add(new FoodPear(this.gamePanel, -1, -1));
+        this.inventory.add(new FoodCorn(this.gamePanel, -1, -1));
+        this.inventory.add(new FoodCarrot(this.gamePanel, -1, -1));
+        this.inventory.add(new FoodChilli(this.gamePanel, -1, -1));
+        this.inventory.add(new FoodChicken(this.gamePanel, -1, -1));
     }
 
     public void speak() {

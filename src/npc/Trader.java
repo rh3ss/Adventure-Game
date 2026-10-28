@@ -4,7 +4,9 @@ import enums.GameState;
 import main.GamePanel;
 import object.consumable.PotionExperience;
 import object.consumable.PotionHeal;
+import object.consumable.PotionSpeed;
 import object.consumable.PotionStrength;
+import object.light.Torch;
 
 public class Trader extends NPC {
 
@@ -39,9 +41,11 @@ public class Trader extends NPC {
     public void setInventory() {
         super.setInventory();
         // inventory
-        this.inventory.add(new PotionExperience(this.gamePanel, -1, -1));
-        this.inventory.add(new PotionStrength(this.gamePanel, -1, -1));
         this.inventory.add(new PotionHeal(this.gamePanel, -1, -1));
+        this.inventory.add(new PotionStrength(this.gamePanel, -1, -1));
+        this.inventory.add(new PotionExperience(this.gamePanel, -1, -1));
+        this.inventory.add(new PotionSpeed(this.gamePanel, -1, -1));
+        this.inventory.add(new Torch(this.gamePanel, -1, -1));
     }
 
     public void speak() {

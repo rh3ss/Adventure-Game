@@ -11,7 +11,7 @@ public class Torch extends Light {
         this.objectType = ObjectType.TORCH;
         this.down1 = this.setupEntityImage("/res/objects/torch.png", this.gamePanel.tileSize, this.gamePanel.tileSize);
         this.lightRadius = 200;
-        this.objectCoinValue = 100;
+        this.objectCoinValue = 200;
         this.objectName = "Torch";
         this.objectDescription = "Illuminates your surroundings";
     }

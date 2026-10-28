@@ -22,6 +22,13 @@ public enum ObjectType {
     COIN,
     WOOD,
 
+    FOOD_APPLE,
+    FOOD_PEAR,
+    FOOD_CORN,
+    FOOD_CARROT,
+    FOOD_CHILLI,
+    FOOD_CHICKEN,
+
     FIREBALL,
     BULLET
 }
