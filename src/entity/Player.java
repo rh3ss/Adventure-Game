@@ -331,7 +331,7 @@ public class Player extends Entity {
         else {
             String collisionMessage;
             if (this.playerCanObtainObjectInInventory(object)) {
-                collisionMessage = "You found a " + object.objectType.toString();
+                collisionMessage = "You found a " + object.objectName;
                 // this.inventory.add(object);
                 this.gamePanel.maps.get(this.gamePanel.currentMapNumber).entities.remove(object);
             } else {
